@@ -90,3 +90,38 @@ body {
 .btn-primary:hover {
   background-color: var(--primary-color) !important;
 }
+/* បន្ថែមចំណុចនេះដើម្បីដោះស្រាយបញ្ហា Header លាក់អក្សរ */
+.custom-header {
+  background-color: #003366 !important; /* ពណ៌ខៀវចាស់ */
+  border-bottom: 3px solid #FFD700 !important; /* បន្ទាត់មាស */
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+/* ធានាថាគ្រប់ Link ក្នុង Header មានពណ៌ស */
+.custom-header .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+/* ពេលដាក់ Mouse លើ (Hover) ឬកំពុងនៅ Page នោះ (Active) */
+.custom-header .nav-link:hover,
+.custom-header .nav-link.active {
+  color: #FFD700 !important;
+}
+
+/* ពណ៌អក្សរ Logo */
+.custom-header .navbar-brand {
+  color: #ffffff !important;
+}
+
+/* ប៊ូតុង Sign Up */
+.btn-signup-nav {
+  background-color: #FFD700 !important;
+  color: #000000 !important;
+  font-weight: bold;
+  padding: 8px 18px !important;
+  border-radius: 6px !important;
+  text-decoration: none;
+}
