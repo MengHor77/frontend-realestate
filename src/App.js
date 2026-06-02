@@ -5,6 +5,8 @@ import Sale from './pages/sale/Sale';
 import Rent from './pages/rent/Rent';       
 import News from './pages/news/News';  
 import ContactUs from './pages/contact/ContactUs';  
+import SignUp from './pages/signUp/SignUp';  
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
           <Route path="rent" element={<Rent />} />
           <Route path="news" element={<News />} />
           <Route path="contact-us" element={<ContactUs />} />
+          <Route path="signUp" element={<SignUp />} />
         </Route>
       </Routes>
     </BrowserRouter>
