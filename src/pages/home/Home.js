@@ -1,12 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ServiceCard from '../../components/ServiceCard'; // Import component
 
 function Home() {
+    // រៀបចំទិន្នន័យសម្រាប់សេវាកម្ម
+    const services = [
+        { title: 'ផ្ទះសម្រាប់លក់', icon: '🏡', link: '/sale', color: '#e3f2fd' },
+        { title: 'ផ្ទះសម្រាប់ជួល', icon: '🔑', link: '/rent', color: '#fff3e0' },
+        { title: 'ដីឡូតិ៍វិនិយោគ', icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+        { title: 'construction', icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+        { title: 'decoration', icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+        { title: 'decoration', icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+    ];
+
     return (
         <div className="home-page">
             {/* ១. Hero Section - ផ្នែកខាងលើបង្អស់ */}
-            <section className="hero-section text-white d-flex align-items-center py-5" 
-                style={{ 
+            <section className="hero-section text-white d-flex align-items-center py-5"
+                style={{
                     background: 'linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 51, 102, 0.8)), url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1073&q=80")',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
@@ -15,8 +26,8 @@ function Home() {
                 <div className="container text-center">
                     <h1 className="display-3 fw-bold mb-3">ស្វែងរកផ្ទះក្នុងក្តីសុបិនរបស់អ្នក</h1>
                     <p className="lead mb-5 opacity-75">យើងផ្តល់ជូននូវសេវាកម្មទិញ លក់ និងជួលអចលនទ្រព្យដែលល្អបំផុតក្នុងប្រទេសកម្ពុជា</p>
-                    
-                    {/* Search Bar ងាយស្រួលរកផ្ទះ */}
+
+                    {/* Search Bar */}
                     <div className="row justify-content-center">
                         <div className="col-lg-8">
                             <div className="bg-white p-3 rounded-4 shadow-lg d-flex flex-column flex-md-row gap-2">
@@ -33,28 +44,22 @@ function Home() {
                 </div>
             </section>
 
-            {/* ២. Categories Section - ប្រភេទអចលនទ្រព្យ */}
+            {/* ២. Categories Section - ប្រើប្រាស់ ServiceCard Component */}
             <section className="container py-5 mt-4">
                 <div className="text-center mb-5">
                     <h2 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>សេវាកម្មចម្បងរបស់យើង</h2>
                     <div style={{ width: '60px', height: '4px', backgroundColor: 'var(--gold-color)', margin: '10px auto' }}></div>
                 </div>
-                
+
                 <div className="row g-4 text-center">
-                    {[
-                        { title: 'ផ្ទះសម្រាប់លក់', icon: '🏡', link: '/sale', color: '#e3f2fd' },
-                        { title: 'ផ្ទះសម្រាប់ជួល', icon: '🔑', link: '/rent', color: '#fff3e0' },
-                        { title: 'ដីឡូតិ៍វិនិយោគ', icon: '🏗️', link: '/sale', color: '#e8f5e9' }
-                    ].map((item, index) => (
-                        <div className="col-md-4" key={index}>
-                            <Link to={item.link} className="text-decoration-none">
-                                <div className="p-5 rounded-4 shadow-sm border bg-white card-hover h-100">
-                                    <div className="fs-1 mb-3">{item.icon}</div>
-                                    <h4 className="fw-bold text-dark">{item.title}</h4>
-                                    <p className="text-muted">ស្វែងរកជម្រើសល្អៗជាច្រើនកន្លែង</p>
-                                </div>
-                            </Link>
-                        </div>
+                    {services.map((item, index) => (
+                        <ServiceCard
+                            key={index}
+                            title={item.title}
+                            icon={item.icon}
+                            link={item.link}
+                            color={item.color}
+                        />
                     ))}
                 </div>
             </section>
@@ -71,7 +76,7 @@ function Home() {
                     </div>
 
                     <div className="row g-4">
-                        {/* ឧទាហរណ៍ Card ទី ១ */}
+                        {/* Featured Cards (ឧទាហរណ៍ទី១) */}
                         <div className="col-md-4">
                             <div className="card h-100">
                                 <div className="position-relative">
@@ -84,9 +89,7 @@ function Home() {
                                     <p className="text-muted small">📍 ខណ្ឌជ្រោយចង្វារ, រាជធានីភ្នំពេញ</p>
                                     <hr />
                                     <div className="d-flex justify-content-between text-muted small">
-                                        <span>🛏️ 4 បន្ទប់គេង</span>
-                                        <span>🚿 5 បន្ទប់ទឹក</span>
-                                        <span>📐 120m²</span>
+                                        <span>🛏️ 4 បន្ទប់គេង</span> <span>🚿 5 បន្ទប់ទឹក</span> <span>📐 120m²</span>
                                     </div>
                                 </div>
                             </div>
@@ -105,9 +108,7 @@ function Home() {
                                     <p className="text-muted small">📍 ខណ្ឌសែនសុខ, រាជធានីភ្នំពេញ</p>
                                     <hr />
                                     <div className="d-flex justify-content-between text-muted small">
-                                        <span>🛏️ 3 បន្ទប់គេង</span>
-                                        <span>🚿 4 បន្ទប់ទឹក</span>
-                                        <span>📐 90m²</span>
+                                        <span>🛏️ 3 បន្ទប់គេង</span> <span>🚿 4 បន្ទប់ទឹក</span> <span>📐 90m²</span>
                                     </div>
                                 </div>
                             </div>
@@ -126,9 +127,7 @@ function Home() {
                                     <p className="text-muted small">📍 ខណ្ឌបឹងកេងកង, រាជធានីភ្នំពេញ</p>
                                     <hr />
                                     <div className="d-flex justify-content-between text-muted small">
-                                        <span>🛏️ 2 បន្ទប់គេង</span>
-                                        <span>🚿 2 បន្ទប់ទឹក</span>
-                                        <span>📐 65m²</span>
+                                        <span>🛏️ 2 បន្ទប់គេង</span> <span>🚿 2 បន្ទប់ទឹក</span> <span>📐 65m²</span>
                                     </div>
                                 </div>
                             </div>
