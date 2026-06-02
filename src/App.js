@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/home/Home';
-import Sale from './pages/sale/Sale';       // Import ទំព័រលក់
-import Rent from './pages/rent/Rent';       // Import ទំព័រជួល
-import ContactUs from './pages/contact/ContactUs'; // Import ទំព័រទំនាក់ទំនង
+import Sale from './pages/sale/Sale';    
+import Rent from './pages/rent/Rent';       
+import News from './pages/news/News';  
+import ContactUs from './pages/contact/ContactUs';  
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="sale" element={<Sale />} />
           <Route path="rent" element={<Rent />} />
+          <Route path="news" element={<News />} />
           <Route path="contact-us" element={<ContactUs />} />
         </Route>
       </Routes>
