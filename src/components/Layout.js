@@ -7,6 +7,7 @@ function Layout() {
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
 
+
       <main className="flex-grow-1 container my-4">
         <div className="bg-white p-4 shadow-sm rounded">
           <Outlet />
