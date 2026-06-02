@@ -10,7 +10,7 @@ function Header() {
         <header className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
             <div className="container">
                 <NavLink className="navbar-brand fw-bold fs-4" to="/">
-                    🏡 Real Estate
+                    🏡 Real Estate MH
                 </NavLink>
 
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

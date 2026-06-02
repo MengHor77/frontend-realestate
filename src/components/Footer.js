@@ -8,7 +8,7 @@ function Footer() {
                 <div className="row g-4">
                     {/* ផ្នែកទី ១: អំពីក្រុមហ៊ុន */}
                     <div className="col-lg-4 col-md-6">
-                        <h4 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>Real Estate MS</h4>
+                        <h4 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>Real Estate MH</h4>
                         <p className="opacity-75" style={{ fontSize: '14px', lineHeight: '1.8' }}>
                             យើងគឺជាភ្នាក់ងារអចលនទ្រព្យឈានមុខគេក្នុងប្រទេសកម្ពុជា ដែលផ្តល់ជូននូវសេវាកម្មទិញ លក់ និងជួល ប្រកបដោយទំនុកចិត្ត និងតម្លាភាពខ្ពស់បំផុតសម្រាប់អតិថិជន។
                         </p>
@@ -45,9 +45,8 @@ function Footer() {
                     <div className="col-lg-3 col-md-6">
                         <h5 className="fw-bold mb-4">ទំនាក់ទំនង</h5>
                         <p className="opacity-75 small mb-2">📍 បឹងកេងកង ១, រាជធានីភ្នំពេញ</p>
-                        <p className="opacity-75 small mb-2">📞 +855 12 345 678</p>
-                        <p className="opacity-75 small mb-2">📞 +855 98 765 432</p>
-                        <p className="opacity-75 small mb-0">✉️ info@realestate-ms.com</p>
+                        <p className="opacity-75 small mb-2">📞 096 316 77 44</p>
+                        <p className="opacity-75 small mb-0">✉️ menghor2152152gmail.com</p>
                     </div>
                 </div>
 
@@ -55,7 +54,7 @@ function Footer() {
 
                 {/* ផ្នែករក្សាសិទ្ធិ */}
                 <div className="text-center opacity-75">
-                    <small>© 2026 គ្រប់គ្រងដោយលោក **Meng hor** | រក្សាសិទ្ធិគ្រប់យ៉ាង</small>
+                    <small>© 2026 គ្រប់គ្រងដោយលោក Meng Hor រក្សាសិទ្ធិគ្រប់យ៉ាង</small>
                 </div>
             </div>
         </footer>
