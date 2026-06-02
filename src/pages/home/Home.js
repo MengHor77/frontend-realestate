@@ -18,7 +18,7 @@ function Home() {
             {/* ១. Hero Section - ផ្នែកខាងលើបង្អស់ */}
             <section className="hero-section text-white d-flex align-items-center py-5"
                 style={{
-                    background: 'linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 51, 102, 0.8)), url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1073&q=80")',
+                    background: 'linear-gradient(rgba(0, 51, 102, 0.5), rgba(0, 51, 102, 0.8)), url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1073&q=80")',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     minHeight: '80vh'
