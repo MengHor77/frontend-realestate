@@ -1,10 +1,10 @@
 /* ១. កំណត់ពណ៌ និង Variables (Theme) */
 :root {
-  --primary-color: #0d6efd;    /* ខៀវភ្លឺ */
-  --primary-dark: #003366;     /* ខៀវចាស់ (ពណ៌ចម្បងសម្រាប់ Real Estate) */
-  --gold-color: #FFD700;       /* ពណ៌មាស */
-  --gold-hover: #e6c200;       /* ពណ៌មាសដិត */
-  --light-bg: #f4f7f6;         /* ពណ៌ផ្ទៃខាងក្រោយ */
+  --primary-color: #0d6efd; /* ខៀវភ្លឺ */
+  --primary-dark: #003366; /* ខៀវចាស់ (ពណ៌ចម្បងសម្រាប់ Real Estate) */
+  --gold-color: #ffd700; /* ពណ៌មាស */
+  --gold-hover: #e6c200; /* ពណ៌មាសដិត */
+  --light-bg: #f4f7f6; /* ពណ៌ផ្ទៃខាងក្រោយ */
   --white: #ffffff;
 }
 
@@ -16,7 +16,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Kantumruy Pro', 'Segoe UI', Roboto, sans-serif;
+  font-family: "Kantumruy Pro", "Segoe UI", Roboto, sans-serif;
   background-color: var(--light-bg);
   color: #333;
   -webkit-font-smoothing: antialiased;
@@ -43,8 +43,10 @@ body {
 
 /* ៤. ប្លង់ Header & Navbar */
 .fixed-top {
-  background-color: var(--primary-dark) !important; /* បង្ខំឱ្យ Header ប្រើពណ៌ខៀវចាស់ */
-  border-bottom: 3px solid var(--gold-color);      /* បន្ថែមបន្ទាត់មាសពីក្រោម */
+  background-color: var(
+    --primary-dark
+  ) !important; /* បង្ខំឱ្យ Header ប្រើពណ៌ខៀវចាស់ */
+  border-bottom: 3px solid var(--gold-color); /* បន្ថែមបន្ទាត់មាសពីក្រោម */
 }
 
 /* ៥. Active Link - ពណ៌មាស (Gold) ដែលបងចង់បាន */
@@ -54,7 +56,7 @@ body {
   border-radius: 6px;
   font-weight: bold;
   padding: 5px 12px !important;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease-in-out;
 }
 
@@ -73,7 +75,7 @@ body {
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
 }
 
 .card-title {
@@ -93,7 +95,7 @@ body {
 /* បន្ថែមចំណុចនេះដើម្បីដោះស្រាយបញ្ហា Header លាក់អក្សរ */
 .custom-header {
   background-color: #003366 !important; /* ពណ៌ខៀវចាស់ */
-  border-bottom: 3px solid #FFD700 !important; /* បន្ទាត់មាស */
+  border-bottom: 3px solid #ffd700 !important; /* បន្ទាត់មាស */
   padding: 10px 0;
   z-index: 1000;
 }
@@ -108,7 +110,7 @@ body {
 /* ពេលដាក់ Mouse លើ (Hover) ឬកំពុងនៅ Page នោះ (Active) */
 .custom-header .nav-link:hover,
 .custom-header .nav-link.active {
-  color: #FFD700 !important;
+  color: #ffd700 !important;
 }
 
 /* ពណ៌អក្សរ Logo */
@@ -118,10 +120,74 @@ body {
 
 /* ប៊ូតុង Sign Up */
 .btn-signup-nav {
-  background-color: #FFD700 !important;
+  background-color: #ffd700 !important;
   color: #000000 !important;
   font-weight: bold;
   padding: 8px 18px !important;
   border-radius: 6px !important;
   text-decoration: none;
+}
+/* ៨. បន្ថែមការតុបតែងសម្រាប់ Language Dropdown */
+
+/* កំណត់រូបរាងប៊ូតុង Dropdown ឱ្យស្អាត */
+#languageDropdown {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+#languageDropdown:hover {
+  border-color: var(--gold-color);
+  color: var(--gold-color);
+}
+
+/* កំណត់ការរចនាលើ Dropdown Menu */
+.dropdown-menu {
+  background-color: var(--white);
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px;
+  min-width: 120px;
+}
+
+/* ការរចនាលើ Item នីមួយៗក្នុង Dropdown */
+.dropdown-item {
+  padding: 8px 15px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+.dropdown-item:last-child {
+  margin-bottom: 0;
+}
+
+/* ពេល Mouse Hover លើភាសា */
+.dropdown-item:hover {
+  background-color: var(--primary-dark) !important;
+  color: var(--gold-color) !important;
+  padding-left: 20px; /* បន្ថែម Effect រំកិលអក្សរបន្តិចពេល Hover */
+}
+
+/* ការពារកុំឱ្យឃើញបន្ទាត់ខៀវជុំវិញពេលចុច (Outline) */
+.btn:focus,
+.btn-check:focus + .btn,
+.form-control:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* សម្រាប់ទូរស័ព្ទ កុំឱ្យ Dropdown ធ្លាក់មកបាំងអក្សរផ្សេង */
+@media (max-width: 991.98px) {
+  .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none !important;
+  }
+  .dropdown-item {
+    color: #ffffff;
+  }
 }
