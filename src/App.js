@@ -6,7 +6,7 @@ import Rent from './pages/rent/Rent';
 import News from './pages/news/News';  
 import ContactUs from './pages/contact/ContactUs';  
 import SignUp from './pages/signUp/SignUp';  
-
+import Login from './pages/login/Login';  
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
           <Route path="news" element={<News />} />
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="signUp" element={<SignUp />} />
+          <Route path="login" element={<Login />} />
         </Route>
       </Routes>
     </BrowserRouter>
