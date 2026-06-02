@@ -1,13 +1,92 @@
+/* ១. កំណត់ពណ៌ និង Variables (Theme) */
+:root {
+  --primary-color: #0d6efd;    /* ខៀវភ្លឺ */
+  --primary-dark: #003366;     /* ខៀវចាស់ (ពណ៌ចម្បងសម្រាប់ Real Estate) */
+  --gold-color: #FFD700;       /* ពណ៌មាស */
+  --gold-hover: #e6c200;       /* ពណ៌មាសដិត */
+  --light-bg: #f4f7f6;         /* ពណ៌ផ្ទៃខាងក្រោយ */
+  --white: #ffffff;
+}
+
+/* ២. ការកំណត់ទូទៅ (Global Styles) */
+html {
+  overflow-y: scroll; /* ការពារការកន្ត្រាក់ Header ពេលដូរ Page */
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  font-family: 'Kantumruy Pro', 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--light-bg);
+  color: #333;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* ៣. ការតុបតែង Scrollbar (ឱ្យមើលទៅតូច និងទំនើប) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* ៤. ប្លង់ Header & Navbar */
+.fixed-top {
+  background-color: var(--primary-dark) !important; /* បង្ខំឱ្យ Header ប្រើពណ៌ខៀវចាស់ */
+  border-bottom: 3px solid var(--gold-color);      /* បន្ថែមបន្ទាត់មាសពីក្រោម */
+}
+
+/* ៥. Active Link - ពណ៌មាស (Gold) ដែលបងចង់បាន */
+.bg-gold {
+  background-color: var(--gold-color) !important;
+  color: #000 !important; /* អក្សរខ្មៅលើពណ៌មាស */
+  border-radius: 6px;
+  font-weight: bold;
+  padding: 5px 12px !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link {
+  margin: 0 5px;
+  transition: color 0.2s ease;
+}
+
+/* ៦. ការតុបតែង Card ឱ្យមានលក្ខណៈ Professional */
+.card {
+  border: none !important;
+  border-radius: 15px !important;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+}
+
+.card-title {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+/* ៧. ប៊ូតុងទូទៅ */
+.btn-primary {
+  background-color: var(--primary-dark) !important;
+  border: none !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color) !important;
 }

@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Header() {
+
+    const navLinkStyle = ({ isActive }) =>
+        isActive ? "nav-link active fw-bold border-bottom bg-gold" : "nav-link";
+
     return (
-        <header className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <header className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
             <div className="container">
-                <Link className="navbar-brand fw-bold fs-4" to="/">
+                <NavLink className="navbar-brand fw-bold fs-4" to="/">
                     🏡 Real Estate
-                </Link>
+                </NavLink>
 
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span className="navbar-toggler-icon"></span>
@@ -16,22 +20,20 @@ function Header() {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto align-items-center">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Home</Link>
+                            <NavLink className={navLinkStyle} to="/">Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/sale">Sale</Link>
+                            <NavLink className={navLinkStyle} to="/sale">Sale</NavLink>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/rent">Rent</Link>
+                            <NavLink className={navLinkStyle} to="/rent">Rent</NavLink>
                         </li>
-                         <li className="nav-item">
-                            <Link className="nav-link" to="/news">News</Link>
+                        <li className="nav-item">
+                            <NavLink className={navLinkStyle} to="/news">News</NavLink>
                         </li>
-                        <li className="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            {/* កែប៊ូតុង Contact Us ឱ្យមានរាងមូលស្អាត */}
-                            <Link className="btn btn-warning text-dark fw-bold px-4 rounded-pill shadow-sm" to="/contact-us">
-                                Contact Us
-                            </Link>
+                        <li className="nav-item">
+                             <NavLink className={navLinkStyle} to="/contact-us">ContactUS</NavLink>
+
                         </li>
                     </ul>
                 </div>
