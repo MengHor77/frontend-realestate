@@ -1,13 +1,109 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --brand-primary: #0066cc;
+  --brand-accent: #00a86b;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background: #f5f7fb;
+}
+
+.theme-dark {
+  background: #121212;
+  color: #f1f1f1;
+}
+
+.theme-dark .bg-body,
+.theme-dark .card,
+.theme-dark .border,
+.theme-dark .stat-card,
+.theme-dark .cta-box {
+  background-color: #1f1f1f !important;
+  color: #f1f1f1;
+  border-color: #343a40 !important;
+}
+
+.theme-dark a {
+  color: #8ec5ff;
+}
+
+.home-carousel-image,
+.card-image {
+  height: 220px;
+  object-fit: cover;
+}
+
+.list-image {
+  width: 220px;
+  object-fit: cover;
+}
+
+.detail-main-image {
+  max-height: 460px;
+  object-fit: cover;
+}
+
+.thumb-image {
+  width: 82px;
+  height: 62px;
+  object-fit: cover;
+}
+
+.agent-avatar {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+}
+
+.key-detail,
+.stat-card,
+.cta-box {
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-image {
+  max-width: 85vw;
+  max-height: 80vh;
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: fixed;
+  top: 1rem;
+}
+
+.lightbox-close {
+  right: 1rem;
+}
+
+.lightbox-prev {
+  left: 1rem;
+  top: 50%;
+}
+
+.lightbox-next {
+  right: 1rem;
+  top: 50%;
+}
+
+@media (max-width: 768px) {
+  .list-image {
+    width: 100%;
+    height: 200px;
+  }
 }
