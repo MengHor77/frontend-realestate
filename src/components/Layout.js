@@ -52,7 +52,8 @@ function Layout() {
             </div>
             <div className="col-md-5">
               <form className="d-flex gap-2" aria-label="Newsletter subscription form">
-                <input className="form-control" type="email" placeholder="Subscribe to newsletter" aria-label="Email" />
+                <label className="visually-hidden" htmlFor="newsletter-email">Email</label>
+                <input id="newsletter-email" className="form-control" type="email" placeholder="Subscribe to newsletter" aria-label="Email" />
                 <button className="btn btn-success" type="submit">
                   Subscribe
                 </button>
