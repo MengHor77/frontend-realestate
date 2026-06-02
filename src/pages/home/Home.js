@@ -3,6 +3,7 @@ import PropertyCard from '../../components/PropertyCard';
 import { useAppContext } from '../../context/AppContext';
 
 const quickFilters = ['Buy', 'Rent', 'New Listings'];
+const DEFAULT_MAX_PRICE = 500000;
 
 function Home() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ function Home() {
       query: formData.get('query') || '',
       maxPrice: Number(formData.get('maxPrice')) || state.filters.maxPrice,
       propertyType: formData.get('propertyType') || 'Any',
+      mode: 'Any',
     });
     navigate('/search');
   };
@@ -47,9 +49,12 @@ function Home() {
               type="button"
               className="rounded-full border border-white/40 px-4 py-1 text-sm hover:bg-white hover:text-blue-700"
               onClick={() => {
-                setFilters(filter === 'New Listings' ? { sort: 'newest' } : { query: '', propertyType: 'Any' });
-                if (filter === 'Buy' || filter === 'Rent') {
-                  setFilters({ query: '', propertyType: 'Any', minPrice: 0, maxPrice: 500000 });
+                if (filter === 'New Listings') {
+                  setFilters({ sort: 'newest', mode: 'Any' });
+                } else if (filter === 'Buy') {
+                  setFilters({ query: '', propertyType: 'Any', mode: 'Buy', minPrice: 0, maxPrice: DEFAULT_MAX_PRICE });
+                } else {
+                  setFilters({ query: '', propertyType: 'Any', mode: 'Rent', minPrice: 0, maxPrice: DEFAULT_MAX_PRICE });
                 }
                 navigate('/properties');
               }}

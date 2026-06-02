@@ -115,6 +115,7 @@ export const defaultFilters = {
   minPrice: 0,
   maxPrice: 500000,
   propertyType: 'Any',
+  mode: 'Any',
   bedrooms: 'Any',
   bathrooms: 'Any',
   minSize: 0,

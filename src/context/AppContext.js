@@ -64,6 +64,7 @@ export function AppProvider({ children }) {
       minPrice,
       maxPrice,
       propertyType,
+      mode,
       bedrooms,
       bathrooms,
       minSize,
@@ -80,6 +81,7 @@ export function AppProvider({ children }) {
       const matchesLocation = location === 'Any' || property.neighborhood === location;
       const matchesPrice = property.price >= Number(minPrice) && property.price <= Number(maxPrice);
       const matchesType = propertyType === 'Any' || property.type === propertyType;
+      const matchesMode = mode === 'Any' || property.mode === mode;
       const matchesBedrooms = bedrooms === 'Any' || property.beds >= Number(bedrooms);
       const matchesBathrooms = bathrooms === 'Any' || property.baths >= Number(bathrooms);
       const matchesSize = property.size >= Number(minSize);
@@ -90,6 +92,7 @@ export function AppProvider({ children }) {
         && matchesLocation
         && matchesPrice
         && matchesType
+        && matchesMode
         && matchesBedrooms
         && matchesBathrooms
         && matchesSize

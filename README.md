@@ -18,7 +18,7 @@ A production-style React real estate UI built with functional components, Contex
 - Context API reducer for shared app state
 - Tailwind CSS (mobile-first responsive styling)
 - React Hook Form for forms
-- React Router v6 for page routing
+- React Router v6 for page routing (kept on v6 for CRA/Jest compatibility, with future flags enabled in `BrowserRouter` to ease v7 migration)
 
 ## Scripts
 

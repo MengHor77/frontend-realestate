@@ -32,6 +32,7 @@ function SearchResultsPage() {
             Enable email alerts
           </label>
           <p className="mt-2 text-xs text-slate-500">Saved searches: {state.savedSearches.length}</p>
+          <p className="mt-1 text-xs text-slate-500">{alertEnabled ? 'Email alerts are active for new matches.' : 'Enable alerts to receive matching listings.'}</p>
         </div>
       </section>
 
