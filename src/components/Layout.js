@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import Footer from './Footer';
 
 function Layout() {
   return (
@@ -11,11 +12,8 @@ function Layout() {
         <Outlet />
       </main>
 
-      <footer className="bg-light py-3 border-top mt-auto">
-        <div className="container text-center">
-          <span className="text-muted">© 2026 គ្រប់គ្រងដោយលោក Meng hor</span>
-        </div>
-      </footer>
+      <Footer />
+
     </div>
   );
 }
