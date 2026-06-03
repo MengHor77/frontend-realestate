@@ -6,8 +6,14 @@ const Login = () => {
     const { t } = useTranslation();
 
     return (
-        <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center py-5"
-            style={{ backgroundColor: 'var(--light-bg)', marginTop: '60px' }}>
+        <div className="container-fluid d-flex align-items-center justify-content-center"
+            style={{
+                backgroundColor: 'var(--light-bg)',
+                minHeight: '100vh',         // Takes up the full view height
+                marginTop: '-75px',          // Pulls the background up behind the navbar completely
+                paddingTop: '95px',          // 75px layout clearance + 20px extra breathing room for content
+                paddingBottom: '40px'
+            }}>
             <div className="container">
                 <div className="row justify-content-center align-items-center">
 

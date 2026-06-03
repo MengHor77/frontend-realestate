@@ -30,7 +30,7 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* ── Frontend Public Routes ───────────────────────────── */}
+        {/* ── Frontend Public Routes (Includes Layout) ───────────────────────────── */}
         <Route element={<FrontendLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -39,11 +39,11 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
-        </Route>
 
-        {/* ── Auth Routes (no layout) ───────────────────────────── */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+          {/* MOVED HERE: Now these pages will display your header and footer */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Route>
 
         {/* ── Admin Protected Routes ───────────────────────────── */}
         <Route path="/admin" element={<AdminLayout />}>
