@@ -172,20 +172,92 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
 }
-/* ៨. បន្ថែមការតុបតែងសម្រាប់ Language Dropdown */
+/* ==========================================================================
+   Language Dropdown - Premium Glassmorphism Style
+   ========================================================================== */
 
-/* កំណត់រូបរាងប៊ូតុង Dropdown ឱ្យស្អាត */
+/* កំណត់រូបរាងប៊ូតុង Dropdown (Main Button) */
 #languageDropdown {
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1); /* ថ្លាៗតិចៗ */
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   font-weight: 500;
-  transition: all 0.3s ease;
+  border-radius: 30px;
+  padding: 6px 18px;
+  backdrop-filter: blur(5px); /* ធ្វើឱ្យផ្ទៃខាងក្រោយព្រាលៗបែបកញ្ចក់ */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #languageDropdown:hover {
+  background: rgba(255, 255, 255, 0.2);
   border-color: var(--gold-color);
   color: var(--gold-color);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+/* កំណត់ការរចនាលើ Dropdown Menu (The Box) */
+.custom-header .dropdown-menu {
+  background: rgba(255, 255, 255, 0.95); /* ពណ៌សថ្លាៗ */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 51, 102, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+  padding: 10px;
+  min-width: 150px;
+  margin-top: 12px !important; /* ទុកចន្លោះពីប៊ូតុងបន្តិច */
+  
+  /* បង្កើតចលនា Fade-in & Slide-up ពេលបង្ហាញ Menu */
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ពេល Dropdown បើក (Show Menu) */
+.custom-header .dropdown:hover .dropdown-menu,
+.custom-header .dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ការរចនាលើ Item នីមួយៗ (English / ខ្មែរ) */
+.custom-header .dropdown-item {
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: var(--primary-dark);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+/* ពេល Mouse Hover លើភាសា */
+.custom-header .dropdown-item:hover {
+  background-color: var(--primary-dark) !important;
+  color: var(--gold-color) !important;
+  transform: scale(1.03); /* រីកធំបន្តិចបែបទំនើប */
+}
+
+/* បន្ថែមរូបសញ្ញា Checkmark តូចមួយនៅពីមុខភាសាដែលកំពុងជ្រើសរើស (Optional) */
+.custom-header .dropdown-item.active {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: var(--primary-dark);
+}
+
+/* កែសម្រួលសម្រាប់ Mobile */
+@media (max-width: 991.98px) {
+  .custom-header .dropdown-menu {
+    background: var(--primary-dark);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    transform: none !important;
+  }
+  .custom-header .dropdown-item {
+    color: #ffffff;
+  }
 }
 
 /* កំណត់ការរចនាលើ Dropdown Menu */
