@@ -18,7 +18,7 @@ function Header() {
                 {/* Logo & Brand Name */}
                 <NavLink className="navbar-brand fw-bold fs-4 d-flex align-items-center gap-2" to="/">
                     <span className="brand-icon">🏡</span>
-                    <span className="brand-text">Real Estate <span className="text-gold">MH</span></span>
+                    <span className="brand-text">MH<span className="text-gold"> Real Estate</span></span>
                 </NavLink>
 
                 {/* Mobile Menu Toggler */}

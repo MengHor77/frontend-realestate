@@ -11,7 +11,7 @@ function Footer() {
                 <div className="row g-4">
                     {/* ផ្នែកទី ១: អំពីក្រុមហ៊ុន */}
                     <div className="col-lg-4 col-md-6">
-                        <h4 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>Real Estate MH</h4>
+                        <h4 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>MH Real Estate </h4>
                         <p className="opacity-75" style={{ fontSize: '14px', lineHeight: '1.8' }}>
                             {t('footer_about')}
                         </p>
