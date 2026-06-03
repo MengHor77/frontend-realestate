@@ -3,19 +3,16 @@ import { Outlet } from 'react-router-dom';
 import Header from '../components/frontend/Header';
 import Footer from '../components/frontend/Footer';
 
-function Layout() {
+const FrontendLayout = () => {
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-
-      <main className="flex-grow-1 my-4">
+      <main style={{ flex: 1 }}>
         <Outlet />
       </main>
-
       <Footer />
-
     </div>
   );
-}
+};
 
-export default Layout;
+export default FrontendLayout;
