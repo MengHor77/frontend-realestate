@@ -7,7 +7,8 @@ const FrontendLayout = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <main style={{ flex: 1 }}>
+      {/* Added pt-5 (padding-top) or style padding to clear the fixed navbar */}
+      <main style={{ flex: 1, paddingTop: '75px' }}> 
         <Outlet />
       </main>
       <Footer />

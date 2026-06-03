@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next'; // ១. Import
+import { useTranslation } from 'react-i18next';
 import ServiceCard from '../../../components/frontend/ServiceCard';
+import HeroSection from '../../../components/frontend/HeroSection'; // 1. Import your new clean component
 
 function Home() {
-    const { t } = useTranslation(); // ២. ហៅ Hook
+    const { t } = useTranslation();
 
     const services = [
         { title: t('house_sale'), icon: '🏡', link: '/sale', color: '#e3f2fd' },
@@ -17,33 +18,8 @@ function Home() {
 
     return (
         <div className="home-page">
-            {/* ១. Hero Section */}
-            <section className="hero-section text-white d-flex align-items-center py-5"
-                style={{
-                    background: 'linear-gradient(rgba(0, 51, 102, 0.5), rgba(0, 51, 102, 0.8)), url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1073&q=80")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    minHeight: '80vh'
-                }}>
-                <div className="container text-center">
-                    <h1 className="display-3 fw-bold mb-3">{t('hero_title')}</h1>
-                    <p className="lead mb-5 opacity-75">{t('hero_subtitle')}</p>
-
-                    <div className="row justify-content-center">
-                        <div className="col-lg-8">
-                            <div className="bg-white p-3 rounded-4 shadow-lg d-flex flex-column flex-md-row gap-2">
-                                <input type="text" className="form-control border-0 py-3" placeholder={t('search_placeholder')} />
-                                <select className="form-select border-0">
-                                    <option>{t('all_types')}</option>
-                                    <option>{t('sale')}</option>
-                                    <option>{t('rent')}</option>
-                                </select>
-                                <button className="btn btn-primary px-5 fw-bold rounded-3 py-3">{t('search_btn')}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {/* ១. Hero Section - Swapped with the optimized standalone component */}
+            <HeroSection />
 
             {/* ២. Categories Section */}
             <section className="container py-5 mt-4">
@@ -139,7 +115,7 @@ function Home() {
                 <div className="p-5 rounded-5 text-white text-center shadow-lg" style={{ backgroundColor: 'var(--primary-dark)', borderLeft: '10px solid var(--gold-color)' }}>
                     <h2 className="fw-bold mb-3">{t('cta_title')}</h2>
                     <p className="mb-4 opacity-75">{t('cta_subtitle')}</p>
-                    <Link to="/contact-us" className="btn btn-warning btn-lg px-5 fw-bold rounded-pill">{t('consult_now')}</Link>
+                    <Link to="/contact" className="btn btn-warning btn-lg px-5 fw-bold rounded-pill">{t('consult_now')}</Link>
                 </div>
             </section>
         </div>
