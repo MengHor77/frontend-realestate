@@ -1,7 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import SignUpForm from '../../components/SignUpForm';
 
 const SignUp = () => {
+    const { t } = useTranslation();
+
     return (
         <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center py-5"
             style={{ backgroundColor: 'var(--light-bg)', marginTop: '60px' }}>
@@ -10,12 +13,12 @@ const SignUp = () => {
                     {/* ផ្នែកខាងឆ្វេង: រូបភាព ឬ អត្ថបទស្វាគមន៍ */}
                     <div className="col-md-6 d-none d-lg-block text-center mb-4 mb-lg-0">
                         <h1 style={{ color: 'var(--primary-dark)', fontWeight: '800', fontSize: '3rem' }}>
-                            ស្វែងរកផ្ទះក្នុងក្តីសុបិន <br />
-                            <span style={{ color: 'var(--gold-color)' }}>ជាមួយយើង!</span>
+                            {t('signup_hero_title_1')} <br />
+                            <span style={{ color: 'var(--gold-color)' }}>{t('signup_hero_title_2')}</span>
                         </h1>
                         <p className="lead mt-3 text-secondary">
-                            ចុះឈ្មោះដើម្បីទទួលបានព័ត៌មានអចលនទ្រព្យថ្មីៗ <br />
-                            និងការផ្ដល់ជូនពិសេសមុនគេ។
+                            {t('signup_hero_desc_1')} <br />
+                            {t('signup_hero_desc_2')}
                         </p>
                         <img
                             src="https://img.freepik.com/free-vector/sign-up-concept-illustration_114360-7885.jpg"
