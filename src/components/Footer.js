@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; // ១. ថែមនេះ
 
 function Footer() {
+    const { t } = useTranslation(); // ២. ហៅ Hook
+
     return (
         <footer className="text-white pt-5 pb-3 border-top" style={{ backgroundColor: 'var(--primary-dark)', borderTop: '4px solid var(--gold-color) !important' }}>
             <div className="container">
@@ -10,7 +13,7 @@ function Footer() {
                     <div className="col-lg-4 col-md-6">
                         <h4 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>Real Estate MH</h4>
                         <p className="opacity-75" style={{ fontSize: '14px', lineHeight: '1.8' }}>
-                            យើងគឺជាភ្នាក់ងារអចលនទ្រព្យឈានមុខគេក្នុងប្រទេសកម្ពុជា ដែលផ្តល់ជូននូវសេវាកម្មទិញ លក់ និងជួល ប្រកបដោយទំនុកចិត្ត និងតម្លាភាពខ្ពស់បំផុតសម្រាប់អតិថិជន។
+                            {t('footer_about')}
                         </p>
                         <div className="d-flex gap-3 mt-4">
                             <a href="#" className="text-white fs-5"><i className="bi bi-facebook"></i></a>
@@ -21,32 +24,32 @@ function Footer() {
 
                     {/* ផ្នែកទី ២: តំណភ្ជាប់រហ័ស */}
                     <div className="col-lg-2 col-md-6">
-                        <h5 className="fw-bold mb-4">តំណភ្ជាប់រហ័ស</h5>
+                        <h5 className="fw-bold mb-4">{t('quick_links')}</h5>
                         <ul className="list-unstyled">
-                            <li className="mb-2"><Link to="/" className="text-white text-decoration-none opacity-75">ទំព័រដើម</Link></li>
-                            <li className="mb-2"><Link to="/sale" className="text-white text-decoration-none opacity-75">សម្រាប់លក់</Link></li>
-                            <li className="mb-2"><Link to="/rent" className="text-white text-decoration-none opacity-75">សម្រាប់ជួល</Link></li>
-                            <li className="mb-2"><Link to="/news" className="text-white text-decoration-none opacity-75">ព័ត៌មានថ្មីៗ</Link></li>
+                            <li className="mb-2"><Link to="/" className="text-white text-decoration-none opacity-75">{t('home')}</Link></li>
+                            <li className="mb-2"><Link to="/sale" className="text-white text-decoration-none opacity-75">{t('sale')}</Link></li>
+                            <li className="mb-2"><Link to="/rent" className="text-white text-decoration-none opacity-75">{t('rent')}</Link></li>
+                            <li className="mb-2"><Link to="/news" className="text-white text-decoration-none opacity-75">{t('news')}</Link></li>
                         </ul>
                     </div>
 
                     {/* ផ្នែកទី ៣: សេវាកម្ម */}
                     <div className="col-lg-3 col-md-6">
-                        <h5 className="fw-bold mb-4">សេវាកម្មរបស់យើង</h5>
+                        <h5 className="fw-bold mb-4">{t('our_services_footer')}</h5>
                         <ul className="list-unstyled opacity-75" style={{ fontSize: '14px' }}>
-                            <li className="mb-2">✓ វាយតម្លៃអចលនទ្រព្យ</li>
-                            <li className="mb-2">✓ ប្រឹក្សាយោបល់ផ្នែកវិនិយោគ</li>
-                            <li className="mb-2">✓ សេវាកម្មផ្ទេរសិទ្ធិកាន់កាប់</li>
-                            <li className="mb-2">✓ គ្រប់គ្រងការជួលផ្ទះ/ខុនដូ</li>
+                            <li className="mb-2">✓ {t('service_1')}</li>
+                            <li className="mb-2">✓ {t('service_2')}</li>
+                            <li className="mb-2">✓ {t('service_3')}</li>
+                            <li className="mb-2">✓ {t('service_4')}</li>
                         </ul>
                     </div>
 
                     {/* ផ្នែកទី ៤: ទំនាក់ទំនង */}
                     <div className="col-lg-3 col-md-6">
-                        <h5 className="fw-bold mb-4">ទំនាក់ទំនង</h5>
-                        <p className="opacity-75 small mb-2">📍 បឹងកេងកង ១, រាជធានីភ្នំពេញ</p>
+                        <h5 className="fw-bold mb-4">{t('contact_us_footer')}</h5>
+                        <p className="opacity-75 small mb-2">📍 {t('address')}</p>
                         <p className="opacity-75 small mb-2">📞 096 316 77 44</p>
-                        <p className="opacity-75 small mb-0">✉️ menghor2152152gmail.com</p>
+                        <p className="opacity-75 small mb-0">✉️ menghor215215@gmail.com</p>
                     </div>
                 </div>
 
@@ -54,7 +57,7 @@ function Footer() {
 
                 {/* ផ្នែករក្សាសិទ្ធិ */}
                 <div className="text-center opacity-75">
-                    <small>© 2026 គ្រប់គ្រងដោយលោក Meng Hor រក្សាសិទ្ធិគ្រប់យ៉ាង</small>
+                    <small>{t('copyright')}</small>
                 </div>
             </div>
         </footer>

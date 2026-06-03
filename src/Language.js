@@ -46,6 +46,17 @@ const resources = {
       "cta_subtitle": "Our expert agents will help you get the best price quickly.",
       "consult_now": "Consult Now",
       "default_service_desc": "Explore many great options available.",
+      "footer_about": "We are a leading real estate agency in Cambodia, providing buying, selling, and renting services with the highest trust and transparency for our customers.",
+      "quick_links": "Quick Links",
+      "our_services_footer": "Our Services",
+      "service_1": "Property Valuation",
+      "service_2": "Investment Consulting",
+      "service_3": "Ownership Transfer Service",
+      "service_4": "Rental Property Management",
+      "contact_us_footer": "Contact Us",
+      "address": "Boeung Keng Kang 1, Phnom Penh",
+      "copyright": "© 2026 Managed by Mr. Meng Hor. All Rights Reserved.",
+
     }
   },
   kh: {
@@ -91,6 +102,17 @@ const resources = {
       "cta_subtitle": "ភ្នាក់ងារជំនាញរបស់យើងនឹងជួយអ្នកឱ្យទទួលបានតម្លៃខ្ពស់ និងលឿនបំផុត។",
       "consult_now": "ប្រឹក្សាយោបល់ឥឡូវនេះ",
       "default_service_desc": "ស្វែងរកជម្រើសល្អៗជាច្រើនកន្លែង",
+      "footer_about": "យើងគឺជាភ្នាក់ងារអចលនទ្រព្យឈានមុខគេក្នុងប្រទេសកម្ពុជា ដែលផ្តល់ជូននូវសេវាកម្មទិញ លក់ និងជួល ប្រកបដោយទំនុកចិត្ត និងតម្លាភាពខ្ពស់បំផុតសម្រាប់អតិថិជន។",
+      "quick_links": "តំណភ្ជាប់រហ័ស",
+      "our_services_footer": "សេវាកម្មរបស់យើង",
+      "service_1": "វាយតម្លៃអចលនទ្រព្យ",
+      "service_2": "ប្រឹក្សាយោបល់ផ្នែកវិនិយោគ",
+      "service_3": "សេវាកម្មផ្ទេរសិទ្ធិកាន់កាប់",
+      "service_4": "គ្រប់គ្រងការជួលផ្ទះ/ខុនដូ",
+      "contact_us_footer": "ទំនាក់ទំនង",
+      "address": "បឹងកេងកង ១, រាជធានីភ្នំពេញ",
+      "copyright": "© 2026 គ្រប់គ្រងដោយលោក Meng Hor រក្សាសិទ្ធិគ្រប់យ៉ាង",
+
     }
   }
 };
