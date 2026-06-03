@@ -83,7 +83,15 @@ const resources = {
       "contact_info_btn": "Contact for info",
       "prev": "Previous",
       "next": "Next",
-      "size_format": "{{value}} m"
+      "size_format": "{{value}} m",
+      "properties_for_rent": "Properties for Rent",
+      "available_units_count": "{{count}} available units",
+      "per_month": "month",
+      "book_now_btn": "Book Now",
+      "modern_condo_studio": "Modern Condo (Studio Room)",
+      "available_now": "Available Now",
+      "fully_furnished": "Fully Furnished",
+      "has_pool": "Has Swimming Pool",
 
     }
   },
@@ -167,7 +175,15 @@ const resources = {
       "contact_info_btn": "ទាក់ទងសួរព័ត៌មាន",
       "prev": "ថយក្រោយ",
       "next": "បន្ទាប់",
-      "size_format": "{{value}} ម៉ែត្រ"
+      "size_format": "{{value}} ម៉ែត្រ",
+      "properties_for_rent": "អចលនទ្រព្យសម្រាប់ជួល",
+      "available_units_count": "មានទីតាំងទំនេរចំនួន {{count}} កន្លែង",
+      "per_month": "ខែ",
+      "book_now_btn": "កក់ទុកមុន",
+      "modern_condo_studio": "ខុនដូទំនើប (Studio Room)",
+      "available_now": "ទំនេរឥឡូវនេះ",
+      "fully_furnished": "មានគ្រឿងសង្ហារិមពេញ",
+      "has_pool": "មានអាងហែលទឹក",
 
 
     }
