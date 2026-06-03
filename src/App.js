@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/home/Home';
-import Sale from './pages/sale/Sale';    
-import Rent from './pages/rent/Rent';       
-import News from './pages/news/News';  
-import ContactUs from './pages/contact/ContactUs';  
-import SignUp from './pages/signUp/SignUp';  
-import Login from './pages/login/Login';  
+import Layout from './layouts/frontentLayout';
+import Home from './pages/frontend/home/Home';
+import Sale from './pages/frontend/sale/Sale';
+import Rent from './pages/frontend/rent/Rent';
+import News from './pages/frontend/news/News';
+import ContactUs from './pages/frontend/contact/ContactUs';
+import SignUp from './pages/frontend/signUp/SignUp';
+import Login from './pages/frontend/login/Login';
 
 function App() {
   return (

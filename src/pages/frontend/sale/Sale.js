@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import SaleCard from '../../components/SaleCard';
+import SaleCard from '../../../components/frontend/SaleCard';
 
 function Sale() {
     const { t } = useTranslation();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next'; // ១. Import
-import ServiceCard from '../../components/ServiceCard';
+import ServiceCard from '../../../components/frontend/ServiceCard';
 
 function Home() {
     const { t } = useTranslation(); // ២. ហៅ Hook

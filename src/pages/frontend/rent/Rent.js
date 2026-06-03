@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import RentCard from '../../components/RentCard';
+import RentCard from '../../../components/frontend/RentCard';
 
 function Rent() {
     const { t } = useTranslation();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import TopicCard from '../../components/TopicCard';
+import TopicCard from '../../../components/frontend/TopicCard';
 
 function News() {
     const { t } = useTranslation();

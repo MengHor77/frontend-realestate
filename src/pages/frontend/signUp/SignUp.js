@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import SignUpForm from '../../components/SignUpForm';
+import SignUpForm from '../../../components/frontend/SignUpForm';
 
 const SignUp = () => {
     const { t } = useTranslation();
