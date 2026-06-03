@@ -1,4 +1,6 @@
-/* ១. កំណត់ពណ៌ និង Variables (Theme) */
+/* ==========================================================================
+   ១. កំណត់ពណ៌ និង Variables (Theme)
+   ========================================================================== */
 :root {
   --primary-color: #0d6efd; /* ខៀវភ្លឺ */
   --primary-dark: #003366; /* ខៀវចាស់ (ពណ៌ចម្បងសម្រាប់ Real Estate) */
@@ -8,7 +10,9 @@
   --white: #ffffff;
 }
 
-/* ២. ការកំណត់ទូទៅ (Global Styles) */
+/* ==========================================================================
+   ២. ការកំណត់ទូទៅ (Global Styles)
+   ========================================================================== */
 html {
   overflow-y: scroll; /* ការពារការកន្ត្រាក់ Header ពេលដូរ Page */
 }
@@ -23,7 +27,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ៣. ការតុបតែង Scrollbar (ឱ្យមើលទៅតូច និងទំនើប) */
+/* ==========================================================================
+   ៣. ការតុបតែង Scrollbar (ឱ្យមើលទៅតូច និងទំនើប)
+   ========================================================================== */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -41,7 +47,9 @@ body {
   background: var(--primary-dark);
 }
 
-/* ៤. ប្លង់ Header & Navbar */
+/* ==========================================================================
+   ៤. ប្លង់ Header & Navbar
+   ========================================================================== */
 .fixed-top {
   background-color: var(
     --primary-dark
@@ -49,7 +57,51 @@ body {
   border-bottom: 3px solid var(--gold-color); /* បន្ថែមបន្ទាត់មាសពីក្រោម */
 }
 
-/* ៥. Active Link - ពណ៌មាស (Gold) ដែលបងចង់បាន */
+.custom-header {
+  background-color: #003366 !important; /* ពណ៌ខៀវចាស់ */
+  border-bottom: 3px solid #ffd700 !important; /* បន្ទាត់មាស */
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+.custom-header .navbar-brand {
+  color: #ffffff !important;
+}
+
+/* --- Header Premium Menu Links Style --- */
+.custom-header .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative; /* ចាំបាច់សម្រាប់បង្កើត Underline Effect */
+  padding: 6px 0 !important; /* បន្ថែមគម្លាតលើក្រោមឱ្យមើលទៅសមសួន */
+  margin: 0 12px; /* បង្កើនគម្លាតឆ្វេងស្តាំរវាង Menu នីមួយៗ */
+}
+
+.custom-header .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--gold-color);
+  transition: width 0.3s ease-in-out;
+}
+
+.custom-header .nav-link:hover,
+.custom-header .nav-link.active {
+  color: var(--gold-color) !important;
+}
+
+.custom-header .nav-link:hover::after,
+.custom-header .nav-link.active::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   ៥. Active Link - ពណ៌មាស (Gold)
+   ========================================================================== */
 .bg-gold {
   background-color: var(--gold-color) !important;
   color: #000 !important; /* អក្សរខ្មៅលើពណ៌មាស */
@@ -60,12 +112,9 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
-.nav-link {
-  margin: 0 5px;
-  transition: color 0.2s ease;
-}
-
-/* ៦. ការតុបតែង Card ឱ្យមានលក្ខណៈ Professional */
+/* ==========================================================================
+   ៦. ការតុបតែង Card ឱ្យមានលក្ខណៈ Professional
+   ========================================================================== */
 .card {
   border: none !important;
   border-radius: 15px !important;
@@ -83,7 +132,9 @@ body {
   font-weight: 700;
 }
 
-/* ៧. ប៊ូតុងទូទៅ */
+/* ==========================================================================
+   ៧. ប៊ូតុងទូទៅ
+   ========================================================================== */
 .btn-primary {
   background-color: var(--primary-dark) !important;
   border: none !important;
@@ -92,34 +143,9 @@ body {
 .btn-primary:hover {
   background-color: var(--primary-color) !important;
 }
-/* បន្ថែមចំណុចនេះដើម្បីដោះស្រាយបញ្ហា Header លាក់អក្សរ */
-.custom-header {
-  background-color: #003366 !important; /* ពណ៌ខៀវចាស់ */
-  border-bottom: 3px solid #ffd700 !important; /* បន្ទាត់មាស */
-  padding: 10px 0;
-  z-index: 1000;
-}
-
-/* ធានាថាគ្រប់ Link ក្នុង Header មានពណ៌ស */
-.custom-header .nav-link {
-  color: #ffffff !important;
-  font-weight: 500;
-  transition: 0.3s;
-}
-
-/* ពេលដាក់ Mouse លើ (Hover) ឬកំពុងនៅ Page នោះ (Active) */
-.custom-header .nav-link:hover,
-.custom-header .nav-link.active {
-  color: #ffd700 !important;
-}
-
-/* ពណ៌អក្សរ Logo */
-.custom-header .navbar-brand {
-  color: #ffffff !important;
-}
 
 /* ==========================================================================
-   ប៊ូតុង Sign Up - Premium Luxury Animation Style
+   ៨. ប៊ូតុង Sign Up - Premium Luxury Animation Style
    ========================================================================== */
 .btn-signup-nav {
   position: relative;
@@ -136,7 +162,6 @@ body {
   z-index: 1;
 }
 
-/* បង្កើតស្រទាប់ពន្លឺពណ៌សរត់កាត់ (Shine Effect Layer) */
 .btn-signup-nav::before {
   content: "";
   position: absolute;
@@ -154,7 +179,6 @@ body {
   z-index: -1;
 }
 
-/* ដំណាក់កាលពេលដាក់ Mouse លើ (Hover Effect) */
 .btn-signup-nav:hover {
   background-color: var(--gold-hover) !important;
   color: #000000 !important;
@@ -162,60 +186,69 @@ body {
   box-shadow: 0 6px 20px rgba(255, 215, 0, 0.45); /* បង្កើនកម្រិតស្រមោលឱ្យដិតស្អាត */
 }
 
-/* ពេល Hover: បញ្ជាឱ្យពន្លឺពណ៌សរត់កាត់ពីឆ្វេងទៅស្តាំយ៉ាងលឿន */
 .btn-signup-nav:hover::before {
   left: 100%;
 }
 
-/* ពេលចុចលើប៊ូតុង (Click Effect) */
 .btn-signup-nav:active {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
 }
+
 /* ==========================================================================
-   Language Dropdown - Premium Glassmorphism Style
+   ៩. Language Dropdown - Stable Premium Glassmorphism Style (No Shaking)
    ========================================================================== */
 
-/* កំណត់រូបរាងប៊ូតុង Dropdown (Main Button) */
+/* Dropdown Toggle Button */
 #languageDropdown {
-  background: rgba(255, 255, 255, 0.1); /* ថ្លាៗតិចៗ */
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   font-weight: 500;
   border-radius: 30px;
   padding: 6px 18px;
-  backdrop-filter: blur(5px); /* ធ្វើឱ្យផ្ទៃខាងក្រោយព្រាលៗបែបកញ្ចក់ */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(5px);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-#languageDropdown:hover {
+#languageDropdown:hover,
+#languageDropdown:focus,
+#languageDropdown[aria-expanded="true"] {
   background: rgba(255, 255, 255, 0.2);
   border-color: var(--gold-color);
   color: var(--gold-color);
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-  transform: translateY(-1px);
 }
 
-/* កំណត់ការរចនាលើ Dropdown Menu (The Box) */
+/* Dropdown Menu Container (Locked size to stop layout shifts) */
 .custom-header .dropdown-menu {
-  background: rgba(255, 255, 255, 0.95); /* ពណ៌សថ្លាៗ */
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 51, 102, 0.1);
   border-radius: 16px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
-  padding: 10px;
+  padding: 8px;
+  width: 150px;
   min-width: 150px;
-  margin-top: 12px !important; /* ទុកចន្លោះពីប៊ូតុងបន្តិច */
-  
-  /* បង្កើតចលនា Fade-in & Slide-up ពេលបង្ហាញ Menu */
+  max-width: 150px;
+  margin-top: 8px !important;
+
+  /* Safe Animation Layout */
   display: block;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(15px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(10px);
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease,
+    transform 0.25s ease;
 }
 
-/* ពេល Dropdown បើក (Show Menu) */
+/* Dropdown Menu Open Trigger States */
 .custom-header .dropdown:hover .dropdown-menu,
 .custom-header .dropdown-menu.show {
   opacity: 1;
@@ -223,107 +256,62 @@ body {
   transform: translateY(0);
 }
 
-/* ការរចនាលើ Item នីមួយៗ (English / ខ្មែរ) */
+/* Individual Dropdown Items */
 .custom-header .dropdown-item {
-  padding: 10px 15px;
+  padding: 10px 15px !important;
   border-radius: 10px;
-  color: var(--primary-dark);
+  margin-bottom: 2px;
+  color: var(--primary-dark) !important;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.2s ease;
+  background: transparent !important;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* ពេល Mouse Hover លើភាសា */
-.custom-header .dropdown-item:hover {
-  background-color: var(--primary-dark) !important;
-  color: var(--gold-color) !important;
-  transform: scale(1.03); /* រីកធំបន្តិចបែបទំនើប */
-}
-
-/* បន្ថែមរូបសញ្ញា Checkmark តូចមួយនៅពីមុខភាសាដែលកំពុងជ្រើសរើស (Optional) */
-.custom-header .dropdown-item.active {
-  background-color: rgba(255, 215, 0, 0.1);
-  color: var(--primary-dark);
-}
-
-/* កែសម្រួលសម្រាប់ Mobile */
-@media (max-width: 991.98px) {
-  .custom-header .dropdown-menu {
-    background: var(--primary-dark);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    transform: none !important;
-  }
-  .custom-header .dropdown-item {
-    color: #ffffff;
-  }
-}
-
-/* កំណត់ការរចនាលើ Dropdown Menu */
-.dropdown-menu {
-  background-color: var(--white);
-  border: none;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-  padding: 8px;
-  min-width: 120px;
-}
-
-/* ការរចនាលើ Item នីមួយៗក្នុង Dropdown */
-.dropdown-item {
-  padding: 8px 15px;
-  border-radius: 6px;
-  margin-bottom: 2px;
-  color: var(--primary-dark);
-  font-weight: 500;
-}
-
-.dropdown-item:last-child {
+.custom-header .dropdown-item:last-child {
   margin-bottom: 0;
 }
 
-/* ពេល Mouse Hover លើភាសា */
-.dropdown-item:hover {
+/* Item Interactions */
+.custom-header .dropdown-item:hover,
+.custom-header .dropdown-item:focus {
   background-color: var(--primary-dark) !important;
   color: var(--gold-color) !important;
-  padding-left: 20px; /* បន្ថែម Effect រំកិលអក្សរបន្តិចពេល Hover */
 }
 
-/* ការពារកុំឱ្យឃើញបន្ទាត់ខៀវជុំវិញពេលចុច (Outline) */
+.custom-header .dropdown-item.active {
+  background-color: rgba(0, 51, 102, 0.1) !important;
+  color: var(--primary-dark) !important;
+}
+
+/* Global focus resets to prevent component bouncing */
 .btn:focus,
 .btn-check:focus + .btn,
-.form-control:focus {
+.form-control:focus,
+.dropdown-item:focus {
   box-shadow: none !important;
   outline: none !important;
 }
 
-/* សម្រាប់ទូរស័ព្ទ កុំឱ្យ Dropdown ធ្លាក់មកបាំងអក្សរផ្សេង */
-@media (max-width: 991.98px) {
-  .dropdown-menu {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: none !important;
-  }
-  .dropdown-item {
-    color: #ffffff;
-  }
-}
-
-/* --- Footer Premium Quick Links Style --- */
+/* ==========================================================================
+   ១០. --- Footer Premium Quick Links Style ---
+   ========================================================================== */
 .footer-link {
   position: relative;
   transition: all 0.3s ease-in-out;
-  display: inline-block; /* ងាយស្រួលក្នុងការធ្វើ Underline Effect */
+  display: inline-block;
 }
 
-/* ពេល Hover: ប្តូរពណ៌អក្សរទៅជាពណ៌មាស */
 .footer-link:hover {
   color: var(--gold-color) !important;
   opacity: 1 !important;
-  transform: translateX(5px); /* រំកិលទៅស្តាំបន្តិចបែបទំនើប */
+  transform: translateX(5px);
 }
 
-/* បង្កើតបន្ទាត់ពីក្រោម (Underline Effect) */
 .footer-link::after {
   content: "";
   position: absolute;
@@ -335,51 +323,38 @@ body {
   transition: width 0.3s ease-in-out;
 }
 
-/* ពេល Hover: បង្ហាញបន្ទាត់ពីក្រោមឱ្យវែងពេញអក្សរ */
 .footer-link:hover::after {
   width: 100%;
 }
-/* --- Header Premium Menu Links Style --- */
-.custom-header .nav-link {
-  color: #ffffff !important;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  position: relative; /* ចាំបាច់សម្រាប់បង្កើត Underline Effect */
-  padding: 6px 0 !important; /* បន្ថែមគម្លាតលើក្រោមឱ្យមើលទៅសមសួន */
-  margin: 0 12px; /* បង្កើនគម្លាតឆ្វេងស្តាំរវាង Menu នីមួយៗ */
-}
 
-/* បង្កើតបន្ទាត់លាក់នៅពីក្រោម (Underline Base) */
-.custom-header .nav-link::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: var(--gold-color);
-  transition: width 0.3s ease-in-out;
-}
-
-/* ពេលដាក់ Mouse លើ (Hover) ឬកំពុងស្ថិតនៅលើទំព័រនោះ (Active) */
-.custom-header .nav-link:hover,
-.custom-header .nav-link.active {
-  color: var(--gold-color) !important;
-}
-
-/* ពេល Hover ឬ Active: ឱ្យបន្ទាត់រត់ចេញពេញទទឹងអក្សរ */
-.custom-header .nav-link:hover::after,
-.custom-header .nav-link.active::after {
-  width: 100%;
-}
-
-/* កែសម្រួល៖ សម្រាប់ទូរស័ព្ទដៃ មិនបាច់ឱ្យមានបន្ទាត់រត់ក្រោមទេ ដើម្បីកុំឱ្យជាន់គ្នា */
+/* ==========================================================================
+   ១១. Responsive Media Queries
+   ========================================================================== */
 @media (max-width: 991.98px) {
   .custom-header .nav-link {
     margin: 8px 0;
     padding-left: 10px !important;
   }
+
   .custom-header .nav-link::after {
     display: none !important;
+  }
+
+  .custom-header .dropdown-menu {
+    background: var(--primary-dark) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+  }
+
+  .custom-header .dropdown-item {
+    color: #ffffff !important;
+  }
+
+  .custom-header .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--gold-color) !important;
   }
 }
