@@ -26,10 +26,26 @@ function Footer() {
                     <div className="col-lg-2 col-md-6">
                         <h5 className="fw-bold mb-4">{t('quick_links')}</h5>
                         <ul className="list-unstyled">
-                            <li className="mb-2"><Link to="/" className="text-white text-decoration-none opacity-75">{t('home')}</Link></li>
-                            <li className="mb-2"><Link to="/sale" className="text-white text-decoration-none opacity-75">{t('sale')}</Link></li>
-                            <li className="mb-2"><Link to="/rent" className="text-white text-decoration-none opacity-75">{t('rent')}</Link></li>
-                            <li className="mb-2"><Link to="/news" className="text-white text-decoration-none opacity-75">{t('news')}</Link></li>
+                            <li className="mb-2">
+                                <Link to="/" className="text-white text-decoration-none opacity-75 footer-link">
+                                    {t('home')}
+                                </Link>
+                            </li>
+                            <li className="mb-2">
+                                <Link to="/sale" className="text-white text-decoration-none opacity-75 footer-link">
+                                    {t('sale')}
+                                </Link>
+                            </li>
+                            <li className="mb-2">
+                                <Link to="/rent" className="text-white text-decoration-none opacity-75 footer-link">
+                                    {t('rent')}
+                                </Link>
+                            </li>
+                            <li className="mb-2">
+                                <Link to="/news" className="text-white text-decoration-none opacity-75 footer-link">
+                                    {t('news')}
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 

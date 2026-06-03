@@ -191,3 +191,34 @@ body {
     color: #ffffff;
   }
 }
+
+/* --- Footer Premium Quick Links Style --- */
+.footer-link {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  display: inline-block; /* ងាយស្រួលក្នុងការធ្វើ Underline Effect */
+}
+
+/* ពេល Hover: ប្តូរពណ៌អក្សរទៅជាពណ៌មាស */
+.footer-link:hover {
+  color: var(--gold-color) !important;
+  opacity: 1 !important;
+  transform: translateX(5px); /* រំកិលទៅស្តាំបន្តិចបែបទំនើប */
+}
+
+/* បង្កើតបន្ទាត់ពីក្រោម (Underline Effect) */
+.footer-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--gold-color);
+  transition: width 0.3s ease-in-out;
+}
+
+/* ពេល Hover: បង្ហាញបន្ទាត់ពីក្រោមឱ្យវែងពេញអក្សរ */
+.footer-link:hover::after {
+  width: 100%;
+}
