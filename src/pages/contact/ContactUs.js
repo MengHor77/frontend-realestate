@@ -1,12 +1,19 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 function ContactUs() {
+    const { t } = useTranslation();
+
     return (
         <div className="container py-5">
             {/* ១. ចំណងជើងទំព័រ */}
             <div className="text-center mb-5">
-                <h1 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>ទំនាក់ទំនងយើងខ្ញុំ</h1>
-                <p className="text-muted">យើងខ្ញុំត្រៀមខ្លួនជានិច្ចដើម្បីឆ្លើយតបរាល់ចម្ងល់ និងការចង់បានរបស់បង</p>
+                <h1 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>
+                    {t('contact_title')}
+                </h1>
+                <p className="text-muted">
+                    {t('contact_subtitle')}
+                </p>
                 <div style={{ width: '60px', height: '4px', backgroundColor: 'var(--gold-color)', margin: '15px auto' }}></div>
             </div>
 
@@ -14,20 +21,22 @@ function ContactUs() {
                 {/* ២. ផ្នែកព័ត៌មានទំនាក់ទំនង (ឆ្វេង) */}
                 <div className="col-lg-5">
                     <div className="card border-0 shadow-sm p-4 h-100" style={{ backgroundColor: 'var(--primary-dark)', color: 'white', borderRadius: '20px' }}>
-                        <h3 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>ព័ត៌មានលម្អិត</h3>
+                        <h3 className="fw-bold mb-4" style={{ color: 'var(--gold-color)' }}>
+                            {t('contact_details')}
+                        </h3>
 
                         <div className="d-flex align-items-center mb-4">
                             <div className="fs-3 me-3">📍</div>
                             <div>
-                                <h6 className="fw-bold mb-1">អាសយដ្ឋាន</h6>
-                                <p className="mb-0 opacity-75 small">ផ្លូវលេខ ១០១, សង្កាត់បឹងកេងកង ១, រាជធានីភ្នំពេញ</p>
+                                <h6 className="fw-bold mb-1">{t('address_label')}</h6>
+                                <p className="mb-0 opacity-75 small">{t('address_value')}</p>
                             </div>
                         </div>
 
                         <div className="d-flex align-items-center mb-4">
                             <div className="fs-3 me-3">📞</div>
                             <div>
-                                <h6 className="fw-bold mb-1">លេខទូរស័ព្ទ</h6>
+                                <h6 className="fw-bold mb-1">{t('phone_label')}</h6>
                                 <p className="mb-0 opacity-75 small">+855 12 345 678 / +855 98 765 432</p>
                             </div>
                         </div>
@@ -35,17 +44,19 @@ function ContactUs() {
                         <div className="d-flex align-items-center mb-4">
                             <div className="fs-3 me-3">✉️</div>
                             <div>
-                                <h6 className="fw-bold mb-1">អ៊ីមែល</h6>
+                                <h6 className="fw-bold mb-1">{t('email_label')}</h6>
                                 <p className="mb-0 opacity-75 small">info@realestate-cambodia.com</p>
                             </div>
                         </div>
 
                         <div className="mt-auto">
-                            <h6 className="fw-bold mb-3" style={{ color: 'var(--gold-color)' }}>តាមដានយើងខ្ញុំលើបណ្តាញសង្គម</h6>
+                            <h6 className="fw-bold mb-3" style={{ color: 'var(--gold-color)' }}>
+                                {t('follow_us')}
+                            </h6>
                             <div className="d-flex gap-3">
-                                <div className="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>f</div>
-                                <div className="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>t</div>
-                                <div className="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>in</div>
+                                <a href="#" className="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center text-decoration-none" style={{ width: '40px', height: '40px' }}>f</a>
+                                <a href="#" className="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center text-decoration-none" style={{ width: '40px', height: '40px' }}>t</a>
+                                <a href="#" className="rounded-circle bg-white text-dark d-flex align-items-center justify-content-center text-decoration-none" style={{ width: '40px', height: '40px' }}>in</a>
                             </div>
                         </div>
                     </div>
@@ -54,28 +65,30 @@ function ContactUs() {
                 {/* ៣. ផ្នែក Form ផ្ញើសារ (ស្តាំ) */}
                 <div className="col-lg-7">
                     <div className="card border-0 shadow-sm p-4 p-md-5" style={{ borderRadius: '20px' }}>
-                        <h3 className="fw-bold mb-4" style={{ color: 'var(--primary-dark)' }}>ផ្ញើសារមកកាន់យើង</h3>
-                        <form>
+                        <h3 className="fw-bold mb-4" style={{ color: 'var(--primary-dark)' }}>
+                            {t('send_message_title')}
+                        </h3>
+                        <form onSubmit={(e) => e.preventDefault()}>
                             <div className="row g-3">
                                 <div className="col-md-6">
-                                    <label className="form-label text-muted small fw-bold">ឈ្មោះពេញ</label>
-                                    <input type="text" className="form-control border-0 bg-light py-2" placeholder="បញ្ចូលឈ្មោះបង..." />
+                                    <label className="form-label text-muted small fw-bold">{t('full_name_label')}</label>
+                                    <input type="text" className="form-control border-0 bg-light py-2" placeholder={t('full_name_placeholder')} />
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label text-muted small fw-bold">លេខទូរស័ព្ទ</label>
+                                    <label className="form-label text-muted small fw-bold">{t('phone_label')}</label>
                                     <input type="text" className="form-control border-0 bg-light py-2" placeholder="012 345 678" />
                                 </div>
                                 <div className="col-12">
-                                    <label className="form-label text-muted small fw-bold">ប្រធានបទ</label>
-                                    <input type="text" className="form-control border-0 bg-light py-2" placeholder="ចង់សួរអំពីផ្ទះលក់ ឬជួល..." />
+                                    <label className="form-label text-muted small fw-bold">{t('subject_label')}</label>
+                                    <input type="text" className="form-control border-0 bg-light py-2" placeholder={t('subject_placeholder')} />
                                 </div>
                                 <div className="col-12">
-                                    <label className="form-label text-muted small fw-bold">សាររបស់អ្នក</label>
-                                    <textarea className="form-control border-0 bg-light py-2" rows="5" placeholder="សរសេរសារនៅទីនេះ..."></textarea>
+                                    <label className="form-label text-muted small fw-bold">{t('message_label')}</label>
+                                    <textarea className="form-control border-0 bg-light py-2" rows="5" placeholder={t('message_placeholder')}></textarea>
                                 </div>
                                 <div className="col-12 mt-4">
                                     <button type="submit" className="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-sm">
-                                        ផ្ញើសារឥឡូវនេះ 🚀
+                                        {t('send_button')} 🚀
                                     </button>
                                 </div>
                             </div>
@@ -95,6 +108,7 @@ function ContactUs() {
                         style={{ border: 0 }}
                         allowFullScreen=""
                         loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
                 </div>
             </div>

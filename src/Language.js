@@ -120,7 +120,22 @@ const resources = {
       "news_3_date": "May 30, 2026",
       "news_3_desc": "Adjustments to the new procedures for transferring property ownership rights...",
 
-
+      "contact_title": "Contact Us",
+      "contact_subtitle": "We are always ready to answer your questions and meet your needs.",
+      "contact_details": "Contact Details",
+      "address_label": "Address",
+      "address_value": "Street 101, Sangkat Boeung Keng Kang 1, Phnom Penh",
+      "phone_label": "Phone Number",
+      "email_label": "Email",
+      "follow_us": "Follow Us on Social Media",
+      "send_message_title": "Send Us a Message",
+      "full_name_label": "Full Name",
+      "full_name_placeholder": "Enter your name...",
+      "subject_label": "Subject",
+      "subject_placeholder": "Inquiry about property for sale or rent...",
+      "message_label": "Your Message",
+      "message_placeholder": "Write your message here...",
+      "send_button": "Send Message Now",
     }
   },
   kh: {
@@ -240,6 +255,22 @@ const resources = {
       "news_3_date": "៣០ ឧសភា ២០២៦",
       "news_3_desc": "ការកែសម្រួលនីតិវិធីនៃការផ្ទេរសិទ្ធិកាន់កាប់អចលនទ្រព្យថ្មី...",
 
+      "contact_title": "ទំនាក់ទំនងយើងខ្ញុំ",
+      "contact_subtitle": "យើងខ្ញុំត្រៀមខ្លួនជានិច្ចដើម្បីឆ្លើយតបរាល់ចម្ងល់ និងការចង់បានរបស់បង",
+      "contact_details": "ព័ត៌មានលម្អិត",
+      "address_label": "អាសយដ្ឋាន",
+      "address_value": "ផ្លូវលេខ ១០១, សង្កាត់បឹងកេងកង ១, រាជធានីភ្នំពេញ",
+      "phone_label": "លេខទូរស័ព្ទ",
+      "email_label": "អ៊ីមែល",
+      "follow_us": "តាមដានយើងខ្ញុំលើបណ្តាញសង្គម",
+      "send_message_title": "ផ្ញើសារមកកាន់យើង",
+      "full_name_label": "ឈ្មោះពេញ",
+      "full_name_placeholder": "បញ្ចូលឈ្មោះបង...",
+      "subject_label": "ប្រធានបទ",
+      "subject_placeholder": "ចង់សួរអំពីផ្ទះលក់ ឬជួល...",
+      "message_label": "សាររបស់អ្នក",
+      "message_placeholder": "សរសេរសារនៅទីនេះ...",
+      "send_button": "ផ្ញើសារឥឡូវនេះ",
 
     }
   }
