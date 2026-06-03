@@ -118,14 +118,59 @@ body {
   color: #ffffff !important;
 }
 
-/* ប៊ូតុង Sign Up */
+/* ==========================================================================
+   ប៊ូតុង Sign Up - Premium Luxury Animation Style
+   ========================================================================== */
 .btn-signup-nav {
-  background-color: #ffd700 !important;
+  position: relative;
+  background-color: var(--gold-color) !important;
   color: #000000 !important;
-  font-weight: bold;
-  padding: 8px 18px !important;
-  border-radius: 6px !important;
+  font-weight: 700;
+  padding: 8px 22px !important;
+  border-radius: 30px !important; /* ប្តូរទៅជាការរចនារាងមូលទ្រវែងបែបសម័យថ្មី */
   text-decoration: none;
+  display: inline-block;
+  overflow: hidden; /* ចាំបាច់សម្រាប់លាក់ពន្លឺកុំឱ្យចេញក្រៅរង្វង់ប៊ូតុង */
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2); /* ស្រមោលពន្លឺមាសតិចៗ */
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 1;
+}
+
+/* បង្កើតស្រទាប់ពន្លឺពណ៌សរត់កាត់ (Shine Effect Layer) */
+.btn-signup-nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: all 0.6s ease;
+  z-index: -1;
+}
+
+/* ដំណាក់កាលពេលដាក់ Mouse លើ (Hover Effect) */
+.btn-signup-nav:hover {
+  background-color: var(--gold-hover) !important;
+  color: #000000 !important;
+  transform: translateY(-3px); /* ហោះឡើងលើបន្តិចបែប 3D */
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.45); /* បង្កើនកម្រិតស្រមោលឱ្យដិតស្អាត */
+}
+
+/* ពេល Hover: បញ្ជាឱ្យពន្លឺពណ៌សរត់កាត់ពីឆ្វេងទៅស្តាំយ៉ាងលឿន */
+.btn-signup-nav:hover::before {
+  left: 100%;
+}
+
+/* ពេលចុចលើប៊ូតុង (Click Effect) */
+.btn-signup-nav:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
 }
 /* ៨. បន្ថែមការតុបតែងសម្រាប់ Language Dropdown */
 
@@ -208,7 +253,7 @@ body {
 
 /* បង្កើតបន្ទាត់ពីក្រោម (Underline Effect) */
 .footer-link::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 2px;
@@ -221,4 +266,48 @@ body {
 /* ពេល Hover: បង្ហាញបន្ទាត់ពីក្រោមឱ្យវែងពេញអក្សរ */
 .footer-link:hover::after {
   width: 100%;
+}
+/* --- Header Premium Menu Links Style --- */
+.custom-header .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative; /* ចាំបាច់សម្រាប់បង្កើត Underline Effect */
+  padding: 6px 0 !important; /* បន្ថែមគម្លាតលើក្រោមឱ្យមើលទៅសមសួន */
+  margin: 0 12px; /* បង្កើនគម្លាតឆ្វេងស្តាំរវាង Menu នីមួយៗ */
+}
+
+/* បង្កើតបន្ទាត់លាក់នៅពីក្រោម (Underline Base) */
+.custom-header .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--gold-color);
+  transition: width 0.3s ease-in-out;
+}
+
+/* ពេលដាក់ Mouse លើ (Hover) ឬកំពុងស្ថិតនៅលើទំព័រនោះ (Active) */
+.custom-header .nav-link:hover,
+.custom-header .nav-link.active {
+  color: var(--gold-color) !important;
+}
+
+/* ពេល Hover ឬ Active: ឱ្យបន្ទាត់រត់ចេញពេញទទឹងអក្សរ */
+.custom-header .nav-link:hover::after,
+.custom-header .nav-link.active::after {
+  width: 100%;
+}
+
+/* កែសម្រួល៖ សម្រាប់ទូរស័ព្ទដៃ មិនបាច់ឱ្យមានបន្ទាត់រត់ក្រោមទេ ដើម្បីកុំឱ្យជាន់គ្នា */
+@media (max-width: 991.98px) {
+  .custom-header .nav-link {
+    margin: 8px 0;
+    padding-left: 10px !important;
+  }
+  .custom-header .nav-link::after {
+    display: none !important;
+  }
 }
