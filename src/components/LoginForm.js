@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
+    const { t } = useTranslation();
     const [credentials, setCredentials] = useState({
         username: '',
         password: ''
@@ -20,44 +22,44 @@ const LoginForm = () => {
     return (
         <div className="card shadow-lg p-4">
             <div className="card-body">
-                <h3 className="card-title text-center mb-4">ចូលប្រើប្រាស់</h3>
+                <h3 className="card-title text-center mb-4">{t('login_title')}</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">ឈ្មោះអ្នកប្រើប្រាស់ ឬ អ៊ីមែល</label>
+                        <label className="form-label">{t('username_or_email_label')}</label>
                         <input
                             type="text"
                             name="username"
                             className="form-control"
-                            placeholder="បញ្ចូលឈ្មោះ ឬអ៊ីមែល"
+                            placeholder={t('username_or_email_placeholder')}
                             onChange={handleChange}
                             required
                         />
                     </div>
                     <div className="mb-4">
                         <div className="d-flex justify-content-between">
-                            <label className="form-label">លេខសម្ងាត់</label>
+                            <label className="form-label">{t('password_label')}</label>
                             <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--primary-dark)' }}>
-                                ភ្លេចលេខសម្ងាត់?
+                                {t('forgot_password_link')}
                             </Link>
                         </div>
                         <input
                             type="password"
                             name="password"
                             className="form-control"
-                            placeholder="បញ្ចូលលេខសម្ងាត់"
+                            placeholder={t('password_placeholder')}
                             onChange={handleChange}
                             required
                         />
                     </div>
                     <button type="submit" className="btn btn-primary w-100 py-2 fw-bold">
-                        ចូលប្រើប្រាស់ឥឡូវនេះ
+                        {t('login_btn')}
                     </button>
                 </form>
 
                 <div className="mt-4 text-center">
-                    <span>មិនទាន់មានគណនីមែនទេ? </span>
+                    <span>{t('no_account_text')} </span>
                     <Link to="/signup" style={{ color: 'var(--gold-color)', fontWeight: 'bold' }}>
-                        ចុះឈ្មោះថ្មី
+                        {t('signup_link')}
                     </Link>
                 </div>
             </div>
