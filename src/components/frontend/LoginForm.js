@@ -1,28 +1,64 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios'; // កុំភ្លេចដំឡើង npm install axios
 
 const LoginForm = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [credentials, setCredentials] = useState({
         username: '',
         password: ''
     });
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("ទិន្នន័យចូលប្រើប្រាស់:", credentials);
-        // បន្ថែម Logic បញ្ជូនទៅកាន់ API Backend នៅទីនេះ
+        setError('');
+
+        try {
+            // ប្រើ fetch ជំនួស axios
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials) // បំប្លែងទិន្នន័យទៅជា JSON
+            });
+
+            const data = await response.json(); // បកប្រែទិន្នន័យដែល Backend ផ្ញើមក
+
+            if (data.success) {
+                // រក្សាទុក Token និងព័ត៌មាន User
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                // រុញទៅកាន់ Admin Dashboard
+                if (data.user.role === 'admin') {
+                    navigate('/admin/dashboard');
+                } else {
+                    navigate('/');
+                }
+            } else {
+                setError(data.message || 'ការចូលប្រើប្រាស់មិនត្រឹមត្រូវ!');
+            }
+        } catch (err) {
+            setError('មានបញ្ហាក្នុងការភ្ជាប់ទៅកាន់ Server!');
+            console.error(err);
+        }
     };
 
     return (
         <div className="card shadow-lg p-4">
             <div className="card-body">
                 <h3 className="card-title text-center mb-4">{t('login_title')}</h3>
+                
+                {error && <div className="alert alert-danger">{error}</div>}
+
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">{t('username_or_email_label')}</label>
@@ -55,13 +91,7 @@ const LoginForm = () => {
                         {t('login_btn')}
                     </button>
                 </form>
-
-                <div className="mt-4 text-center">
-                    <span>{t('no_account_text')} </span>
-                    <Link to="/signup" style={{ color: 'var(--gold-color)', fontWeight: 'bold' }}>
-                        {t('signup_link')}
-                    </Link>
-                </div>
+                {/* ... (signup link) */}
             </div>
         </div>
     );
