@@ -53,7 +53,7 @@ const Navbar = ({ onToggleSidebar, sidebarWidth }) => {
         
         <div className="text-white ms-2 d-none d-sm-block">
           <span className="text-white-50 small d-block" style={{ lineHeight: 1, marginBottom: '2px' }}>
-            រីករាយដែលបានជួបម្ដងទៀត,
+            welcome to admin
           </span>
           <strong style={{ fontSize: '16px', letterSpacing: '0.5px' }}>{user.name || 'Admin User'}</strong>
         </div>
@@ -117,7 +117,7 @@ const Navbar = ({ onToggleSidebar, sidebarWidth }) => {
                       style={{ borderRadius: '8px' }}
                       onClick={() => { setDropdownOpen(false); navigate('/admin/settings'); }}>
                 <FontAwesomeIcon icon={faGear} className="text-muted" />
-                <span style={{ fontSize: '14px' }}>ការកំណត់</span>
+                <span style={{ fontSize: '14px' }}>Setting</span>
               </button>
 
               <div className="dropdown-divider mx-2"></div>
@@ -126,7 +126,7 @@ const Navbar = ({ onToggleSidebar, sidebarWidth }) => {
                       style={{ borderRadius: '8px' }}
                       onClick={handleLogout}>
                 <FontAwesomeIcon icon={faSignOutAlt} />
-                <span style={{ fontSize: '14px' }}>ចាកចេញ</span>
+                <span style={{ fontSize: '14px' }}>Logout</span>
               </button>
             </div>
           )}

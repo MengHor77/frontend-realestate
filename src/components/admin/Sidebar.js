@@ -14,15 +14,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const menuItems = [
-  { path: '/admin/dashboard', icon: faChartPie, label: 'ផ្ទាំងគ្រប់គ្រង' },
-  { path: '/admin/properties', icon: faBuilding, label: 'អចលនទ្រព្យ' },
-  { path: '/admin/users', icon: faUsers, label: 'អ្នកប្រើប្រាស់' },
-  { path: '/admin/news', icon: faNewspaper, label: 'ព័ត៌មាន' },
-  { path: '/admin/inquiries', icon: faComments, label: 'ការសាកសួរ' },
-  { path: '/admin/analytics', icon: faChartLine, label: 'របាយការណ៍' },
-  { path: '/admin/settings', icon: faGear, label: 'ការកំណត់' },
+  { path: '/admin/dashboard', icon: faChartPie, label: 'Dashboard' },
+  { path: '/admin/properties', icon: faBuilding, label: 'Properties' },
+  { path: '/admin/users', icon: faUsers, label: 'Users' },
+  { path: '/admin/news', icon: faNewspaper, label: 'News' },
+  { path: '/admin/inquiries', icon: faComments, label: 'Inquiries' },
+  { path: '/admin/analytics', icon: faChartLine, label: 'Analytics' },
+  { path: '/admin/settings', icon: faGear, label: 'Settings' },
 ];
-
 const Sidebar = ({ isOpen }) => {
   const navigate = useNavigate();
 
@@ -120,7 +119,7 @@ const Sidebar = ({ isOpen }) => {
           <div style={{ width: '25px', textAlign: 'center' }}>
             <FontAwesomeIcon icon={faSignOutAlt} style={{ fontSize: '18px' }} />
           </div>
-          {isOpen && <span style={{ fontWeight: 600 }}>ចាកចេញ</span>}
+          {isOpen && <span style={{ fontWeight: 600 }}>Logout</span>}
         </button>
       </div>
     </aside>
