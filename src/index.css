@@ -13,18 +13,20 @@
 /* ==========================================================================
    ២. ការកំណត់ទូទៅ (Global Styles)
    ========================================================================== */
-html {
-  overflow-y: scroll; /* ការពារការកន្ត្រាក់ Header ពេលដូរ Page */
+
+
+
+/* បង្ខំឱ្យគ្មានចន្លោះលើគែមអេក្រង់ */
+body, html {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden; /* ដាច់ខាតមិនឱ្យមាន Scroll ផ្ដេក */
+  width: 100%;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Kantumruy Pro", "Segoe UI", Roboto, sans-serif;
-  background-color: var(--light-bg);
-  color: #333;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ធានាថាគ្រប់ Element ប្រើប្រាស់ Border-box */
+* {
+  box-sizing: border-box !important;
 }
 
 /* ==========================================================================

@@ -25,12 +25,19 @@ const Navbar = ({ onToggleSidebar, sidebarWidth }) => {
     <header
       className="custom-header fixed-top d-flex align-items-center justify-content-between px-4 shadow-sm"
       style={{
-        left: sidebarWidth,
-        transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        position: 'fixed', // Keep fixed to stay at top
+        top: 0,
+        left: sidebarWidth, // Start after the sidebar
+        right: 0,           // Stretch to the end of the screen
         height: '74px',
-        width: 'auto',
         zIndex: 1000,
-        background: '#003366', // ពណ៌ផ្ទៃខាងក្រោយ Navbar
+        background: '#003366',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 24px',  // Use padding instead of px-4 class if needed
+        transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
       }}
     >
       {/* ផ្នែកខាងឆ្វេង: Toggle + Welcome Text */}
