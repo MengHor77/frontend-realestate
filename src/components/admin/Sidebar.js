@@ -62,24 +62,48 @@ const Sidebar = ({ isOpen }) => {
       {/* Navigation Links */}
       <nav style={{ flex: 1, padding: '20px 10px' }}>
         {menuItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            style={({ isActive }) => ({
-              display: 'flex', alignItems: 'center', gap: '18px',
-              padding: '12px 18px', marginBottom: '8px', borderRadius: '12px',
-              textDecoration: 'none', transition: 'all 0.3s',
-              color: isActive ? '#ffd700' : 'rgba(255,255,255,0.6)',
-              background: isActive ? 'rgba(255,215,0,0.1)' : 'transparent',
-              borderLeft: isActive ? '4px solid #ffd700' : '4px solid transparent',
-              whiteSpace: 'nowrap'
-            })}
-          >
-            <div style={{ width: '25px', textAlign: 'center' }}>
-              <FontAwesomeIcon icon={item.icon} style={{ fontSize: '18px' }} />
-            </div>
-            {isOpen && <span style={{ fontSize: '14px', fontWeight: 500 }}>{item.label}</span>}
-          </NavLink>
+         // កែសម្រួលត្រង់ផ្នែក NavLink ក្នុង Sidebar.js
+<NavLink
+  key={item.path}
+  to={item.path}
+  className="nav-link-hover" // ដាក់ Class សម្រាប់កែសម្រួលបន្ថែមតាម CSS
+  style={({ isActive }) => ({
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '18px',
+    padding: '12px 18px', 
+    marginBottom: '8px', 
+    borderRadius: '12px',
+    textDecoration: 'none', 
+    transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)', // Transition ល្បឿនលឿននិងរលូន
+    color: isActive ? '#ffd700' : 'rgba(255,255,255,0.6)',
+    background: isActive ? 'rgba(255,215,0,0.1)' : 'transparent',
+    borderLeft: isActive ? '4px solid #ffd700' : '4px solid transparent',
+    whiteSpace: 'nowrap',
+    // បន្ថែម Hover State តាមរយៈ JavaScript Object
+    ':hover': { 
+      background: 'rgba(255, 255, 255, 0.05)',
+      transform: 'translateX(5px)', // រុញមេនុយទៅស្តាំតិចៗពេល Hover
+      color: '#fff' 
+    }
+  })}
+  // ប្រើប្រាស់ onMouseEnter និង onMouseLeave ដើម្បីគ្រប់គ្រង Hover Effect តាមរយៈ Style
+  onMouseEnter={(e) => {
+    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+    e.currentTarget.style.transform = 'translateX(5px)';
+  }}
+  onMouseLeave={(e) => {
+    // ពិនិត្យមើលថាតើវាជា Active Link ឬអត់ ដើម្បីកុំឱ្យបាត់ពណ៌ Active
+    const isActive = e.currentTarget.classList.contains('active'); 
+    e.currentTarget.style.backgroundColor = isActive ? 'rgba(255,215,0,0.1)' : 'transparent';
+    e.currentTarget.style.transform = 'translateX(0px)';
+  }}
+>
+  <div style={{ width: '25px', textAlign: 'center' }}>
+    <FontAwesomeIcon icon={item.icon} style={{ fontSize: '18px' }} />
+  </div>
+  {isOpen && <span style={{ fontSize: '14px', fontWeight: 500 }}>{item.label}</span>}
+</NavLink>
         ))}
       </nav>
 
