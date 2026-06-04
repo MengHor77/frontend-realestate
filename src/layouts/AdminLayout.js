@@ -1,42 +1,51 @@
 import React, { useState } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/admin/Sidebar';
 import Navbar from '../components/admin/Navbar';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Check auth from localStorage
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-  // if (!token) return <Navigate to="/login" replace />;
-  // if (user.role !== 'admin') return <Navigate to="/" replace />;
+  // កម្ពស់ Navbar និង ទទឹង Sidebar
+  const navbarHeight = '74px'; 
+  const sidebarWidth = sidebarOpen ? '260px' : '80px';
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f2f5' }}>
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
+      
+      {/* Sidebar - Fixed Position */}
+      <Sidebar isOpen={sidebarOpen} />
 
-      {/* Main Content Area */}
+      {/* Main Wrapper */}
       <div
         style={{
           flex: 1,
-          marginLeft: sidebarOpen ? '250px' : '70px',
-          transition: 'margin-left 0.3s ease',
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '100vh',
+          marginLeft: sidebarWidth,
+          transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          minWidth: 0, // ការពារ Layout រុញចេញក្រៅ screen
         }}
       >
-        {/* Top Navbar */}
-        <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        {/* Navbar - Pass sidebarWidth ដើម្បីឱ្យវាដឹងពីគម្លាតឆ្វេង */}
+        <Navbar 
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
+          sidebarWidth={sidebarWidth}
+        />
 
         {/* Page Content */}
-        <main style={{ flex: 1, padding: '24px', marginTop: '64px' }}>
-          <Outlet />
+        <main 
+          style={{ 
+            flex: 1, 
+            padding: '25px', 
+            marginTop: navbarHeight,
+            background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+          }}
+        >
+          <div className="container-fluid">
+            <Outlet />
+          </div>
         </main>
-
       </div>
     </div>
   );

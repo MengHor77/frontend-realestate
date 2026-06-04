@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = ({ onToggleSidebar }) => {
+const Navbar = ({ onToggleSidebar, sidebarWidth }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -13,158 +13,63 @@ const Navbar = ({ onToggleSidebar }) => {
   };
 
   return (
-    <header
+    <header 
+      className="custom-header fixed-top d-flex align-items-center justify-content-between px-4 shadow-sm"
       style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        left: 0,
-        height: '64px',
-        background: '#fff',
-        borderBottom: '1px solid #e8ecf0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 24px',
-        zIndex: 999,
-        boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+        left: sidebarWidth, // រុញ Navbar មកស្ដាំតាមទំហំ Sidebar
+        transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // ឱ្យដើរស្របគ្នាជាមួយ Sidebar
+        height: '74px',
+        width: 'auto', // ឱ្យវាគណនាទទឹងដែលនៅសល់ដោយស្វ័យប្រវត្តិ
       }}
     >
-      {/* Left: Toggle + Breadcrumb */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div className="d-flex align-items-center gap-3">
         <button
           onClick={onToggleSidebar}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            padding: '4px 8px',
-            borderRadius: '6px',
-            color: '#555',
-          }}
+          className="btn border-0 text-white p-0 d-flex align-items-center justify-content-center"
+          style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }}
         >
-          ☰
+          <span style={{ fontSize: '24px' }}>☰</span>
         </button>
-        <span style={{ color: '#888', fontSize: '14px' }}>
-          Welcome back, <strong style={{ color: '#333' }}>{user.name || 'Admin'}</strong>
-        </span>
+        
+        <div className="text-white ms-2">
+          <span className="text-white-50 small d-block" style={{ lineHeight: 1 }}>រីករាយដែលបានជួបម្ដងទៀត,</span>
+          <strong style={{ fontSize: '15px' }}>{user.name || 'Admin'}</strong>
+        </div>
       </div>
 
-      {/* Right: Actions + Avatar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        {/* Notification Bell */}
-        <button
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            position: 'relative',
-            padding: '4px',
-          }}
-        >
-          🔔
-          <span
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              width: '8px',
-              height: '8px',
-              background: '#f44',
-              borderRadius: '50%',
-            }}
-          />
-        </button>
-
-        {/* Avatar Dropdown */}
-        <div style={{ position: 'relative' }}>
+      <div className="d-flex align-items-center gap-3">
+        {/* Profile Dropdown */}
+        <div className="dropdown" style={{ position: 'relative' }}>
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'none',
-              border: '1px solid #e0e0e0',
-              borderRadius: '24px',
-              padding: '6px 12px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              color: '#333',
-            }}
+            className="btn rounded-pill d-flex align-items-center gap-2 px-2 py-1 border-0"
+            style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#fff' }}
           >
-            <div
-              style={{
-                width: '30px',
-                height: '30px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #4f8ef7, #2d3561)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '13px',
-              }}
-            >
+            <div className="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+              style={{ width: '35px', height: '35px', background: 'linear-gradient(135deg, #ffd700, #b8860b)', color: '#003366' }}>
               {(user.name || 'A').charAt(0).toUpperCase()}
             </div>
-            <span>{user.name || 'Admin'}</span>
-            <span style={{ color: '#999' }}>▾</span>
+            <span className="text-gold">▼</span>
           </button>
 
           {dropdownOpen && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '48px',
-                right: 0,
-                background: '#fff',
-                border: '1px solid #e0e0e0',
-                borderRadius: '10px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
-                minWidth: '180px',
-                zIndex: 1000,
-                overflow: 'hidden',
-              }}
-            >
-              <div style={{ padding: '12px 16px', borderBottom: '1px solid #f0f0f0' }}>
-                <div style={{ fontWeight: 600, fontSize: '14px' }}>{user.name || 'Admin'}</div>
-                <div style={{ fontSize: '12px', color: '#888' }}>{user.email || ''}</div>
+            <div className="shadow-lg border-0 p-2 show" 
+               style={{ 
+                 position: 'absolute', right: 0, top: '55px', background: '#fff',
+                 borderRadius: '12px', minWidth: '200px', zIndex: 1000 
+               }}>
+              <div className="px-3 py-2 border-bottom">
+                <div className="fw-bold text-dark">{user.name || 'Admin'}</div>
+                <div className="small text-muted">{user.email || 'admin@example.com'}</div>
               </div>
-              <button
-                onClick={() => { setDropdownOpen(false); navigate('/admin/settings'); }}
-                style={dropdownBtnStyle}
-              >
-                ⚙️ Settings
-              </button>
-              <button
-                onClick={handleLogout}
-                style={{ ...dropdownBtnStyle, color: '#f44' }}
-              >
-                🚪 Logout
-              </button>
+              <button className="dropdown-item py-2 mt-1" onClick={() => navigate('/admin/settings')}>⚙️ ការកំណត់</button>
+              <button className="dropdown-item py-2 text-danger fw-bold" onClick={handleLogout}>🚪 ចាកចេញ</button>
             </div>
           )}
         </div>
       </div>
     </header>
   );
-};
-
-const dropdownBtnStyle = {
-  display: 'block',
-  width: '100%',
-  padding: '10px 16px',
-  background: 'none',
-  border: 'none',
-  textAlign: 'left',
-  cursor: 'pointer',
-  fontSize: '14px',
-  color: '#333',
-  transition: 'background 0.15s',
 };
 
 export default Navbar;
