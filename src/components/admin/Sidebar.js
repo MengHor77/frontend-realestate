@@ -2,15 +2,15 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 // Import Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faChartPie, 
-  faBuilding, 
-  faUsers, 
-  faNewspaper, 
-  faComments, 
-  faChartLine, 
-  faGear, 
-  faSignOutAlt 
+import {
+  faChartPie,
+  faBuilding,
+  faUsers,
+  faNewspaper,
+  faComments,
+  faChartLine,
+  faGear,
+  faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 const menuItems = [
@@ -43,15 +43,15 @@ const Sidebar = ({ isOpen }) => {
     >
       {/* Logo Section */}
       <div style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '15px', minHeight: '74px', background: 'rgba(0,0,0,0.1)' }}>
-        <div style={{ 
-          fontSize: '20px', 
-          background: '#fff', 
-          borderRadius: '8px', 
-          width: '40px', 
-          height: '40px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
+        <div style={{
+          fontSize: '20px',
+          background: '#fff',
+          borderRadius: '8px',
+          width: '40px',
+          height: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
           <FontAwesomeIcon icon={faBuilding} style={{ color: '#003366' }} />
         </div>
@@ -61,62 +61,89 @@ const Sidebar = ({ isOpen }) => {
       {/* Navigation Links */}
       <nav style={{ flex: 1, padding: '20px 10px' }}>
         {menuItems.map((item) => (
-         // កែសម្រួលត្រង់ផ្នែក NavLink ក្នុង Sidebar.js
-<NavLink
-  key={item.path}
-  to={item.path}
-  className="nav-link-hover" // ដាក់ Class សម្រាប់កែសម្រួលបន្ថែមតាម CSS
-  style={({ isActive }) => ({
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '18px',
-    padding: '12px 18px', 
-    marginBottom: '8px', 
-    borderRadius: '12px',
-    textDecoration: 'none', 
-    transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)', // Transition ល្បឿនលឿននិងរលូន
-    color: isActive ? '#ffd700' : 'rgba(255,255,255,0.6)',
-    background: isActive ? 'rgba(255,215,0,0.1)' : 'transparent',
-    borderLeft: isActive ? '4px solid #ffd700' : '4px solid transparent',
-    whiteSpace: 'nowrap',
-    // បន្ថែម Hover State តាមរយៈ JavaScript Object
-    ':hover': { 
-      background: 'rgba(255, 255, 255, 0.05)',
-      transform: 'translateX(5px)', // រុញមេនុយទៅស្តាំតិចៗពេល Hover
-      color: '#fff' 
-    }
-  })}
-  // ប្រើប្រាស់ onMouseEnter និង onMouseLeave ដើម្បីគ្រប់គ្រង Hover Effect តាមរយៈ Style
-  onMouseEnter={(e) => {
-    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
-    e.currentTarget.style.transform = 'translateX(5px)';
-  }}
-  onMouseLeave={(e) => {
-    // ពិនិត្យមើលថាតើវាជា Active Link ឬអត់ ដើម្បីកុំឱ្យបាត់ពណ៌ Active
-    const isActive = e.currentTarget.classList.contains('active'); 
-    e.currentTarget.style.backgroundColor = isActive ? 'rgba(255,215,0,0.1)' : 'transparent';
-    e.currentTarget.style.transform = 'translateX(0px)';
-  }}
->
-  <div style={{ width: '25px', textAlign: 'center' }}>
-    <FontAwesomeIcon icon={item.icon} style={{ fontSize: '18px' }} />
-  </div>
-  {isOpen && <span style={{ fontSize: '14px', fontWeight: 500 }}>{item.label}</span>}
-</NavLink>
+          // កែសម្រួលត្រង់ផ្នែក NavLink ក្នុង Sidebar.js
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className="nav-link-hover" // ដាក់ Class សម្រាប់កែសម្រួលបន្ថែមតាម CSS
+            style={({ isActive }) => ({
+              display: 'flex',
+              alignItems: 'center',
+              gap: '18px',
+              padding: '12px 18px',
+              marginBottom: '8px',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)', // Transition ល្បឿនលឿននិងរលូន
+              color: isActive ? '#ffd700' : 'rgba(255,255,255,0.6)',
+              background: isActive ? 'rgba(255,215,0,0.1)' : 'transparent',
+              borderLeft: isActive ? '4px solid #ffd700' : '4px solid transparent',
+              whiteSpace: 'nowrap',
+              // បន្ថែម Hover State តាមរយៈ JavaScript Object
+              ':hover': {
+                background: 'rgba(255, 255, 255, 0.05)',
+                transform: 'translateX(5px)', // រុញមេនុយទៅស្តាំតិចៗពេល Hover
+                color: '#fff'
+              }
+            })}
+            // ប្រើប្រាស់ onMouseEnter និង onMouseLeave ដើម្បីគ្រប់គ្រង Hover Effect តាមរយៈ Style
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.transform = 'translateX(5px)';
+            }}
+            onMouseLeave={(e) => {
+              // ពិនិត្យមើលថាតើវាជា Active Link ឬអត់ ដើម្បីកុំឱ្យបាត់ពណ៌ Active
+              const isActive = e.currentTarget.classList.contains('active');
+              e.currentTarget.style.backgroundColor = isActive ? 'rgba(255,215,0,0.1)' : 'transparent';
+              e.currentTarget.style.transform = 'translateX(0px)';
+            }}
+          >
+            <div style={{ width: '25px', textAlign: 'center' }}>
+              <FontAwesomeIcon icon={item.icon} style={{ fontSize: '18px' }} />
+            </div>
+            {isOpen && <span style={{ fontSize: '14px', fontWeight: 500 }}>{item.label}</span>}
+          </NavLink>
         ))}
       </nav>
 
       {/* Logout Button */}
       <div style={{ padding: '20px', borderTop: '1px solid rgba(255,215,0,0.1)' }}>
         <button
-          onClick={() => { localStorage.clear(); navigate('/login'); }}
-          style={{ 
-            width: '100%', display: 'flex', alignItems: 'center', gap: '18px', 
-            padding: '12px 18px', background: 'rgba(255,71,71,0.1)', border: 'none', 
-            borderRadius: '12px', color: '#ff7675', cursor: 'pointer', transition: '0.3s'
+          onClick={() => {
+            // បន្ថែមការសួរបញ្ជាក់នៅទីនេះ
+            const confirmLogout = window.confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+              localStorage.clear();
+              navigate('/login');
+            }
+          }}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: isOpen ? 'flex-start' : 'center',
+            gap: isOpen ? '18px' : '0px',
+            padding: '12px 18px',
+            background: '#ff4757',
+            border: 'none',
+            borderRadius: '12px',
+            color: '#fff',
+            cursor: 'pointer',
+            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            fontWeight: '600'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#ff6b81';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 71, 87, 0.4)';
+            e.currentTarget.style.transform = 'scale(1.03)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = '#ff4757';
+            e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          <div style={{ width: '25px', textAlign: 'center' }}>
+          <div style={{ width: '25px', textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
             <FontAwesomeIcon icon={faSignOutAlt} style={{ fontSize: '18px' }} />
           </div>
           {isOpen && <span style={{ fontWeight: 600 }}>Logout</span>}
