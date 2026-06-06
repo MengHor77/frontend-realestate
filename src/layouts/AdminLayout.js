@@ -5,60 +5,30 @@ import Navbar from '../components/admin/Navbar';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
 
-  const navbarHeight = '74px'; 
+  const navbarHeight = '74px';
   const sidebarWidth = sidebarOpen ? '260px' : '80px';
 
   return (
-    // បន្ថែម overflow: 'hidden' នៅទីនេះ ដើម្បីដក scrollbar ចេញពីទំព័រទាំងមូល
-    <div style={{ 
-      display: 'flex', 
-      height: '100vh', 
-      background: '#f8f9fa',
-      overflow: 'hidden' 
-    }}>
-      
+    <div style={{ display: 'flex', height: '100vh', background: '#f8f9fa', overflow: 'hidden' }}>
+      {/* Overlay សម្រាប់ធ្វើឱ្យស្រអាប់នៅពេលបើក Modal */}
+      {isOverlayVisible && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          background: 'rgba(0, 51, 102, 0.1)', // ដាក់ពណ៌ស្រអាប់ត្រឹមនេះ
+          zIndex: 9998,
+          backdropFilter: 'blur(3px)'
+        }} />
+      )}
+
       <Sidebar isOpen={sidebarOpen} />
 
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          marginLeft: sidebarWidth,
-          transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          minWidth: 0,
-        }}
-      >
-        <Navbar 
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
-          sidebarWidth={sidebarWidth}
-        />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginLeft: sidebarWidth, transition: 'margin-left 0.3s', minWidth: 0 }}>
+        <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} sidebarWidth={sidebarWidth} />
 
-        {/* ផ្នែក Content ៖ បន្ថែម overflowY: 'auto' ដើម្បីឱ្យវាមាន Scroll បើសិនជាអត្ថបទវែង តែលាក់ Scrollbar */}
-        <main 
-          style={{ 
-            flex: 1, 
-            padding: '25px', 
-            marginTop: navbarHeight,
-            background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-            overflowY: 'auto', // ឱ្យវា Scroll នៅខាងក្នុង Main
-            msOverflowStyle: 'none',  // សម្រាប់ IE និង Edge
-            scrollbarWidth: 'none',  // សម្រាប់ Firefox
-          }}
-        >
-          {/* កូដសម្រាប់លាក់ Scrollbar លើ Chrome, Safari, Edge */}
-          <style>
-            {`
-              main::-webkit-scrollbar {
-                display: none;
-              }
-            `}
-          </style>
-
-          <div className="container-fluid">
-            <Outlet />
-          </div>
+        <main style={{ flex: 1, padding: '25px', marginTop: navbarHeight, overflowY: 'auto' }}>
+          <Outlet context={{ setIsOverlayVisible }} />
         </main>
       </div>
     </div>
