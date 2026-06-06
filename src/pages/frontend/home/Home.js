@@ -115,7 +115,7 @@ function Home() {
                 <div className="p-5 rounded-5 text-white text-center shadow-lg" style={{ backgroundColor: 'var(--primary-dark)', borderLeft: '10px solid var(--gold-color)' }}>
                     <h2 className="fw-bold mb-3">{t('cta_title')}</h2>
                     <p className="mb-4 opacity-75">{t('cta_subtitle')}</p>
-                    <Link to="/contact" className="btn btn-warning btn-lg px-5 fw-bold rounded-pill">{t('consult_now')}</Link>
+                    <Link to="/contact-us" className="btn btn-warning btn-lg px-5 fw-bold rounded-pill">{t('consult_now')}</Link>
                 </div>
             </section>
         </div>
