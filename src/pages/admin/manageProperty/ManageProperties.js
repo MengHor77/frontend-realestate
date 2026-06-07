@@ -10,12 +10,27 @@ const ManageProperties = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [editId, setEditId] = useState(null);
 
-  const fetchProperties = async () => {
+ const fetchProperties = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/properties');
-      setProperties(res.data);
+      // ១. ទាញយក Token ពី localStorage
+      const token = localStorage.getItem('token'); 
+      
+      // ២. បង្កើត config ដែលផ្ទុក Header
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
+      // ៣. បញ្ជូន config ចូលទៅក្នុង axios.get
+      const res = await axios.get('http://localhost:5000/api/properties', config);
+      
+      setProperties(res.data.properties || []); 
     } catch (err) {
       console.error("Error fetching properties:", err);
+      // ប្រសិនបើ Error 401 (Unauthorized) អ្នកអាចបញ្ជូនអ្នកប្រើប្រាស់ទៅទំព័រ Login
+      if (err.response && err.response.status === 401) {
+        alert("Session expired. Please login again.");
+        // window.location.href = '/login'; // បញ្ជូនទៅ Login ប្រសិនបើត្រូវការ
+      }
     }
   };
 
@@ -23,17 +38,27 @@ const ManageProperties = () => {
     fetchProperties();
   }, []);
 
-  const handleDelete = async (id) => {
+ const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/properties/${id}`);
-        fetchProperties();
+        // ១. ទាញយក Token ដូចគ្នា
+        const token = localStorage.getItem('token');
+        
+        // ២. បង្កើត config ដែលផ្ទុក Header
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+
+        // ៣. ដាក់ config ចូលក្នុង axios.delete
+        await axios.delete(`http://localhost:5000/api/properties/${id}`, config);
+        
+        fetchProperties(); // Refresh ទិន្នន័យក្រោយលុប
       } catch (err) {
-        alert("Failed to delete property.");
+        console.error("Delete error:", err);
+        alert("Failed to delete property. Check your permissions.");
       }
     }
   };
-
   const handleOpenAdd = () => {
     setShowAdd(true);
     setIsOverlayVisible(true);
