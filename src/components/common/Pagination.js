@@ -15,11 +15,10 @@ const Pagination = ({
   
   const generatePaginationItems = () => {
     const items = [];
-    const totalNumbers = siblingCount * 2 + 3; // First + Last + Current + Siblings
-    const totalBlocks = totalNumbers + 2; // Add prev/next buttons
+    const totalNumbers = siblingCount * 2 + 3;
+    const totalBlocks = totalNumbers + 2;
 
     if (totalPages <= totalBlocks) {
-      // Show all pages
       for (let i = 1; i <= totalPages; i++) {
         items.push(i);
       }
@@ -30,7 +29,6 @@ const Pagination = ({
       const showRightDots = rightSiblingIndex < totalPages - 1;
 
       if (!showLeftDots && showRightDots) {
-        // Show first pages then dots then last page
         for (let i = 1; i <= 3 + siblingCount * 2; i++) {
           items.push(i);
         }
@@ -38,7 +36,6 @@ const Pagination = ({
         items.push(totalPages);
       } 
       else if (showLeftDots && !showRightDots) {
-        // Show first page, dots, then last pages
         items.push(1);
         items.push('dots');
         for (let i = totalPages - (3 + siblingCount * 2) + 1; i <= totalPages; i++) {
@@ -46,7 +43,6 @@ const Pagination = ({
         }
       }
       else if (showLeftDots && showRightDots) {
-        // Show first page, dots, middle pages, dots, last page
         items.push(1);
         items.push('dots');
         for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
@@ -67,19 +63,6 @@ const Pagination = ({
     }
   };
 
-  const getButtonVariant = (isActive = false) => {
-    if (isActive) {
-      switch(variant) {
-        case 'primary': return 'btn-primary';
-        case 'danger': return 'btn-danger';
-        case 'success': return 'btn-success';
-        case 'warning': return 'btn-warning';
-        default: return 'btn-primary';
-      }
-    }
-    return 'btn-outline-secondary';
-  };
-
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
       onPageChange(page);
@@ -93,7 +76,6 @@ const Pagination = ({
   return (
     <nav className={`d-flex justify-content-center align-items-center ${className}`}>
       <ul className="pagination mb-0">
-        {/* First Page Button */}
         {showFirstLast && (
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button
@@ -107,7 +89,6 @@ const Pagination = ({
           </li>
         )}
 
-        {/* Previous Page Button */}
         {showPrevNext && (
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button
@@ -121,15 +102,15 @@ const Pagination = ({
           </li>
         )}
 
-        {/* Page Numbers */}
         {paginationItems.map((item, index) => (
           <li key={index} className={`page-item ${item === currentPage ? 'active' : ''} ${item === 'dots' ? 'disabled' : ''}`}>
             {item === 'dots' ? (
               <span className={`page-link ${getButtonSize()}`}>...</span>
             ) : (
               <button
-                className={`page-link ${getButtonSize()} ${getButtonVariant(item === currentPage)}`}
+                className={`page-link ${getButtonSize()} ${item === currentPage ? 'btn-primary' : 'btn-outline-secondary'}`}
                 onClick={() => handlePageChange(item)}
+                style={item === currentPage ? { backgroundColor: '#003366', borderColor: '#003366', color: 'white' } : {}}
               >
                 {item}
               </button>
@@ -137,7 +118,6 @@ const Pagination = ({
           </li>
         ))}
 
-        {/* Next Page Button */}
         {showPrevNext && (
           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
             <button
@@ -151,7 +131,6 @@ const Pagination = ({
           </li>
         )}
 
-        {/* Last Page Button */}
         {showFirstLast && (
           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
             <button
@@ -165,84 +144,11 @@ const Pagination = ({
           </li>
         )}
       </ul>
-
-      {/* Page Info */}
+      
       <div className="ms-3 text-muted small">
         Page {currentPage} of {totalPages}
       </div>
     </nav>
-  );
-};
-
-// Additional component for pagination with page size selector
-export const PaginationWithSize = ({
-  currentPage,
-  totalPages,
-  totalItems,
-  pageSize,
-  onPageChange,
-  onPageSizeChange,
-  pageSizeOptions = [5, 10, 25, 50, 100],
-  showTotalItems = true,
-  ...props
-}) => {
-  return (
-    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
-      {/* Page Size Selector */}
-      <div className="d-flex align-items-center gap-2">
-        <label className="text-muted small mb-0">Show:</label>
-        <select
-          className="form-select form-select-sm"
-          value={pageSize}
-          onChange={(e) => onPageSizeChange(Number(e.target.value))}
-          style={{ width: 'auto', borderRadius: '8px' }}
-        >
-          {pageSizeOptions.map(size => (
-            <option key={size} value={size}>{size} items</option>
-          ))}
-        </select>
-      </div>
-
-      {/* Pagination Component */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-        {...props}
-      />
-
-      {/* Total Items Info */}
-      {showTotalItems && (
-        <div className="text-muted small">
-          Total: <strong>{totalItems}</strong> items
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Compact version for mobile
-export const CompactPagination = ({ currentPage, totalPages, onPageChange }) => {
-  return (
-    <div className="d-flex justify-content-center gap-2">
-      <button
-        className="btn btn-sm btn-outline-secondary"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        <i className="bi bi-chevron-left"></i>
-      </button>
-      <span className="align-self-center text-muted small">
-        {currentPage} / {totalPages}
-      </span>
-      <button
-        className="btn btn-sm btn-outline-secondary"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        <i className="bi bi-chevron-right"></i>
-      </button>
-    </div>
   );
 };
 
