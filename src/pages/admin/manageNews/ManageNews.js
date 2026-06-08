@@ -171,36 +171,43 @@ const ManageNews = () => {
                     </td>
                     <td style={{ padding: '15px', textAlign: 'center' }}>
                       <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+
                         <button
                           onClick={() => navigate(`/admin/news/edit/${item.id}`)}
                           style={{
-                            color: '#0d6efd',
+                            backgroundColor: '#4f8ef7',
+                            color: '#fff',
                             border: 'none',
-                            background: 'none',
+                            padding: '6px 16px',
+                            borderRadius: '8px',
                             cursor: 'pointer',
-                            padding: '5px 10px',
-                            borderRadius: '5px',
-                            transition: 'background 0.2s'
+                            fontSize: '13px',
+                            fontWeight: '600',
+                            marginRight: '8px',
+                            transition: 'all 0.3s ease'
                           }}
-                          onMouseEnter={(e) => e.target.style.background = '#e3f2fd'}
-                          onMouseLeave={(e) => e.target.style.background = 'none'}
+                          onMouseEnter={(e) => e.target.style.backgroundColor = '#3a7bd5'}
+                          onMouseLeave={(e) => e.target.style.backgroundColor = '#4f8ef7'}
                         >
                           <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
                           Edit
                         </button>
+
                         <button
                           onClick={() => handleDelete(item)}
                           style={{
-                            color: '#ff4757',
+                            backgroundColor: '#dc3545',
+                            color: '#fff',
                             border: 'none',
-                            background: 'none',
+                            padding: '6px 16px',
+                            borderRadius: '8px',
                             cursor: 'pointer',
-                            padding: '5px 10px',
-                            borderRadius: '5px',
-                            transition: 'background 0.2s'
+                            fontSize: '13px',
+                            fontWeight: '600',
+                            transition: 'all 0.3s ease'
                           }}
-                          onMouseEnter={(e) => e.target.style.background = '#ffe5e5'}
-                          onMouseLeave={(e) => e.target.style.background = 'none'}
+                          onMouseEnter={(e) => e.target.style.backgroundColor = '#c82333'}
+                          onMouseLeave={(e) => e.target.style.backgroundColor = '#dc3545'}
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
                           Delete
