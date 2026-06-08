@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faNewspaper, 
-  faPlus, 
-  faEdit, 
-  faTrash, 
+import {
+  faNewspaper,
+  faPlus,
+  faEdit,
+  faTrash,
   faEye,
   faSearch,
   faCalendarAlt,
-  faUser 
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
@@ -79,9 +79,9 @@ const ManageNews = () => {
         <div>
           <h1 style={{ color: '#003366', fontWeight: '700', fontSize: '28px' }}>
             <FontAwesomeIcon icon={faNewspaper} style={{ marginRight: '12px', color: '#ffd700' }} />
-            គ្រប់គ្រងព័ត៌មាន (Manage News)
+            Manage News
           </h1>
-          <p style={{ color: '#666' }}>បន្ថែម, កែប្រែ និងលុបព័ត៌មាន</p>
+          <p style={{ color: '#666' }}>add, edit and delete</p>
         </div>
         <button
           onClick={() => navigate('/admin/news/create')}
@@ -99,8 +99,7 @@ const ManageNews = () => {
           }}
         >
           <FontAwesomeIcon icon={faPlus} />
-          បន្ថែមព័ត៌មានថ្មី
-        </button>
+          add news </button>
       </div>
 
       {/* Search Bar */}
@@ -109,7 +108,7 @@ const ManageNews = () => {
           <FontAwesomeIcon icon={faSearch} style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
           <input
             type="text"
-            placeholder="ស្វែងរកព័ត៌មានតាមចំណងជើង ឬខ្លឹមសារ..."
+            placeholder="search by title or article..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
@@ -132,7 +131,7 @@ const ManageNews = () => {
         ) : filteredNews.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '50px' }}>
             <FontAwesomeIcon icon={faNewspaper} style={{ fontSize: '48px', color: '#ccc', marginBottom: '15px' }} />
-            <p style={{ color: '#999' }}>ពុំមានព័ត៌មានទេ</p>
+            <p style={{ color: '#999' }}>no news</p>
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
@@ -140,10 +139,10 @@ const ManageNews = () => {
               <thead>
                 <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
                   <th style={{ padding: '15px', textAlign: 'left' }}>ID</th>
-                  <th style={{ padding: '15px', textAlign: 'left' }}>ចំណងជើង</th>
-                  <th style={{ padding: '15px', textAlign: 'left' }}>អ្នកនិពន្ធ</th>
-                  <th style={{ padding: '15px', textAlign: 'left' }}>កាលបរិច្ឆេទ</th>
-                  <th style={{ padding: '15px', textAlign: 'center' }}>សកម្មភាព</th>
+                  <th style={{ padding: '15px', textAlign: 'left' }}>Title</th>
+                  <th style={{ padding: '15px', textAlign: 'left' }}>Author</th>
+                  <th style={{ padding: '15px', textAlign: 'left' }}>Date</th>
+                  <th style={{ padding: '15px', textAlign: 'center' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -187,7 +186,7 @@ const ManageNews = () => {
                           onMouseLeave={(e) => e.target.style.background = 'none'}
                         >
                           <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
-                          កែប្រែ
+                          Edit
                         </button>
                         <button
                           onClick={() => handleDelete(item)}
@@ -204,7 +203,7 @@ const ManageNews = () => {
                           onMouseLeave={(e) => e.target.style.background = 'none'}
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
-                          លុប
+                          Delete
                         </button>
                       </div>
                     </td>
