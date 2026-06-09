@@ -8,7 +8,8 @@ const CreateProperty = ({ onClose, onRefresh }) => {
         title: '',
         price: '',
         location: '',
-        type: 'sale',
+        property_type: 'condo',      // Added for DB compatibility
+        listing_type: 'sale',        // Renamed from 'type'
         status: 'active',
         bedrooms: '',
         bathrooms: '',
@@ -26,14 +27,13 @@ const CreateProperty = ({ onClose, onRefresh }) => {
         e.preventDefault();
         setError('');
 
-        if (!formData.title || !formData.price || !formData.type) {
-            setError('Title, price and type are required.');
+        if (!formData.title || !formData.price) {
+            setError('Title and price are required.');
             return;
         }
 
         try {
             setLoading(true);
-            
             const fd = new FormData();
             Object.keys(formData).forEach((key) => {
                 if (formData[key] !== '' && formData[key] !== null && formData[key] !== undefined) {
@@ -47,25 +47,12 @@ const CreateProperty = ({ onClose, onRefresh }) => {
                 }
             }
 
-            // IMPORTANT: Do NOT set 'Content-Type' manually. 
-            // Axios detects FormData and sets the boundary automatically.
             await api.post('/properties', fd);
-
             onRefresh();
             onClose();
         } catch (err) {
-            console.error("FULL ERROR OBJECT:", err);
-            
-            if (err.response) {
-                if (err.response.status === 401) {
-                    setError('Session expired. Please log in again.');
-                    setTimeout(() => window.location.href = '/login', 2000);
-                } else {
-                    setError(err.response.data?.message || 'Error creating property.');
-                }
-            } else {
-                setError('Cannot connect to server.');
-            }
+            console.error("Error creating property:", err);
+            setError(err.response?.data?.message || 'Error creating property.');
         } finally {
             setLoading(false);
         }
@@ -100,16 +87,27 @@ const CreateProperty = ({ onClose, onRefresh }) => {
 
                     <div style={styles.grid2}>
                         <div style={styles.group}>
-                            <label style={styles.label}>Price ($) *</label>
-                            <input style={styles.input} type="number" placeholder="e.g. 150000" value={formData.price} onChange={e => set('price', e.target.value)} required />
+                            <label style={styles.label}>Property Type</label>
+                            <select style={styles.input} value={formData.property_type} onChange={e => set('property_type', e.target.value)}>
+                                <option value="condo">Condo</option>
+                                <option value="villa">Villa</option>
+                                <option value="flat">Flat</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="land">Land</option>
+                            </select>
                         </div>
                         <div style={styles.group}>
-                            <label style={styles.label}>Type</label>
-                            <select style={styles.input} value={formData.type} onChange={e => set('type', e.target.value)}>
+                            <label style={styles.label}>Listing Type</label>
+                            <select style={styles.input} value={formData.listing_type} onChange={e => set('listing_type', e.target.value)}>
                                 <option value="sale">For Sale</option>
                                 <option value="rent">For Rent</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div style={styles.group}>
+                        <label style={styles.label}>Price ($) *</label>
+                        <input style={styles.input} type="number" placeholder="e.g. 150000" value={formData.price} onChange={e => set('price', e.target.value)} required />
                     </div>
 
                     <div style={styles.grid3}>
