@@ -11,12 +11,12 @@ function Home() {
     const [loading, setLoading] = useState(true);
 
     const services = [
-        { title: t('house_sale'), icon: '🏡', link: '/sale', color: '#e3f2fd' },
-        { title: t('house_rent'), icon: '🔑', link: '/rent', color: '#fff3e0' },
-        { title: t('land_investment'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+        { title: t('house sale'), icon: '🏡', link: '/sale', color: '#e3f2fd' },
+        { title: t('house rent'), icon: '🔑', link: '/rent', color: '#fff3e0' },
+        { title: t('land rent'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
         { title: t('construction'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
         { title: t('decoration'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
-        { title: t('decoration'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+        { title: t('create web and app '), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
     ];
 
     useEffect(() => {
