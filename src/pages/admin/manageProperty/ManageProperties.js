@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import CreateProperty from './CreateProperty';
 import EditProperty from './EditProperty';
-import Filter from '../../../components/common/Filter';
+import Filter from '../../../components/admin/Filter';
 import Pagination from '../../../components/common/Pagination';
 
 const ManageProperties = () => {

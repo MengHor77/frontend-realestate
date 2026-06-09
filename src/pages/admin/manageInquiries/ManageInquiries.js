@@ -1,6 +1,6 @@
 // D:\realestate\frontend\src\pages\admin\manageInquiries\ManageInquiries.js
 import React, { useState, useEffect } from 'react';
-import Filter from '../../../components/common/Filter';
+import Filter from '../../../components/admin/Filter';
 import api from '../../../services/api';
 
 const ManageInquiries = () => {
