@@ -61,7 +61,7 @@ function Rent() {
     ];
 
     return (
-        <div className="container mt-4 pb-4">
+        <div className="container mt-4 pb-4" style={{ paddingTop: '50px' }}>
             {/* ១. ផ្នែកចំណងជើង និង Filter */}
             <div className="bg-white p-4 rounded-4 shadow-sm mb-4 border-top" style={{ borderColor: 'var(--gold-color)', borderWidth: '4px' }}>
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">

@@ -5,7 +5,7 @@ function ContactUs() {
     const { t } = useTranslation();
 
     return (
-        <div className="container py-5">
+        <div className="container py-5" style={{ paddingTop: '300px' }}>
             {/* ១. ចំណងជើងទំព័រ */}
             <div className="text-center mb-5">
                 <h1 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>

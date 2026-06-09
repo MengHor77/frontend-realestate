@@ -55,7 +55,7 @@ const Login = () => {
                 paddingTop: '95px',
                 paddingBottom: '40px'
             }}>
-            <div className="container">
+            <div className="container" style={{ paddingTop: '50px' }}>
                 <div className="row justify-content-center align-items-center">
 
                     {/* Left Side: Professional Branding & Imagery */}

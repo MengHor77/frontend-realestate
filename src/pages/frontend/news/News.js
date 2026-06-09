@@ -34,7 +34,7 @@ function News() {
     ];
 
     return (
-        <div className="container pb-5">
+        <div className="container pb-5" style={{ paddingTop: '20px' }} >
             {/* ១. Hero Header សម្រាប់ទំព័រព័ត៌មាន */}
             <div className="py-5 text-center">
                 <h1 className="fw-bold mb-3" style={{ color: 'var(--primary-dark)' }}>

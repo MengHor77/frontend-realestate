@@ -12,7 +12,7 @@ const SignUp = () => {
                 backgroundColor: 'var(--light-bg)',
                 minHeight: '100vh',         // Takes up the full view height
                 marginTop: '-75px',          // Pulls the background up behind the navbar completely
-                paddingTop: '95px',          // 75px layout clearance + 20px extra breathing room for content
+                paddingTop: '150px',          // 75px layout clearance + 20px extra breathing room for content
                 paddingBottom: '40px'
             }}>
             <div className="container">
