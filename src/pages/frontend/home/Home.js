@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ServiceCard from '../../../components/frontend/ServiceCard';
-import HeroSection from '../../../components/frontend/HeroSection'; // 1. Import your new clean component
+import HeroSection from '../../../components/frontend/HeroSection';
 
 function Home() {
     const { t } = useTranslation();
+    const [properties, setProperties] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const services = [
         { title: t('house_sale'), icon: '🏡', link: '/sale', color: '#e3f2fd' },
@@ -16,9 +19,26 @@ function Home() {
         { title: t('decoration'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
     ];
 
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/properties')
+            .then(res => {
+                // តម្រងយកតែប្រភេទ 'sale' និងកំណត់ត្រឹម 6 ជួរ
+                const saleProperties = res.data.properties
+                    .filter(item => item.type && item.type.toLowerCase() === 'sale')
+                    .slice(0, 6);
+                
+                setProperties(saleProperties);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Error fetching properties:", err);
+                setLoading(false);
+            });
+    }, []);
+
     return (
         <div className="home-page">
-            {/* ១. Hero Section - Swapped with the optimized standalone component */}
+            {/* ១. Hero Section */}
             <HeroSection />
 
             {/* ២. Categories Section */}
@@ -27,7 +47,6 @@ function Home() {
                     <h2 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>{t('our_services')}</h2>
                     <div style={{ width: '60px', height: '4px', backgroundColor: 'var(--gold-color)', margin: '10px auto' }}></div>
                 </div>
-
                 <div className="row g-4 text-center">
                     {services.map((item, index) => (
                         <ServiceCard
@@ -41,7 +60,7 @@ function Home() {
                 </div>
             </section>
 
-            {/* ៣. Featured Listings */}
+            {/* ៣. Latest Projects (ទាញចេញពី Database) */}
             <section className="py-5" style={{ backgroundColor: 'var(--white)' }}>
                 <div className="container">
                     <div className="d-flex justify-content-between align-items-end mb-4">
@@ -52,65 +71,46 @@ function Home() {
                         <Link to="/sale" className="btn btn-outline-primary fw-bold rounded-pill">{t('view_all')}</Link>
                     </div>
 
-                    <div className="row g-4">
-                        <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="position-relative">
-                                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" className="card-img-top" alt="House" style={{ height: '240px', objectFit: 'cover' }} />
-                                    <span className="position-absolute top-0 end-0 m-3 badge bg-gold">{t('special_offer')}</span>
-                                </div>
-                                <div className="card-body p-4">
-                                    <h5 className="card-title">$285,000</h5>
-                                    <p className="fw-bold text-dark mb-2 text-truncate">{t('villa_title')}</p>
-                                    <p className="text-muted small">📍 {t('phnom_penh')}</p>
-                                    <hr />
-                                    <div className="d-flex justify-content-between text-muted small">
-                                        <span>🛏️ {t('bed_count', { count: 4 })}</span> <span>🚿 {t('bath_count', { count: 5 })}</span> <span>📐 120m²</span>
+                    {loading ? (
+                        <p className="text-center">កំពុងផ្ទុកទិន្នន័យ...</p>
+                    ) : (
+                        <div className="row g-4">
+                            {properties.length > 0 ? (
+                                properties.map((item) => (
+                                    <div className="col-md-4" key={item.id}>
+                                        <div className="card h-100">
+                                            <div className="position-relative">
+                                                <img 
+                                                    src={`http://localhost:5000${item.image_url}`} 
+                                                    className="card-img-top" 
+                                                    alt={item.title} 
+                                                    style={{ height: '240px', objectFit: 'cover' }} 
+                                                />
+                                                <span className="position-absolute top-0 end-0 m-3 badge bg-gold">{item.type}</span>
+                                            </div>
+                                            <div className="card-body p-4">
+                                                <h5 className="card-title">${item.price}</h5>
+                                                <p className="fw-bold text-dark mb-2 text-truncate">{item.title}</p>
+                                                <p className="text-muted small">📍 {item.location}</p>
+                                                <hr />
+                                                <div className="d-flex justify-content-between text-muted small">
+                                                    <span>🛏️ {item.bedrooms}</span> 
+                                                    <span>🚿 {item.bathrooms}</span> 
+                                                    <span>📐 {item.size_sqm}m²</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                ))
+                            ) : (
+                                <p className="text-center">មិនទាន់មានទិន្នន័យសម្រាប់លក់ទេ</p>
+                            )}
                         </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="position-relative">
-                                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80" className="card-img-top" alt="House" style={{ height: '240px', objectFit: 'cover' }} />
-                                    <span className="position-absolute top-0 end-0 m-3 badge bg-primary">{t('new_listing')}</span>
-                                </div>
-                                <div className="card-body p-4">
-                                    <h5 className="card-title">$145,000</h5>
-                                    <p className="fw-bold text-dark mb-2 text-truncate">{t('shophouse_title')}</p>
-                                    <p className="text-muted small">📍 {t('phnom_penh')}</p>
-                                    <hr />
-                                    <div className="d-flex justify-content-between text-muted small">
-                                        <span>🛏️ {t('bed_count', { count: 3 })}</span> <span>🚿 {t('bath_count', { count: 4 })}</span> <span>📐 90m²</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="position-relative">
-                                    <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80" className="card-img-top" alt="House" style={{ height: '240px', objectFit: 'cover' }} />
-                                    <span className="position-absolute top-0 end-0 m-3 badge bg-danger">{t('hot_deal')}</span>
-                                </div>
-                                <div className="card-body p-4">
-                                    <h5 className="card-title">$550 / {t('rent')}</h5>
-                                    <p className="fw-bold text-dark mb-2 text-truncate">{t('condo_title')}</p>
-                                    <p className="text-muted small">📍 {t('phnom_penh')}</p>
-                                    <hr />
-                                    <div className="d-flex justify-content-between text-muted small">
-                                        <span>🛏️ {t('bed_count', { count: 2 })}</span> <span>🚿 {t('bath_count', { count: 2 })}</span> <span>📐 65m²</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </section>
 
-            {/* ៤. Call to Action */}
+            {/* ៤. Consult Section */}
             <section className="container py-5 my-5">
                 <div className="p-5 rounded-5 text-white text-center shadow-lg" style={{ backgroundColor: 'var(--primary-dark)', borderLeft: '10px solid var(--gold-color)' }}>
                     <h2 className="fw-bold mb-3">{t('cta_title')}</h2>
