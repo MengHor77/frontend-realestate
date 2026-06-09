@@ -16,18 +16,16 @@ function Home() {
         { title: t('land rent'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
         { title: t('construction'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
         { title: t('decoration'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
-        { title: t('create web and app '), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
+        { title: t('create web and app'), icon: '🏗️', link: '/sale', color: '#e8f5e9' },
     ];
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/properties')
             .then(res => {
-                // តម្រងយកតែប្រភេទ 'sale' និងកំណត់ត្រឹម 6 ជួរ
-                const saleProperties = res.data.properties
-                    .filter(item => item.type && item.type.toLowerCase() === 'sale')
-                    .slice(0, 6);
-                
-                setProperties(saleProperties);
+                // កែសម្រួល៖ យកទិន្នន័យមកទាំងអស់ រួចកាត់យកតែ 6 ជួរដំបូង ដោយមិនតម្រង
+                const allProperties = res.data.properties.slice(0, 6);
+
+                setProperties(allProperties);
                 setLoading(false);
             })
             .catch(err => {
@@ -60,7 +58,7 @@ function Home() {
                 </div>
             </section>
 
-            {/* ៣. Latest Projects (ទាញចេញពី Database) */}
+            {/* ៣. Latest Projects (បង្ហាញរាល់ Type ទាំងអស់ត្រឹម 6 កាត) */}
             <section className="py-5" style={{ backgroundColor: 'var(--white)' }}>
                 <div className="container">
                     <div className="d-flex justify-content-between align-items-end mb-4">
@@ -80,11 +78,11 @@ function Home() {
                                     <div className="col-md-4" key={item.id}>
                                         <div className="card h-100">
                                             <div className="position-relative">
-                                                <img 
-                                                    src={`http://localhost:5000${item.image_url}`} 
-                                                    className="card-img-top" 
-                                                    alt={item.title} 
-                                                    style={{ height: '240px', objectFit: 'cover' }} 
+                                                <img
+                                                    src={`http://localhost:5000${item.image_url}`}
+                                                    className="card-img-top"
+                                                    alt={item.title}
+                                                    style={{ height: '240px', objectFit: 'cover' }}
                                                 />
                                                 <span className="position-absolute top-0 end-0 m-3 badge bg-gold">{item.type}</span>
                                             </div>
@@ -94,8 +92,8 @@ function Home() {
                                                 <p className="text-muted small">📍 {item.location}</p>
                                                 <hr />
                                                 <div className="d-flex justify-content-between text-muted small">
-                                                    <span>🛏️ {item.bedrooms}</span> 
-                                                    <span>🚿 {item.bathrooms}</span> 
+                                                    <span>🛏️ {item.bedrooms}</span>
+                                                    <span>🚿 {item.bathrooms}</span>
                                                     <span>📐 {item.size_sqm}m²</span>
                                                 </div>
                                             </div>
@@ -103,7 +101,7 @@ function Home() {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-center">មិនទាន់មានទិន្នន័យសម្រាប់លក់ទេ</p>
+                                <p className="text-center">មិនទាន់មានទិន្នន័យក្នុងប្រព័ន្ធទេ</p>
                             )}
                         </div>
                     )}
