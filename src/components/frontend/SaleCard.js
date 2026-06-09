@@ -63,9 +63,15 @@ function SaleCard({ item }) {
                         )}
                     </div>
 
-                    <Link to="/contact-us" className="btn btn-outline-primary w-100 fw-bold mt-auto rounded-3 py-2">
-                        {t('contact_info_btn')}
-                    </Link>
+                    {/* Buttons Section with Flex */}
+                    <div className="mt-auto d-flex gap-2">
+                        <Link to={`/properties/${item.id}`} className="btn btn-primary flex-fill fw-bold rounded-3 py-2">
+                            {t('view_details')}
+                        </Link>
+                        <Link to="/contact-us" className="btn btn-outline-primary flex-fill fw-bold rounded-3 py-2">
+                            {t('contact_info_btn')}
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
