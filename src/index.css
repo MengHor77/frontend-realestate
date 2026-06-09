@@ -361,9 +361,17 @@ body, html {
   }
 }
 /* ==========================================================================
-   12 
+   12. Hide Scrollbar for Chrome, Safari, Edge, and Firefox
    ========================================================================== */
 .custom-scroll-area {
-    height: 100%;
+    flex: 1;
     overflow-y: auto;
+    
+    /* Chrome, Safari, and Opera */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.custom-scroll-area::-webkit-scrollbar {
+    display: none; /* Hides scrollbar in Chrome/Safari/Opera */
 }
