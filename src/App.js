@@ -10,6 +10,7 @@ import Home from './pages/frontend/home/Home';
 import About from './pages/frontend/about/About';
 import Sale from './pages/frontend/sale/Sale';
 import Rent from './pages/frontend/rent/Rent';
+import SaleDetail from './pages/frontend/sale/SaleDetail'; // Add this if you have a separate SaleDetail component
 import RentDetail from './pages/frontend/rent/RentDetail';
 import News from './pages/frontend/news/News';
 import ContactUs from './pages/frontend/contact/ContactUs';
@@ -36,13 +37,20 @@ function App() {
         <Route element={<FrontendLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          
+          {/* Property Routes - Consistent with backend */}
           <Route path="/sale" element={<Sale />} />
+          <Route path="/sale/:id" element={<SaleDetail />} /> {/* Add this if you have separate sale detail page */}
+          
           <Route path="/rent" element={<Rent />} />
-          {/* CHANGE THIS LINE - Updated route */}
-          <Route path="/rent/rent-detail/:id" element={<RentDetail />} />
+          <Route path="/rent/:id" element={<RentDetail />} /> {/* Fixed: removed extra 'rent-detail' */}
+          
+          {/* Alternative: Use single property detail route for all properties */}
+          <Route path="/property/:id" element={<PropertyDetail />} />
+          
+          {/* Other routes */}
           <Route path="/news" element={<News />} />
           <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </Route>

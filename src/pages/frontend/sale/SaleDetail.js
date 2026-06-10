@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
-const RentDetail = () => {
+const SaleDetail = () => {
     const { id } = useParams();
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ const RentDetail = () => {
     const fetchPropertyDetails = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:5000/api/properties/rent/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/properties/sale/${id}`);
             
             if (response.data.success) {
                 setProperty(response.data.property);
@@ -35,6 +35,20 @@ const RentDetail = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const calculateMortgage = () => {
+        if (!property) return null;
+        const downPayment = property.price * 0.2;
+        const loanAmount = property.price - downPayment;
+        const monthlyInterest = 0.04 / 12;
+        const numberOfPayments = 30 * 12;
+        const monthlyPayment = (loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, numberOfPayments)) / 
+                               (Math.pow(1 + monthlyInterest, numberOfPayments) - 1);
+        return {
+            downPayment: downPayment.toLocaleString(),
+            monthlyPayment: Math.round(monthlyPayment).toLocaleString()
+        };
     };
 
     const handleInquiryChange = (e) => {
@@ -144,6 +158,36 @@ const RentDetail = () => {
             fontSize: '18px',
             fontWeight: '600',
             color: '#333'
+        },
+        mortgageCalculator: {
+            background: '#f0f4ff',
+            padding: '20px',
+            borderRadius: '8px',
+            marginBottom: '30px'
+        },
+        mortgageTitle: {
+            marginTop: 0,
+            marginBottom: '15px'
+        },
+        mortgageDetails: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '20px'
+        },
+        mortgageItem: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px'
+        },
+        mortgageLabel: {
+            color: '#666',
+            fontSize: '14px'
+        },
+        mortgageValue: {
+            fontSize: '20px',
+            color: '#667eea',
+            fontWeight: 'bold'
         },
         description: {
             marginBottom: '30px'
@@ -287,16 +331,18 @@ const RentDetail = () => {
         return (
             <div style={styles.errorContainer}>
                 <p>{error || 'Property not found'}</p>
-                <Link to="/rent" style={styles.backButton}>Back to Rentals</Link>
+                <Link to="/sale" style={styles.backButton}>Back to Properties for Sale</Link>
             </div>
         );
     }
+
+    const mortgage = calculateMortgage();
 
     return (
         <div style={styles.page}>
             <div style={styles.container}>
                 <div style={styles.backNavigation}>
-                    <Link to="/rent" style={styles.backLink}>← Back to Rentals</Link>
+                    <Link to="/sale" style={styles.backLink}>← Back to Properties for Sale</Link>
                 </div>
 
                 <div style={styles.detailContainer}>
@@ -307,7 +353,7 @@ const RentDetail = () => {
                     <div style={styles.content}>
                         <div style={styles.header}>
                             <h1 style={styles.title}>{property.title}</h1>
-                            <div style={styles.priceTag}>${property.price.toLocaleString()}/month</div>
+                            <div style={styles.priceTag}>${property.price.toLocaleString()}</div>
                         </div>
 
                         <div style={styles.location}>
@@ -332,6 +378,22 @@ const RentDetail = () => {
                                 <span style={styles.specValue}>{property.size_sqm} m²</span>
                             </div>
                         </div>
+
+                        {mortgage && (
+                            <div style={styles.mortgageCalculator}>
+                                <h3 style={styles.mortgageTitle}>Mortgage Estimate</h3>
+                                <div style={styles.mortgageDetails}>
+                                    <div style={styles.mortgageItem}>
+                                        <span style={styles.mortgageLabel}>Down Payment (20%):</span>
+                                        <strong style={styles.mortgageValue}>${mortgage.downPayment}</strong>
+                                    </div>
+                                    <div style={styles.mortgageItem}>
+                                        <span style={styles.mortgageLabel}>Estimated Monthly Payment:</span>
+                                        <strong style={styles.mortgageValue}>${mortgage.monthlyPayment}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <div style={styles.description}>
                             <h3 style={styles.descriptionTitle}>Description</h3>
@@ -416,4 +478,4 @@ const RentDetail = () => {
     );
 };
 
-export default RentDetail;
+export default SaleDetail;

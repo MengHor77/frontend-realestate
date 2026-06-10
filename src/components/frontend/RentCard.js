@@ -12,7 +12,8 @@ function RentCard({ item }) {
             transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
             transform: isHovered ? 'translateY(-10px)' : 'translateY(0)',
             boxShadow: isHovered ? '0 20px 40px rgba(0,0,0,0.15)' : '0 0.125rem 0.25rem rgba(0,0,0,0.075)',
-            border: 'none'
+            border: 'none',
+            cursor: 'pointer'
         },
         imageContainer: {
             overflow: 'hidden',
@@ -20,6 +21,7 @@ function RentCard({ item }) {
         },
         image: {
             height: '240px',
+            width: '100%',
             objectFit: 'cover',
             transition: 'transform 0.5s ease',
             transform: isHovered ? 'scale(1.05)' : 'scale(1)'
@@ -93,14 +95,14 @@ function RentCard({ item }) {
                         <div className="h4 text-dark fw-bolder mb-0">
                             ${item.price}<span className="fs-6 text-muted fw-normal">/mo</span>
                         </div>
-                        {/* CHANGE THIS LINE - Updated route */}
+                        {/* FIXED ROUTE - Now matches your backend route */}
                         <Link
-                            to={item.id ? `/rent/rent-detail/${item.id}` : "#"}
+                            to={item.id ? `/rent/${item.id}` : "#"}
                             className="btn btn-primary px-4 py-2 rounded-pill"
                             style={styles.shadowPrimary}
                             onClick={(e) => {
                                 if (!item.id) {
-                                    e.preventDefault(); // Stop navigation
+                                    e.preventDefault();
                                     alert("Error: Property ID is missing or invalid.");
                                 }
                             }}
