@@ -10,6 +10,7 @@ import Home from './pages/frontend/home/Home';
 import About from './pages/frontend/about/About';
 import Sale from './pages/frontend/sale/Sale';
 import Rent from './pages/frontend/rent/Rent';
+import RentDetail from './pages/frontend/rent/RentDetail';
 import News from './pages/frontend/news/News';
 import ContactUs from './pages/frontend/contact/ContactUs';
 import Login from './pages/frontend/login/Login';
@@ -31,42 +32,36 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* ── Frontend Public Routes (Includes Layout) ───────────────────────────── */}
+        {/* Frontend Public Routes */}
         <Route element={<FrontendLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/sale" element={<Sale />} />
           <Route path="/rent" element={<Rent />} />
+          <Route path="/rent-property/:id" element={<RentDetail />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
-
-          {/* MOVED HERE: Now these pages will display your header and footer */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </Route>
 
-        {/* ── Admin Protected Routes ───────────────────────────── */}
+        {/* Admin Protected Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="properties" element={<ManageProperties />} />
           <Route path="users" element={<ManageUsers />} />
-          
-          {/* News Routes - ADD THESE */}
           <Route path="news" element={<ManageNews />} />
           <Route path="news/create" element={<CreateNews />} />
           <Route path="news/edit/:id" element={<EditNews />} />
-          
           <Route path="inquiries" element={<ManageInquiries />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 
-        {/* ── 404 Fallback ─────────────────────────────────────── */}
+        {/* 404 Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
-
       </Routes>
     </BrowserRouter>
   );

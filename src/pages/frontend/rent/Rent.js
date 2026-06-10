@@ -9,7 +9,6 @@ function Rent() {
     const [rentList, setRentList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
-    const [filters, setFilters] = useState({});
 
     const fetchRentProperties = async (searchFilters = {}) => {
         try {
@@ -35,7 +34,6 @@ function Rent() {
     };
 
     const handleSearch = (newFilters) => {
-        setFilters(newFilters);
         fetchRentProperties(newFilters);
     };
 

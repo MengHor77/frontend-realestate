@@ -8,12 +8,15 @@ import {
   faBuilding, 
   faInfoCircle, 
   faMapMarkerAlt, 
-  faPlus
+  faPlus,
+  faImage
 } from '@fortawesome/free-solid-svg-icons';
 import CreateProperty from './CreateProperty';
 import EditProperty from './EditProperty';
 import Filter from '../../../components/admin/Filter';
 import Pagination from '../../../components/common/Pagination';
+
+const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const ManageProperties = () => {
   const { setIsOverlayVisible } = useOutletContext();
@@ -52,7 +55,7 @@ const ManageProperties = () => {
       };
       if (filters.status === 'all') delete params.status;
 
-      const res = await axios.get('http://localhost:5000/api/properties', { ...config, params });
+      const res = await axios.get(`${API}/properties`, { ...config, params });
       
       setProperties(res.data.properties || []);
       setTotalItems(res.data.total || 0);
@@ -70,7 +73,7 @@ const ManageProperties = () => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/properties/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.delete(`${API}/properties/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         fetchProperties();
       } catch (err) { alert("Failed to delete property."); }
     }
@@ -102,25 +105,60 @@ const ManageProperties = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #ffd700' }}>
-                {['ID', 'Title', 'Type', 'Listing', 'Price', 'Location', 'Status', 'Actions'].map(h => (
-                  <th key={h} style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>{h}</th>
-                ))}
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>ID</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Image</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Title</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Type</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Listing</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Price</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Location</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Status</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {properties.map((item) => (
                 <tr key={item.id} style={{ borderBottom: '1px solid #eef2f6' }}>
                   <td style={{ padding: '16px 20px' }}>#{item.id}</td>
+                  <td style={{ padding: '16px 20px' }}>
+                    <img 
+                      src={item.image_url || 'https://via.placeholder.com/50x50?text=No+Image'} 
+                      alt={item.title}
+                      style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }}
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
+                      }}
+                    />
+                  </td>
                   <td style={{ padding: '16px 20px', fontWeight: '600' }}>{item.title}</td>
-                  {/* DISPLAYING NEW PROPERTY TYPES HERE */}
                   <td style={{ padding: '16px 20px', textTransform: 'capitalize' }}>{item.property_type}</td>
                   <td style={{ padding: '16px 20px' }}>{item.listing_type}</td>
                   <td style={{ padding: '16px 20px', fontWeight: '700' }}>${Number(item.price).toLocaleString()}</td>
                   <td style={{ padding: '16px 20px' }}><FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: '#ffd700', marginRight: '5px' }} /> {item.location}</td>
-                  <td style={{ padding: '16px 20px' }}><span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', backgroundColor: item.status === 'active' ? '#d4edda' : '#fff3cd' }}>{item.status.toUpperCase()}</span></td>
                   <td style={{ padding: '16px 20px' }}>
-                    <button onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }} style={{ backgroundColor: '#4f8ef7', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', marginRight: '5px' }}>Edit</button>
-                    <button onClick={() => handleDelete(item.id)} style={{ backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px' }}>Delete</button>
+                    <span style={{ 
+                      padding: '4px 12px', 
+                      borderRadius: '20px', 
+                      fontSize: '12px', 
+                      backgroundColor: item.status === 'active' ? '#d4edda' : item.status === 'sold' ? '#f8d7da' : '#fff3cd',
+                      color: item.status === 'active' ? '#155724' : item.status === 'sold' ? '#721c24' : '#856404'
+                    }}>
+                      {item.status.toUpperCase()}
+                    </span>
+                  </td>
+                  <td style={{ padding: '16px 20px' }}>
+                    <button 
+                      onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }} 
+                      style={{ backgroundColor: '#4f8ef7', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', marginRight: '5px', cursor: 'pointer' }}
+                    >
+                      <FontAwesomeIcon icon={faEdit} /> Edit
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(item.id)} 
+                      style={{ backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer' }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} /> Delete
+                    </button>
                   </td>
                 </tr>
               ))}
