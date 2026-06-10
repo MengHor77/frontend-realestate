@@ -1,119 +1,231 @@
+// D:\realestate\frontend\src\components\frontend\RentCard.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
-function RentCard({ item }) {
-    const { t } = useTranslation();
+const RentCard = ({ property, onFavoriteToggle, isFavorite = false, featured = false }) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [imageError, setImageError] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
-    const styles = {
-        card: {
-            borderRadius: '20px',
-            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-            transform: isHovered ? 'translateY(-10px)' : 'translateY(0)',
-            boxShadow: isHovered ? '0 20px 40px rgba(0,0,0,0.15)' : '0 0.125rem 0.25rem rgba(0,0,0,0.075)',
-            border: 'none',
-            cursor: 'pointer'
-        },
-        imageContainer: {
-            overflow: 'hidden',
-            borderRadius: '20px 20px 0 0'
-        },
-        image: {
-            height: '240px',
-            width: '100%',
-            objectFit: 'cover',
-            transition: 'transform 0.5s ease',
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)'
-        },
-        shadowPrimary: {
-            boxShadow: '0 4px 15px rgba(13, 110, 253, 0.3)'
+    const handleImageLoad = () => {
+        setImageLoaded(true);
+    };
+
+    const handleImageError = () => {
+        setImageError(true);
+    };
+
+    const handleFavoriteClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (onFavoriteToggle) {
+            onFavoriteToggle(property.id);
         }
     };
 
-    if (!item || !item.id) {
-        return null;
-    }
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(price);
+    };
+
+    const styles = {
+        card: {
+            position: 'relative',
+            background: '#ffffff',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: isHovered 
+                ? '0 8px 20px rgba(0,0,0,0.15)' 
+                : '0 2px 8px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease',
+            transform: isHovered ? 'translateY(-5px)' : 'translateY(0)',
+            cursor: 'pointer',
+            textDecoration: 'none',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        imageContainer: {
+            position: 'relative',
+            height: '250px',
+            overflow: 'hidden',
+            backgroundColor: '#f5f5f5'
+        },
+        image: {
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'transform 0.3s ease',
+            transform: isHovered ? 'scale(1.05)' : 'scale(1)'
+        },
+        imagePlaceholder: {
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f0f0f0',
+            color: '#999',
+            fontSize: '14px'
+        },
+        favoriteButton: {
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            background: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            border: 'none',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            zIndex: 10,
+            fontSize: '18px'
+        },
+        featuredBadge: {
+            position: 'absolute',
+            top: '12px',
+            left: '12px',
+            background: '#ffd700',
+            color: '#003366',
+            padding: '4px 12px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            zIndex: 10
+        },
+        propertyType: {
+            position: 'absolute',
+            bottom: '12px',
+            left: '12px',
+            background: 'rgba(0, 0, 0, 0.7)',
+            color: 'white',
+            padding: '4px 12px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            textTransform: 'capitalize',
+            zIndex: 10
+        },
+        content: {
+            padding: '16px',
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        title: {
+            fontSize: '18px',
+            fontWeight: '600',
+            color: '#003366',
+            marginBottom: '8px',
+            lineHeight: 1.4
+        },
+        location: {
+            color: '#666',
+            fontSize: '14px',
+            marginBottom: '12px'
+        },
+        price: {
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: '#0d6efd',
+            marginBottom: '12px'
+        },
+        details: {
+            display: 'flex',
+            gap: '16px',
+            color: '#666',
+            fontSize: '14px',
+            paddingTop: '12px',
+            borderTop: '1px solid #eee'
+        },
+        viewButton: {
+            background: '#003366',
+            color: 'white',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'background 0.3s ease',
+            marginTop: '12px',
+            textAlign: 'center'
+        }
+    };
 
     return (
-        <div
-            className="h-100"
+        <Link 
+            to={`/rent/${property.id}`} 
+            style={{ textDecoration: 'none' }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="card h-100 overflow-hidden" style={styles.card}>
+            <div style={styles.card}>
                 <div style={styles.imageContainer}>
-                    <img
-                        src={item.image_url || '/default-image.jpg'}
-                        className="card-img-top"
-                        alt={item.title}
-                        style={styles.image}
-                        onError={(e) => {
-                            e.target.src = '/default-image.jpg';
-                        }}
-                    />
-                    <div className="card-img-overlay d-flex flex-column justify-content-between p-3">
-                        <div className="d-flex justify-content-between">
-                            {item.status && (
-                                <span className="badge px-3 py-2 bg-white text-dark rounded-pill shadow-sm">
-                                    {item.status}
-                                </span>
-                            )}
+                    {!imageLoaded && !imageError && (
+                        <div style={styles.imagePlaceholder}>
+                            Loading...
                         </div>
+                    )}
+                    {!imageError ? (
+                        <img 
+                            src={property.image_url || property.images?.[0] || '/api/placeholder/400/300'}
+                            alt={property.title}
+                            style={styles.image}
+                            onLoad={handleImageLoad}
+                            onError={handleImageError}
+                        />
+                    ) : (
+                        <div style={styles.imagePlaceholder}>
+                            No Image Available
+                        </div>
+                    )}
+                    <div 
+                        style={styles.favoriteButton}
+                        onClick={handleFavoriteClick}
+                    >
+                        {isFavorite ? '❤️' : '🤍'}
+                    </div>
+                    {featured && (
+                        <div style={styles.featuredBadge}>
+                            Featured
+                        </div>
+                    )}
+                    <div style={styles.propertyType}>
+                        {property.property_type || property.type}
                     </div>
                 </div>
 
-                <div className="card-body p-4 d-flex flex-column">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                        <span className="text-primary fw-bold text-uppercase small" style={{ letterSpacing: '1px' }}>
-                            {item.property_type || 'Property'}
-                        </span>
-                        <span className="text-warning">★★★★★</span>
-                    </div>
-
-                    <h5 className="fw-bold text-dark mb-1">{item.title}</h5>
-                    <p className="text-muted small mb-3">
-                        <i className="bi bi-geo-alt-fill me-1"></i> {item.location}
+                <div style={styles.content}>
+                    <h3 style={styles.title}>
+                        {property.title}
+                    </h3>
+                    <p style={styles.location}>
+                        📍 {property.location}
                     </p>
-
-                    <div className="d-flex justify-content-between align-items-center bg-light p-3 rounded-3 mb-4">
-                        <div className="text-center">
-                            <small className="d-block text-muted">Beds</small>
-                            <span className="fw-bold">{item.bedrooms || 0}</span>
-                        </div>
-                        <div className="text-center border-start border-end px-3">
-                            <small className="d-block text-muted">Baths</small>
-                            <span className="fw-bold">{item.bathrooms || 0}</span>
-                        </div>
-                        <div className="text-center">
-                            <small className="d-block text-muted">Size</small>
-                            <span className="fw-bold">{item.size_sqm || 0}m²</span>
-                        </div>
+                    <p style={styles.price}>
+                        {formatPrice(property.price)}/month
+                    </p>
+                    <div style={styles.details}>
+                        <span>🛏️ {property.bedrooms} beds</span>
+                        <span>🚿 {property.bathrooms} baths</span>
+                        <span>📏 {property.size_sqm || property.area} m²</span>
                     </div>
-
-                    <div className="mt-auto d-flex align-items-center justify-content-between">
-                        <div className="h4 text-dark fw-bolder mb-0">
-                            ${item.price}<span className="fs-6 text-muted fw-normal">/mo</span>
-                        </div>
-                        {/* FIXED ROUTE - Now matches your backend route */}
-                        <Link
-                            to={item.id ? `/rent/${item.id}` : "#"}
-                            className="btn btn-primary px-4 py-2 rounded-pill"
-                            style={styles.shadowPrimary}
-                            onClick={(e) => {
-                                if (!item.id) {
-                                    e.preventDefault();
-                                    alert("Error: Property ID is missing or invalid.");
-                                }
-                            }}
-                        >
-                            {t('view_details')}
-                        </Link>
+                    <div style={styles.viewButton}>
+                        View Details →
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
-}
+};
 
 export default RentCard;

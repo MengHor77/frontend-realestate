@@ -1,11 +1,14 @@
+// D:\realestate\frontend\src\pages\frontend\rent\Rent.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import RentCard from '../../../components/frontend/RentCard';
 
 const Rent = () => {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [favorites, setFavorites] = useState([]);
     const [filters, setFilters] = useState({
         location: '',
         type: '',
@@ -62,8 +65,16 @@ const Rent = () => {
     const handlePageChange = (newPage) => {
         if (newPage > 0 && newPage <= pagination.totalPages) {
             setPagination(prev => ({ ...prev, currentPage: newPage }));
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+    };
+
+    const handleFavoriteToggle = (propertyId) => {
+        setFavorites(prev => 
+            prev.includes(propertyId) 
+                ? prev.filter(id => id !== propertyId)
+                : [...prev, propertyId]
+        );
     };
 
     const styles = {
@@ -72,7 +83,7 @@ const Rent = () => {
             backgroundColor: '#f5f5f5'
         },
         heroSection: {
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #003366 0%, #0d6efd 100%)',
             color: 'white',
             padding: '60px 20px',
             textAlign: 'center'
@@ -130,58 +141,6 @@ const Rent = () => {
             gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
             gap: '30px'
         },
-        propertyCard: {
-            background: 'white',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            transition: 'transform 0.3s ease',
-            cursor: 'pointer'
-        },
-        propertyImage: {
-            position: 'relative',
-            height: '250px',
-            overflow: 'hidden'
-        },
-        image: {
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-        },
-        propertyType: {
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            background: 'rgba(0,0,0,0.7)',
-            color: 'white',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '12px'
-        },
-        propertyInfo: {
-            padding: '20px'
-        },
-        title: {
-            fontSize: '20px',
-            marginBottom: '8px',
-            color: '#333'
-        },
-        location: {
-            color: '#666',
-            marginBottom: '12px'
-        },
-        price: {
-            fontSize: '24px',
-            fontWeight: 'bold',
-            color: '#667eea',
-            marginBottom: '12px'
-        },
-        propertyDetails: {
-            display: 'flex',
-            gap: '16px',
-            color: '#666',
-            fontSize: '14px'
-        },
         pagination: {
             display: 'flex',
             justifyContent: 'center',
@@ -191,7 +150,7 @@ const Rent = () => {
         },
         button: {
             padding: '10px 20px',
-            background: '#667eea',
+            background: '#003366',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
@@ -215,7 +174,7 @@ const Rent = () => {
         },
         spinner: {
             border: '4px solid #f3f3f3',
-            borderTop: '4px solid #667eea',
+            borderTop: '4px solid #003366',
             borderRadius: '50%',
             width: '40px',
             height: '40px',
@@ -264,7 +223,11 @@ const Rent = () => {
                     transform: translateY(-5px);
                 }
                 .pagination-button:hover:not(:disabled) {
-                    background: #5a67d8 !important;
+                    background: #0d6efd !important;
+                }
+                input:focus, select:focus {
+                    outline: none;
+                    border-color: #003366 !important;
                 }
             `}</style>
             
@@ -334,24 +297,13 @@ const Rent = () => {
                         <>
                             <div style={styles.propertiesGrid}>
                                 {properties.map(property => (
-                                    <Link to={`/rent/${property.id}`} key={property.id} style={{ textDecoration: 'none' }}>
-                                        <div className="property-card" style={styles.propertyCard}>
-                                            <div style={styles.propertyImage}>
-                                                <img src={property.image_url} alt={property.title} style={styles.image} />
-                                                <span style={styles.propertyType}>{property.property_type}</span>
-                                            </div>
-                                            <div style={styles.propertyInfo}>
-                                                <h3 style={styles.title}>{property.title}</h3>
-                                                <p style={styles.location}>{property.location}</p>
-                                                <p style={styles.price}>${property.price.toLocaleString()}/month</p>
-                                                <div style={styles.propertyDetails}>
-                                                    <span>{property.bedrooms} beds</span>
-                                                    <span>{property.bathrooms} baths</span>
-                                                    <span>{property.size_sqm} m²</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
+                                    <RentCard
+                                        key={property.id}
+                                        property={property}
+                                        isFavorite={favorites.includes(property.id)}
+                                        onFavoriteToggle={handleFavoriteToggle}
+                                        featured={property.is_featured}
+                                    />
                                 ))}
                             </div>
 
