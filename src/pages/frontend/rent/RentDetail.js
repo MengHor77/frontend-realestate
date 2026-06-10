@@ -9,6 +9,8 @@ const RentDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showContactForm, setShowContactForm] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [showLightbox, setShowLightbox] = useState(false);
     const [inquiry, setInquiry] = useState({
         name: '',
         email: '',
@@ -38,7 +40,9 @@ const RentDetail = () => {
             }
             
             if (response.data.success || response.data.property) {
-                setProperty(response.data.property || response.data);
+                const propertyData = response.data.property || response.data;
+                setProperty(propertyData);
+                setCurrentImageIndex(0);
             } else {
                 setError('Property not found');
             }
@@ -49,6 +53,54 @@ const RentDetail = () => {
             setLoading(false);
         }
     };
+
+    const nextImage = () => {
+        if (property && property.images && property.images.length > 0) {
+            setCurrentImageIndex((prev) =>
+                prev === property.images.length - 1 ? 0 : prev + 1
+            );
+        }
+    };
+
+    const prevImage = () => {
+        if (property && property.images && property.images.length > 0) {
+            setCurrentImageIndex((prev) =>
+                prev === 0 ? property.images.length - 1 : prev - 1
+            );
+        }
+    };
+
+    const goToImage = (index) => {
+        setCurrentImageIndex(index);
+    };
+
+    const openLightbox = () => {
+        setShowLightbox(true);
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+        setShowLightbox(false);
+        document.body.style.overflow = 'auto';
+    };
+
+    // Keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (showLightbox) {
+                if (e.key === 'ArrowLeft') {
+                    prevImage();
+                } else if (e.key === 'ArrowRight') {
+                    nextImage();
+                } else if (e.key === 'Escape') {
+                    closeLightbox();
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [showLightbox, property]);
 
     const handleInquiryChange = (e) => {
         const { name, value } = e.target;
@@ -65,7 +117,7 @@ const RentDetail = () => {
                 property_title: property.title,
                 property_type: 'rent'
             });
-            
+
             if (response.data.success) {
                 alert('Inquiry sent successfully! We will contact you soon.');
                 setShowContactForm(false);
@@ -98,9 +150,7 @@ const RentDetail = () => {
             textDecoration: 'none',
             fontSize: '16px',
             fontWeight: '500',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px'
+            transition: 'color 0.3s ease'
         },
         detailContainer: {
             background: 'white',
@@ -110,14 +160,76 @@ const RentDetail = () => {
         },
         gallery: {
             width: '100%',
+            background: '#000',
+            position: 'relative'
+        },
+        mainImageContainer: {
+            position: 'relative',
             height: '500px',
             overflow: 'hidden',
-            position: 'relative'
+            cursor: 'pointer'
         },
         mainImage: {
             width: '100%',
             height: '100%',
-            objectFit: 'cover'
+            objectFit: 'cover',
+            transition: 'transform 0.3s ease'
+        },
+        navButton: {
+            position: 'absolute',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'rgba(0, 0, 0, 0.6)',
+            color: 'white',
+            border: 'none',
+            width: '50px',
+            height: '50px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            fontSize: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease',
+            zIndex: 10
+        },
+        prevButton: {
+            left: '20px'
+        },
+        nextButton: {
+            right: '20px'
+        },
+        thumbnailContainer: {
+            display: 'flex',
+            gap: '10px',
+            padding: '15px 20px',
+            overflowX: 'auto',
+            backgroundColor: '#f8f9fa',
+            borderTop: '1px solid #eee'
+        },
+        thumbnail: {
+            width: '80px',
+            height: '80px',
+            objectFit: 'cover',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            border: '2px solid transparent'
+        },
+        activeThumbnail: {
+            border: '2px solid #003366',
+            transform: 'scale(1.05)'
+        },
+        imageCounter: {
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            background: 'rgba(0, 0, 0, 0.7)',
+            color: 'white',
+            padding: '5px 12px',
+            borderRadius: '20px',
+            fontSize: '14px',
+            zIndex: 10
         },
         propertyTypeBadge: {
             position: 'absolute',
@@ -128,7 +240,48 @@ const RentDetail = () => {
             padding: '8px 16px',
             borderRadius: '8px',
             fontWeight: 'bold',
-            textTransform: 'capitalize'
+            textTransform: 'capitalize',
+            zIndex: 10
+        },
+        // Lightbox styles
+        lightboxOverlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.95)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        lightboxContent: {
+            position: 'relative',
+            maxWidth: '90vw',
+            maxHeight: '90vh'
+        },
+        lightboxImage: {
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            objectFit: 'contain'
+        },
+        closeLightbox: {
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            color: 'white',
+            border: 'none',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            fontSize: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease'
         },
         content: {
             padding: '40px'
@@ -321,13 +474,14 @@ const RentDetail = () => {
             borderRadius: '8px',
             transition: 'background 0.3s ease'
         },
-        similarProperties: {
-            marginTop: '60px'
-        },
-        similarTitle: {
-            fontSize: '28px',
-            marginBottom: '30px',
-            color: '#003366'
+        noImages: {
+            height: '500px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f0f0f0',
+            color: '#999',
+            fontSize: '16px'
         }
     };
 
@@ -339,13 +493,9 @@ const RentDetail = () => {
                         0% { transform: rotate(0deg); }
                         100% { transform: rotate(360deg); }
                     }
-                    input:focus, textarea:focus {
-                        outline: none;
-                        border-color: #003366 !important;
-                    }
                     button:hover:not(:disabled) {
                         opacity: 0.9;
-                        transform: translateY(-2px);
+                        transform: scale(1.05);
                     }
                 `}</style>
                 <div style={styles.spinner}></div>
@@ -365,36 +515,156 @@ const RentDetail = () => {
         );
     }
 
+    // Get images array from property
+    const images = property.images && property.images.length > 0 ? property.images :
+        (property.image_url ? [{ id: 0, url: property.image_url, is_primary: true }] : []);
+    const hasImages = images.length > 0;
+
     return (
         <div style={styles.page}>
             <style>{`
-                input:focus, textarea:focus {
-                    outline: none;
-                    border-color: #003366 !important;
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
                 }
                 button:hover:not(:disabled) {
                     opacity: 0.9;
-                    transform: translateY(-2px);
+                    transform: scale(1.05);
+                }
+                .thumbnail:hover {
+                    transform: scale(1.1);
+                }
+                ::-webkit-scrollbar {
+                    height: 8px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                }
+                ::-webkit-scrollbar-thumb {
+                    background: #888;
+                    border-radius: 4px;
+                }
+                .back-link:hover {
+                    color: #0d6efd !important;
                 }
             `}</style>
             <div style={styles.container}>
                 <div style={styles.backNavigation}>
-                    <Link to="/rent" style={styles.backLink}>
+                    <Link to="/rent" style={styles.backLink} className="back-link">
                         ← Back to Rentals
                     </Link>
                 </div>
 
                 <div style={styles.detailContainer}>
+                    {/* Image Gallery */}
                     <div style={styles.gallery}>
-                        <img 
-                            src={property.image_url || property.images?.[0] || '/api/placeholder/800/500'} 
-                            alt={property.title} 
-                            style={styles.mainImage} 
-                        />
-                        <div style={styles.propertyTypeBadge}>
-                            For Rent
-                        </div>
+                        {hasImages ? (
+                            <>
+                                <div style={styles.mainImageContainer}>
+                                    <img
+                                        src={images[currentImageIndex].url}
+                                        alt={`${property.title} - Image ${currentImageIndex + 1}`}
+                                        style={styles.mainImage}
+                                        onClick={openLightbox}
+                                    />
+                                    {images.length > 1 && (
+                                        <>
+                                            <button
+                                                onClick={prevImage}
+                                                style={{ ...styles.navButton, ...styles.prevButton }}
+                                                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+                                                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'}
+                                            >
+                                                ❮
+                                            </button>
+                                            <button
+                                                onClick={nextImage}
+                                                style={{ ...styles.navButton, ...styles.nextButton }}
+                                                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+                                                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'}
+                                            >
+                                                ❯
+                                            </button>
+                                            <div style={styles.imageCounter}>
+                                                {currentImageIndex + 1} / {images.length}
+                                            </div>
+                                        </>
+                                    )}
+                                    <div style={styles.propertyTypeBadge}>
+                                        For Rent
+                                    </div>
+                                </div>
+
+                                {images.length > 1 && (
+                                    <div style={styles.thumbnailContainer}>
+                                        {images.map((image, index) => (
+                                            <img
+                                                key={image.id || index}
+                                                src={image.url}
+                                                alt={`Thumbnail ${index + 1}`}
+                                                style={{
+                                                    ...styles.thumbnail,
+                                                    ...(currentImageIndex === index ? styles.activeThumbnail : {})
+                                                }}
+                                                className="thumbnail"
+                                                onClick={() => goToImage(index)}
+                                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <div style={styles.noImages}>
+                                <p>No images available for this property</p>
+                                <div style={styles.propertyTypeBadge}>
+                                    For Rent
+                                </div>
+                            </div>
+                        )}
                     </div>
+
+                    {/* Lightbox */}
+                    {showLightbox && hasImages && (
+                        <div style={styles.lightboxOverlay} onClick={closeLightbox}>
+                            <div style={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+                                <img
+                                    src={images[currentImageIndex].url}
+                                    alt="Full size view"
+                                    style={styles.lightboxImage}
+                                />
+                                {images.length > 1 && (
+                                    <>
+                                        <button
+                                            onClick={prevImage}
+                                            style={{ ...styles.navButton, ...styles.prevButton, top: '50%' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'}
+                                        >
+                                            ❮
+                                        </button>
+                                        <button
+                                            onClick={nextImage}
+                                            style={{ ...styles.navButton, ...styles.nextButton, top: '50%' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'}
+                                        >
+                                            ❯
+                                        </button>
+                                    </>
+                                )}
+                                <button
+                                    onClick={closeLightbox}
+                                    style={styles.closeLightbox}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     <div style={styles.content}>
                         <div style={styles.header}>
@@ -456,7 +726,7 @@ const RentDetail = () => {
 
                         <div style={styles.contactSection}>
                             {!showContactForm ? (
-                                <button 
+                                <button
                                     style={styles.contactButton}
                                     onClick={() => setShowContactForm(true)}
                                     onMouseEnter={(e) => e.currentTarget.style.background = '#0d6efd'}
@@ -508,14 +778,18 @@ const RentDetail = () => {
                                             type="submit" 
                                             style={styles.submitButton}
                                             disabled={isSubmitting}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = '#0d6efd'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = '#003366'}
                                         >
                                             {isSubmitting ? 'Sending...' : 'Send Inquiry'}
                                         </button>
-                                        <button 
-                                            type="button" 
+                                        <button
+                                            type="button"
                                             style={styles.cancelButton}
                                             onClick={() => setShowContactForm(false)}
                                             disabled={isSubmitting}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = '#999'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = '#ccc'}
                                         >
                                             Cancel
                                         </button>
