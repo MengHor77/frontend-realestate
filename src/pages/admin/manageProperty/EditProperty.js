@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faSave, faBuilding, faImage, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faSave, faBuilding, faImage, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -11,8 +11,9 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
     listing_type: 'sale', status: 'active', bedrooms: '', 
     bathrooms: '', size_sqm: '', description: '', features: ''
   });
-  const [images, setImages] = useState([]);
-  const [currentImage, setCurrentImage] = useState('');
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [newImagePreviews, setNewImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -31,13 +32,9 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
       setError('');
       const token = localStorage.getItem('token');
       
-      console.log('Fetching property ID:', propertyId);
-      
       const response = await axios.get(`${API}/properties/${propertyId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
-      console.log('API Response:', response.data);
       
       const p = response.data.property;
       setFormData({
@@ -54,25 +51,96 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
         features: p.features || ''
       });
       
-      // Set current image URL
-      if (p.image_url) {
-        setCurrentImage(p.image_url);
+      // Set existing images
+      if (p.images && p.images.length > 0) {
+        setExistingImages(p.images);
+      } else if (p.image_url) {
+        setExistingImages([{ id: null, url: p.image_url, is_primary: true }]);
       }
       
     } catch (err) {
       console.error('Fetch error:', err);
-      if (err.response) {
-        setError(`Failed to load data: ${err.response.data.message || err.response.statusText}`);
-      } else if (err.request) {
-        setError('Cannot connect to server. Make sure backend is running.');
-      } else {
-        setError(`Error: ${err.message}`);
-      }
+      setError(`Failed to load data: ${err.response?.data?.message || err.message}`);
     } finally { 
       setLoading(false); 
     }
   };
 
+  const handleNewImages = (e) => {
+    const files = Array.from(e.target.files);
+    if (existingImages.length + newImages.length + files.length > 10) {
+      setError('Maximum 10 images allowed');
+      return;
+    }
+    setNewImages([...newImages, ...files]);
+    
+    // Create preview URLs
+    const previews = files.map(file => URL.createObjectURL(file));
+    setNewImagePreviews([...newImagePreviews, ...previews]);
+  };
+
+  const removeExistingImage = async (imageId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API}/properties/${propertyId}/images/${imageId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      // Refresh property data
+      await fetchProperty();
+      setSuccess('Image removed successfully');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      console.error('Error removing image:', err);
+      setError('Failed to remove image');
+    }
+  };
+
+  const removeNewImage = (index) => {
+    const newImagesList = newImages.filter((_, i) => i !== index);
+    const newPreviewsList = newImagePreviews.filter((_, i) => i !== index);
+    setNewImages(newImagesList);
+    setNewImagePreviews(newPreviewsList);
+  };
+
+// Update the setPrimaryImage function in EditProperty.js
+const setPrimaryImage = async (imageId) => {
+    try {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        
+        console.log(`Setting image ${imageId} as primary for property ${propertyId}`);
+        
+        const response = await axios.put(
+            `${API}/properties/${propertyId}/images/${imageId}/primary`,
+            {},
+            {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        
+        console.log('Set primary response:', response.data);
+        
+        if (response.data.success) {
+            setSuccess('Primary image updated successfully');
+            // Refresh property data to show updated primary image
+            await fetchProperty();
+            setTimeout(() => setSuccess(''), 3000);
+        } else {
+            setError(response.data.message || 'Failed to set primary image');
+        }
+    } catch (err) {
+        console.error('Error setting primary image:', err);
+        const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to set primary image';
+        setError(errorMsg);
+        setTimeout(() => setError(''), 5000);
+    } finally {
+        setLoading(false);
+    }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -97,14 +165,12 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
         }
       });
       
-      // Append new image if selected
-      if (images.length > 0) {
-        fd.append('images', images[0]);
-        console.log('Uploading new image:', images[0].name);
+      // Append new images
+      if (newImages.length > 0) {
+        for (let i = 0; i < newImages.length; i++) {
+          fd.append('images', newImages[i]);
+        }
       }
-      
-      console.log('Updating property ID:', propertyId);
-      console.log('Form data:', Object.fromEntries(fd));
       
       const response = await axios.put(`${API}/properties/${propertyId}`, fd, {
         headers: { 
@@ -113,40 +179,22 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
         }
       });
       
-      console.log('Update response:', response.data);
-      
-      if (response.data.success || response.data.message) {
+      if (response.data.success) {
         setSuccess('Property updated successfully!');
         setTimeout(() => {
           onRefresh();
           onClose();
         }, 1500);
       } else {
-        setError('Update failed: No success message from server');
+        setError('Update failed');
       }
       
     } catch (err) {
       console.error('Update error:', err);
-      
-      if (err.response) {
-        // Server responded with error
-        const errorMsg = err.response.data?.message || err.response.data?.error || err.response.statusText;
-        setError(`Error: ${errorMsg} (Status: ${err.response.status})`);
-      } else if (err.request) {
-        // Request was made but no response
-        setError('Cannot connect to server. Please check if backend is running on port 5000');
-      } else {
-        // Something else happened
-        setError(`Error: ${err.message}`);
-      }
+      setError(err.response?.data?.message || err.response?.data?.error || 'Error updating property');
     } finally { 
       setLoading(false); 
     }
-  };
-
-  const handleRemoveImage = () => {
-    setCurrentImage('');
-    setImages([]);
   };
 
   return (
@@ -234,34 +282,52 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
               <input style={styles.input} placeholder="e.g., Parking, Pool, Garden" value={formData.features} onChange={e => set('features', e.target.value)} />
             </div>
             
-            {/* Current Image Preview */}
-            {currentImage && (
-              <div style={styles.imagePreview}>
-                <label>Current Image:</label>
-                <div style={styles.imageContainer}>
-                  <img 
-                    src={currentImage} 
-                    alt="Current property" 
-                    style={styles.previewImage}
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/100x100?text=No+Image';
-                    }}
-                  />
-                  <button type="button" onClick={handleRemoveImage} style={styles.removeImageBtn}>
-                    <FontAwesomeIcon icon={faTrash} /> Remove
-                  </button>
+            {/* Existing Images */}
+            {existingImages.length > 0 && (
+              <div style={styles.imageSection}>
+                <label>Current Images ({existingImages.length}/10)</label>
+                <div style={styles.imageGrid}>
+                  {existingImages.map((img) => (
+                    <div key={img.id} style={styles.imageItem}>
+                      <img src={img.url} alt="Property" style={styles.imageThumb} />
+                      <div style={styles.imageActions}>
+                        {!img.is_primary && (
+                          <button type="button" onClick={() => setPrimaryImage(img.id)} style={styles.setPrimaryBtn}>
+                            Set as Primary
+                          </button>
+                        )}
+                        {img.is_primary && <span style={styles.primaryBadge}>Primary</span>}
+                        <button type="button" onClick={() => removeExistingImage(img.id)} style={styles.removeImageBtn}>
+                          <FontAwesomeIcon icon={faTrash} /> Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* New Images Preview */}
+            {newImagePreviews.length > 0 && (
+              <div style={styles.imageSection}>
+                <label>New Images to Add ({newImagePreviews.length})</label>
+                <div style={styles.imageGrid}>
+                  {newImagePreviews.map((preview, index) => (
+                    <div key={index} style={styles.imageItem}>
+                      <img src={preview} alt="New preview" style={styles.imageThumb} />
+                      <button type="button" onClick={() => removeNewImage(index)} style={styles.removeImageBtn}>
+                        <FontAwesomeIcon icon={faTrash} /> Remove
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
             
             <div style={styles.group}>
-              <label>Update Image (optional)</label>
-              <input type="file" accept="image/*" style={styles.input} onChange={e => setImages(Array.from(e.target.files))} />
-              {images.length > 0 && (
-                <div style={styles.newImageInfo}>
-                  <FontAwesomeIcon icon={faImage} /> New image selected: {images[0].name}
-                </div>
-              )}
+              <label>Add More Images</label>
+              <input type="file" multiple accept="image/*" style={styles.input} onChange={handleNewImages} />
+              <small style={styles.helperText}>You can add up to {10 - (existingImages.length + newImages.length)} more images</small>
             </div>
             
             <button type="submit" style={styles.submitBtn} disabled={loading}>
@@ -281,7 +347,7 @@ const styles = {
     alignItems: 'center', zIndex: 9999 
   },
   container: { 
-    background: '#fff', width: '90%', maxWidth: '600px', 
+    background: '#fff', width: '90%', maxWidth: '700px', 
     borderRadius: '12px', maxHeight: '90vh', display: 'flex', 
     flexDirection: 'column', boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
   },
@@ -313,38 +379,69 @@ const styles = {
     padding: '10px', borderRadius: '5px', border: '1px solid #ccc', 
     marginTop: '5px', fontSize: '14px' 
   },
-  imagePreview: {
+  imageSection: {
     marginBottom: '15px',
     padding: '10px',
     background: '#f8f9fa',
     borderRadius: '8px'
   },
-  imageContainer: {
-    display: 'flex',
-    alignItems: 'center',
+  imageGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
     gap: '15px',
     marginTop: '10px'
   },
-  previewImage: {
-    width: '100px',
+  imageItem: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '8px'
+  },
+  imageThumb: {
+    width: '100%',
     height: '100px',
     objectFit: 'cover',
     borderRadius: '8px',
-    border: '2px solid #003366'
+    border: '2px solid #ddd'
+  },
+  imageActions: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px',
+    width: '100%'
+  },
+  setPrimaryBtn: {
+    background: '#28a745',
+    color: 'white',
+    border: 'none',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '11px'
+  },
+  primaryBadge: {
+    background: '#ffd700',
+    color: '#003366',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    fontSize: '11px',
+    textAlign: 'center',
+    fontWeight: 'bold'
   },
   removeImageBtn: {
     background: '#dc3545',
     color: 'white',
     border: 'none',
-    padding: '5px 10px',
-    borderRadius: '5px',
+    padding: '4px 8px',
+    borderRadius: '4px',
     cursor: 'pointer',
-    fontSize: '12px'
+    fontSize: '11px'
   },
-  newImageInfo: {
-    marginTop: '5px',
+  helperText: {
     fontSize: '12px',
-    color: '#28a745'
+    color: '#666',
+    marginTop: '5px'
   },
   submitBtn: { 
     background: '#003366', color: '#ffd700', padding: '12px', 

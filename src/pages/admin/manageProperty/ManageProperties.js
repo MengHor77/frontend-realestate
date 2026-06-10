@@ -6,7 +6,6 @@ import {
   faEdit, 
   faTrash, 
   faBuilding, 
-  faInfoCircle, 
   faMapMarkerAlt, 
   faPlus,
   faImage
@@ -75,12 +74,37 @@ const ManageProperties = () => {
         const token = localStorage.getItem('token');
         await axios.delete(`${API}/properties/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         fetchProperties();
-      } catch (err) { alert("Failed to delete property."); }
+      } catch (err) { 
+        alert("Failed to delete property."); 
+      }
     }
   };
 
-  const handleClose = () => { setShowAdd(false); setEditId(null); setIsOverlayVisible(false); };
+  const handleClose = () => { 
+    setShowAdd(false); 
+    setEditId(null); 
+    setIsOverlayVisible(false); 
+  };
+  
   const totalPages = totalPagesState || Math.ceil(totalItems / itemsPerPage);
+
+  const getImageUrl = (property) => {
+    if (property.images && property.images.length > 0) {
+      const primaryImage = property.images.find(img => img.is_primary) || property.images[0];
+      return primaryImage.url;
+    }
+    if (property.image_url) {
+      return property.image_url;
+    }
+    return 'https://via.placeholder.com/50x50?text=No+Image';
+  };
+
+  const getImageCount = (property) => {
+    if (property.images && property.images.length > 0) {
+      return property.images.length;
+    }
+    return property.image_url ? 1 : 0;
+  };
 
   return (
     <div style={{ padding: '25px', backgroundColor: '#f4f7f6', minHeight: '100vh' }}>
@@ -106,7 +130,7 @@ const ManageProperties = () => {
             <thead>
               <tr style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #ffd700' }}>
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>ID</th>
-                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Image</th>
+                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Images</th>
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Title</th>
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Type</th>
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Listing</th>
@@ -121,15 +145,37 @@ const ManageProperties = () => {
                 <tr key={item.id} style={{ borderBottom: '1px solid #eef2f6' }}>
                   <td style={{ padding: '16px 20px' }}>#{item.id}</td>
                   <td style={{ padding: '16px 20px' }}>
-                    <img 
-                      src={item.image_url || 'https://via.placeholder.com/50x50?text=No+Image'} 
-                      alt={item.title}
-                      style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }}
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
-                      }}
-                    />
-                  </td>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                      <img 
+                        src={getImageUrl(item)} 
+                        alt={item.title}
+                        style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }}
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
+                        }}
+                      />
+                      {getImageCount(item) > 1 && (
+                        <div style={{ 
+                          position: 'absolute', 
+                          bottom: '-5px', 
+                          right: '-5px', 
+                          background: '#003366', 
+                          color: '#ffd700',
+                          borderRadius: '50%',
+                          width: '18px',
+                          height: '18px',
+                          fontSize: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 'bold'
+                        }}>
+                          <FontAwesomeIcon icon={faImage} size="xs" />
+                          <span style={{ marginLeft: '2px' }}>{getImageCount(item)}</span>
+                        </div>
+                      )}
+                    </div>
+                   </td>
                   <td style={{ padding: '16px 20px', fontWeight: '600' }}>{item.title}</td>
                   <td style={{ padding: '16px 20px', textTransform: 'capitalize' }}>{item.property_type}</td>
                   <td style={{ padding: '16px 20px' }}>{item.listing_type}</td>
@@ -145,7 +191,7 @@ const ManageProperties = () => {
                     }}>
                       {item.status.toUpperCase()}
                     </span>
-                  </td>
+                   </td>
                   <td style={{ padding: '16px 20px' }}>
                     <button 
                       onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }} 
@@ -159,17 +205,17 @@ const ManageProperties = () => {
                     >
                       <FontAwesomeIcon icon={faTrash} /> Delete
                     </button>
-                  </td>
-                </tr>
+                   </td>
+                 </tr>
               ))}
             </tbody>
-          </table>
+           </table>
         </div>
         
         {totalPages > 1 && (
-            <div style={{ padding: '20px', borderTop: '1px solid #eef2f6' }}>
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-            </div>
+          <div style={{ padding: '20px', borderTop: '1px solid #eef2f6' }}>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </div>
         )}
       </div>
     </div>

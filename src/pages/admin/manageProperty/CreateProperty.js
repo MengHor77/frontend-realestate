@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import api from '../../../services/api'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faSave, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faSave, faBuilding, faImage, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const CreateProperty = ({ onClose, onRefresh }) => {
     const [formData, setFormData] = useState({
         title: '',
         price: '',
         location: '',
-        property_type: 'condo',      // Added for DB compatibility
-        listing_type: 'sale',        // Renamed from 'type'
+        property_type: 'condo',
+        listing_type: 'sale',
         status: 'active',
         bedrooms: '',
         bathrooms: '',
@@ -18,10 +18,31 @@ const CreateProperty = ({ onClose, onRefresh }) => {
         features: '',
     });
     const [images, setImages] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const set = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 10) {
+            setError('Maximum 10 images allowed');
+            return;
+        }
+        setImages(files);
+        
+        // Create preview URLs
+        const previews = files.map(file => URL.createObjectURL(file));
+        setImagePreviews(previews);
+    };
+
+    const removeImage = (index) => {
+        const newImages = images.filter((_, i) => i !== index);
+        const newPreviews = imagePreviews.filter((_, i) => i !== index);
+        setImages(newImages);
+        setImagePreviews(newPreviews);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,12 +68,17 @@ const CreateProperty = ({ onClose, onRefresh }) => {
                 }
             }
 
-            await api.post('/properties', fd);
-            onRefresh();
-            onClose();
+            const response = await api.post('/properties', fd);
+            
+            if (response.data.success) {
+                onRefresh();
+                onClose();
+            } else {
+                setError(response.data.message || 'Error creating property.');
+            }
         } catch (err) {
             console.error("Error creating property:", err);
-            setError(err.response?.data?.message || 'Error creating property.');
+            setError(err.response?.data?.message || err.response?.data?.error || 'Error creating property.');
         } finally {
             setLoading(false);
         }
@@ -141,12 +167,24 @@ const CreateProperty = ({ onClose, onRefresh }) => {
 
                     <div style={styles.group}>
                         <label style={styles.label}>Features</label>
-                        <input style={styles.input} placeholder="e.g. Parking, Garden, Pool" value={formData.features} onChange={e => set('features', e.target.value)} />
+                        <input style={styles.input} placeholder="e.g. Parking, Garden, Pool (comma separated)" value={formData.features} onChange={e => set('features', e.target.value)} />
                     </div>
 
                     <div style={styles.group}>
                         <label style={styles.label}>Images (max 10)</label>
-                        <input type="file" multiple accept="image/*" style={styles.input} onChange={e => setImages(Array.from(e.target.files))} />
+                        <input type="file" multiple accept="image/*" style={styles.input} onChange={handleImageChange} />
+                        {imagePreviews.length > 0 && (
+                            <div style={styles.imagePreviewContainer}>
+                                {imagePreviews.map((preview, index) => (
+                                    <div key={index} style={styles.imagePreviewItem}>
+                                        <img src={preview} alt={`Preview ${index + 1}`} style={styles.previewImage} />
+                                        <button type="button" onClick={() => removeImage(index)} style={styles.removeImageBtn}>
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <button type="submit" style={styles.submitBtn} disabled={loading}>
@@ -171,7 +209,11 @@ const styles = {
     group: { display: 'flex', flexDirection: 'column', gap: '5px' },
     label: { fontSize: '13px', fontWeight: 600, color: '#444' },
     input: { padding: '10px', borderRadius: '8px', border: '1px solid #ddd', width: '100%', boxSizing: 'border-box', fontSize: '14px' },
-    submitBtn: { background: '#003366', color: '#ffd700', padding: '12px', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: 600, fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+    submitBtn: { background: '#003366', color: '#ffd700', padding: '12px', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: 600, fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    imagePreviewContainer: { display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' },
+    imagePreviewItem: { position: 'relative', width: '80px', height: '80px' },
+    previewImage: { width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' },
+    removeImageBtn: { position: 'absolute', top: '-5px', right: '-5px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '10px' }
 };
 
 export default CreateProperty;
