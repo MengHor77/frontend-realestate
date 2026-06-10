@@ -38,7 +38,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/sale" element={<Sale />} />
           <Route path="/rent" element={<Rent />} />
-          <Route path="/rent-property/:id" element={<RentDetail />} />
+          {/* CHANGE THIS LINE - Updated route */}
+          <Route path="/rent/rent-detail/:id" element={<RentDetail />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/property/:id" element={<PropertyDetail />} />

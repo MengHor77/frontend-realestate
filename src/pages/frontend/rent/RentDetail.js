@@ -13,9 +13,12 @@ function RentDetail() {
         const fetchRentDetail = async () => {
             try {
                 setLoading(true);
+                console.log('Fetching rent property ID:', id);
                 const response = await axios.get(`http://localhost:5000/api/properties/rent-detail/${id}`);
+
                 if (response.data.success) {
                     setProperty(response.data.property);
+                    console.log('Property loaded:', response.data.property);
                 } else {
                     setError('Property not found');
                 }
@@ -39,9 +42,7 @@ function RentDetail() {
     if (loading) {
         return (
             <div className="container mt-5 pt-5 text-center">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
+                <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} />
                 <p className="mt-3">Loading property details...</p>
             </div>
         );
@@ -51,7 +52,7 @@ function RentDetail() {
         return (
             <div className="container mt-5 pt-5 text-center">
                 <div className="alert alert-danger">
-                    <h4 className="alert-heading">Error!</h4>
+                    <h4>Error!</h4>
                     <p>{error || 'Property not found'}</p>
                     <button className="btn btn-primary" onClick={() => navigate('/rent')}>
                         Back to Rent Listings
@@ -68,23 +69,23 @@ function RentDetail() {
             </button>
 
             <div className="row">
-                {/* Image Gallery Section */}
-                <div className="col-lg-7 mb-4">
+                {/* Image Section */}
+                <div className="col-lg-6 mb-4">
                     <div className="card border-0 shadow-sm">
-                        <img 
-                            src={property.image_url || '/default-property.jpg'} 
-                            className="card-img-top rounded-3" 
+                        <img
+                            src={property.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}
+                            className="card-img-top rounded-3"
                             alt={property.title}
                             style={{ maxHeight: '500px', objectFit: 'cover', borderRadius: '15px' }}
                             onError={(e) => {
-                                e.target.src = '/default-property.jpg';
+                                e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
                             }}
                         />
                     </div>
                 </div>
 
                 {/* Property Info Section */}
-                <div className="col-lg-5 mb-4">
+                <div className="col-lg-6 mb-4">
                     <div className="card border-0 shadow-sm p-4 rounded-4">
                         <div className="d-flex justify-content-between align-items-start mb-3">
                             <div>

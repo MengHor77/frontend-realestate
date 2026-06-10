@@ -19,7 +19,7 @@ function Rent() {
             if (searchFilters.type) params.append('type', searchFilters.type);
             if (searchFilters.price_range) params.append('price_range', searchFilters.price_range);
             
-            const url = `http://localhost:5000/api/properties/rent-search${params.toString() ? `?${params.toString()}` : ''}`;
+            const url = `http://localhost:5000/api/properties/rent${params.toString() ? `?${params.toString()}` : ''}`;
             const response = await axios.get(url);
             
             setRentList(response.data.properties || []);

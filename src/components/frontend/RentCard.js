@@ -34,7 +34,7 @@ function RentCard({ item }) {
     }
 
     return (
-        <div 
+        <div
             className="h-100"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -93,10 +93,17 @@ function RentCard({ item }) {
                         <div className="h4 text-dark fw-bolder mb-0">
                             ${item.price}<span className="fs-6 text-muted fw-normal">/mo</span>
                         </div>
-                        <Link 
-                            to={`/rent-property/${item.id}`}
+                        {/* CHANGE THIS LINE - Updated route */}
+                        <Link
+                            to={item.id ? `/rent/rent-detail/${item.id}` : "#"}
                             className="btn btn-primary px-4 py-2 rounded-pill"
                             style={styles.shadowPrimary}
+                            onClick={(e) => {
+                                if (!item.id) {
+                                    e.preventDefault(); // Stop navigation
+                                    alert("Error: Property ID is missing or invalid.");
+                                }
+                            }}
                         >
                             {t('view_details')}
                         </Link>
