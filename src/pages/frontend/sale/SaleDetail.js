@@ -1,3 +1,4 @@
+// D:\realestate\frontend\src\pages\frontend\sale\SaleDetail.js
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -8,6 +9,8 @@ const SaleDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showContactForm, setShowContactForm] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [showLightbox, setShowLightbox] = useState(false);
     const [inquiry, setInquiry] = useState({
         name: '',
         email: '',
@@ -23,9 +26,10 @@ const SaleDetail = () => {
         try {
             setLoading(true);
             const response = await axios.get(`http://localhost:5000/api/properties/sale/${id}`);
-            
+
             if (response.data.success) {
                 setProperty(response.data.property);
+                setCurrentImageIndex(0);
             } else {
                 setError('Property not found');
             }
@@ -37,14 +41,44 @@ const SaleDetail = () => {
         }
     };
 
+    const nextImage = () => {
+        if (property && property.images && property.images.length > 0) {
+            setCurrentImageIndex((prev) =>
+                prev === property.images.length - 1 ? 0 : prev + 1
+            );
+        }
+    };
+
+    const prevImage = () => {
+        if (property && property.images && property.images.length > 0) {
+            setCurrentImageIndex((prev) =>
+                prev === 0 ? property.images.length - 1 : prev - 1
+            );
+        }
+    };
+
+    const goToImage = (index) => {
+        setCurrentImageIndex(index);
+    };
+
+    const openLightbox = () => {
+        setShowLightbox(true);
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+        setShowLightbox(false);
+        document.body.style.overflow = 'auto';
+    };
+
     const calculateMortgage = () => {
         if (!property) return null;
         const downPayment = property.price * 0.2;
         const loanAmount = property.price - downPayment;
         const monthlyInterest = 0.04 / 12;
         const numberOfPayments = 30 * 12;
-        const monthlyPayment = (loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, numberOfPayments)) / 
-                               (Math.pow(1 + monthlyInterest, numberOfPayments) - 1);
+        const monthlyPayment = (loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, numberOfPayments)) /
+            (Math.pow(1 + monthlyInterest, numberOfPayments) - 1);
         return {
             downPayment: downPayment.toLocaleString(),
             monthlyPayment: Math.round(monthlyPayment).toLocaleString()
@@ -64,7 +98,7 @@ const SaleDetail = () => {
                 property_id: property.id,
                 property_title: property.title
             });
-            
+
             if (response.data.success) {
                 alert('Inquiry sent successfully! We will contact you soon.');
                 setShowContactForm(false);
@@ -91,9 +125,10 @@ const SaleDetail = () => {
             marginBottom: '30px'
         },
         backLink: {
-            color: '#667eea',
+            color: '#003366',
             textDecoration: 'none',
-            fontSize: '16px'
+            fontSize: '16px',
+            fontWeight: '500'
         },
         detailContainer: {
             background: 'white',
@@ -103,13 +138,116 @@ const SaleDetail = () => {
         },
         gallery: {
             width: '100%',
+            background: '#000',
+            position: 'relative'
+        },
+        mainImageContainer: {
+            position: 'relative',
             height: '500px',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            cursor: 'pointer'
         },
         mainImage: {
             width: '100%',
             height: '100%',
-            objectFit: 'cover'
+            objectFit: 'cover',
+            transition: 'transform 0.3s ease'
+        },
+        navButton: {
+            position: 'absolute',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'rgba(0, 0, 0, 0.6)',
+            color: 'white',
+            border: 'none',
+            width: '50px',
+            height: '50px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            fontSize: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease',
+            zIndex: 10
+        },
+        prevButton: {
+            left: '20px'
+        },
+        nextButton: {
+            right: '20px'
+        },
+        thumbnailContainer: {
+            display: 'flex',
+            gap: '10px',
+            padding: '15px 20px',
+            overflowX: 'auto',
+            backgroundColor: '#f8f9fa',
+            borderTop: '1px solid #eee'
+        },
+        thumbnail: {
+            width: '80px',
+            height: '80px',
+            objectFit: 'cover',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            border: '2px solid transparent'
+        },
+        activeThumbnail: {
+            border: '2px solid #003366',
+            transform: 'scale(1.05)'
+        },
+        imageCounter: {
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            background: 'rgba(0, 0, 0, 0.7)',
+            color: 'white',
+            padding: '5px 12px',
+            borderRadius: '20px',
+            fontSize: '14px',
+            zIndex: 10
+        },
+        // Lightbox styles
+        lightboxOverlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.95)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        lightboxContent: {
+            position: 'relative',
+            maxWidth: '90vw',
+            maxHeight: '90vh'
+        },
+        lightboxImage: {
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            objectFit: 'contain'
+        },
+        closeLightbox: {
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            color: 'white',
+            border: 'none',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            fontSize: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease'
         },
         content: {
             padding: '40px'
@@ -123,18 +261,22 @@ const SaleDetail = () => {
         },
         title: {
             fontSize: '32px',
-            color: '#333',
-            margin: 0
+            color: '#003366',
+            margin: 0,
+            fontWeight: '700'
         },
         priceTag: {
             fontSize: '32px',
             fontWeight: 'bold',
-            color: '#667eea'
+            color: '#0d6efd'
         },
         location: {
             color: '#666',
             marginBottom: '30px',
-            fontSize: '18px'
+            fontSize: '18px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
         },
         specs: {
             display: 'grid',
@@ -152,7 +294,8 @@ const SaleDetail = () => {
         },
         specLabel: {
             color: '#666',
-            fontSize: '14px'
+            fontSize: '14px',
+            fontWeight: '500'
         },
         specValue: {
             fontSize: '18px',
@@ -167,7 +310,8 @@ const SaleDetail = () => {
         },
         mortgageTitle: {
             marginTop: 0,
-            marginBottom: '15px'
+            marginBottom: '15px',
+            color: '#003366'
         },
         mortgageDetails: {
             display: 'flex',
@@ -186,7 +330,7 @@ const SaleDetail = () => {
         },
         mortgageValue: {
             fontSize: '20px',
-            color: '#667eea',
+            color: '#0d6efd',
             fontWeight: 'bold'
         },
         description: {
@@ -195,7 +339,8 @@ const SaleDetail = () => {
         descriptionTitle: {
             fontSize: '24px',
             marginBottom: '15px',
-            color: '#333'
+            color: '#003366',
+            fontWeight: '600'
         },
         descriptionText: {
             lineHeight: '1.6',
@@ -207,7 +352,8 @@ const SaleDetail = () => {
         featuresTitle: {
             fontSize: '24px',
             marginBottom: '15px',
-            color: '#333'
+            color: '#003366',
+            fontWeight: '600'
         },
         featuresList: {
             display: 'flex',
@@ -216,10 +362,11 @@ const SaleDetail = () => {
         },
         featureTag: {
             background: '#f0f4ff',
-            color: '#667eea',
+            color: '#003366',
             padding: '8px 16px',
             borderRadius: '20px',
-            fontSize: '14px'
+            fontSize: '14px',
+            fontWeight: '500'
         },
         contactSection: {
             marginTop: '40px',
@@ -229,13 +376,14 @@ const SaleDetail = () => {
         contactButton: {
             width: '100%',
             padding: '16px',
-            background: '#667eea',
+            background: '#003366',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
             fontSize: '18px',
             fontWeight: '600',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'background 0.3s ease'
         },
         contactForm: {
             background: '#f9f9f9',
@@ -244,7 +392,8 @@ const SaleDetail = () => {
         },
         formTitle: {
             marginTop: 0,
-            marginBottom: '20px'
+            marginBottom: '20px',
+            color: '#003366'
         },
         form: {
             display: 'flex',
@@ -266,7 +415,7 @@ const SaleDetail = () => {
         },
         submitButton: {
             padding: '12px',
-            background: '#667eea',
+            background: '#003366',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
@@ -291,7 +440,7 @@ const SaleDetail = () => {
         },
         spinner: {
             border: '4px solid #f3f3f3',
-            borderTop: '4px solid #667eea',
+            borderTop: '4px solid #003366',
             borderRadius: '50%',
             width: '40px',
             height: '40px',
@@ -305,10 +454,18 @@ const SaleDetail = () => {
             display: 'inline-block',
             marginTop: '20px',
             padding: '12px 24px',
-            background: '#667eea',
+            background: '#003366',
             color: 'white',
             textDecoration: 'none',
             borderRadius: '8px'
+        },
+        noImages: {
+            height: '500px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f0f0f0',
+            color: '#999'
         }
     };
 
@@ -320,9 +477,13 @@ const SaleDetail = () => {
                         0% { transform: rotate(0deg); }
                         100% { transform: rotate(360deg); }
                     }
+                    button:hover:not(:disabled) {
+                        opacity: 0.9;
+                        transform: scale(1.05);
+                    }
                 `}</style>
                 <div style={styles.spinner}></div>
-                <p>Loading property details...</p>
+                <p style={{ marginTop: '20px', color: '#666' }}>Loading property details...</p>
             </div>
         );
     }
@@ -330,25 +491,149 @@ const SaleDetail = () => {
     if (error || !property) {
         return (
             <div style={styles.errorContainer}>
-                <p>{error || 'Property not found'}</p>
+                <p style={{ fontSize: '18px', color: '#666', marginBottom: '20px' }}>
+                    {error || 'Property not found'}
+                </p>
                 <Link to="/sale" style={styles.backButton}>Back to Properties for Sale</Link>
             </div>
         );
     }
 
     const mortgage = calculateMortgage();
+    const images = property.images && property.images.length > 0 ? property.images :
+        (property.image_url ? [{ id: 0, url: property.image_url, is_primary: true }] : []);
+    const hasImages = images.length > 0;
 
     return (
         <div style={styles.page}>
+            <style>{`
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                button:hover:not(:disabled) {
+                    opacity: 0.9;
+                    transform: scale(1.05);
+                }
+                .thumbnail:hover {
+                    transform: scale(1.1);
+                }
+                ::-webkit-scrollbar {
+                    height: 8px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                }
+                ::-webkit-scrollbar-thumb {
+                    background: #888;
+                    border-radius: 4px;
+                }
+            `}</style>
             <div style={styles.container}>
                 <div style={styles.backNavigation}>
                     <Link to="/sale" style={styles.backLink}>← Back to Properties for Sale</Link>
                 </div>
 
                 <div style={styles.detailContainer}>
+                    {/* Image Gallery */}
                     <div style={styles.gallery}>
-                        <img src={property.image_url} alt={property.title} style={styles.mainImage} />
+                        {hasImages ? (
+                            <>
+                                <div style={styles.mainImageContainer}>
+                                    <img
+                                        src={images[currentImageIndex].url}
+                                        alt={`${property.title} - Image ${currentImageIndex + 1}`}
+                                        style={styles.mainImage}
+                                        onClick={openLightbox}
+                                    />
+                                    {images.length > 1 && (
+                                        <>
+                                            <button
+                                                onClick={prevImage}
+                                                style={{ ...styles.navButton, ...styles.prevButton }}
+                                                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+                                                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'}
+                                            >
+                                                ❮
+                                            </button>
+                                            <button
+                                                onClick={nextImage}
+                                                style={{ ...styles.navButton, ...styles.nextButton }}
+                                                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+                                                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'}
+                                            >
+                                                ❯
+                                            </button>
+                                            <div style={styles.imageCounter}>
+                                                {currentImageIndex + 1} / {images.length}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+
+                                {images.length > 1 && (
+                                    <div style={styles.thumbnailContainer}>
+                                        {images.map((image, index) => (
+                                            <img
+                                                key={image.id || index}
+                                                src={image.url}
+                                                alt={`Thumbnail ${index + 1}`}
+                                                style={{
+                                                    ...styles.thumbnail,
+                                                    ...(currentImageIndex === index ? styles.activeThumbnail : {})
+                                                }}
+                                                className="thumbnail"
+                                                onClick={() => goToImage(index)}
+                                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <div style={styles.noImages}>
+                                <p>No images available for this property</p>
+                            </div>
+                        )}
                     </div>
+
+                    {/* Lightbox */}
+                    {showLightbox && hasImages && (
+                        <div style={styles.lightboxOverlay} onClick={closeLightbox}>
+                            <div style={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+                                <img
+                                    src={images[currentImageIndex].url}
+                                    alt="Full size view"
+                                    style={styles.lightboxImage}
+                                />
+                                {images.length > 1 && (
+                                    <>
+                                        <button
+                                            onClick={prevImage}
+                                            style={{ ...styles.navButton, ...styles.prevButton, top: '50%' }}
+                                        >
+                                            ❮
+                                        </button>
+                                        <button
+                                            onClick={nextImage}
+                                            style={{ ...styles.navButton, ...styles.nextButton, top: '50%' }}
+                                        >
+                                            ❯
+                                        </button>
+                                    </>
+                                )}
+                                <button
+                                    onClick={closeLightbox}
+                                    style={styles.closeLightbox}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     <div style={styles.content}>
                         <div style={styles.header}>
@@ -357,24 +642,24 @@ const SaleDetail = () => {
                         </div>
 
                         <div style={styles.location}>
-                            📍 {property.location}
+                            <span>📍</span> {property.location}
                         </div>
 
                         <div style={styles.specs}>
                             <div style={styles.specItem}>
-                                <strong style={styles.specLabel}>Property Type</strong>
+                                <span style={styles.specLabel}>Property Type</span>
                                 <span style={styles.specValue}>{property.property_type}</span>
                             </div>
                             <div style={styles.specItem}>
-                                <strong style={styles.specLabel}>Bedrooms</strong>
+                                <span style={styles.specLabel}>Bedrooms</span>
                                 <span style={styles.specValue}>{property.bedrooms}</span>
                             </div>
                             <div style={styles.specItem}>
-                                <strong style={styles.specLabel}>Bathrooms</strong>
+                                <span style={styles.specLabel}>Bathrooms</span>
                                 <span style={styles.specValue}>{property.bathrooms}</span>
                             </div>
                             <div style={styles.specItem}>
-                                <strong style={styles.specLabel}>Size</strong>
+                                <span style={styles.specLabel}>Size</span>
                                 <span style={styles.specValue}>{property.size_sqm} m²</span>
                             </div>
                         </div>
@@ -413,9 +698,11 @@ const SaleDetail = () => {
 
                         <div style={styles.contactSection}>
                             {!showContactForm ? (
-                                <button 
+                                <button
                                     style={styles.contactButton}
                                     onClick={() => setShowContactForm(true)}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = '#0d6efd'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = '#003366'}
                                 >
                                     Inquire About This Property
                                 </button>
@@ -460,8 +747,8 @@ const SaleDetail = () => {
                                             required
                                         ></textarea>
                                         <button type="submit" style={styles.submitButton}>Send Inquiry</button>
-                                        <button 
-                                            type="button" 
+                                        <button
+                                            type="button"
                                             style={styles.cancelButton}
                                             onClick={() => setShowContactForm(false)}
                                         >
