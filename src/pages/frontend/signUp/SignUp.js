@@ -6,18 +6,17 @@ const SignUp = () => {
     const { t } = useTranslation();
 
     return (
-        /* REMOVED marginTop: '60px' here */
         <div className="container-fluid d-flex align-items-center justify-content-center"
             style={{
                 backgroundColor: 'var(--light-bg)',
-                minHeight: '100vh',         // Takes up the full view height
-                marginTop: '-75px',          // Pulls the background up behind the navbar completely
-                paddingTop: '150px',          // 75px layout clearance + 20px extra breathing room for content
+                minHeight: '100vh',
+                marginTop: '-75px',
+                paddingTop: '150px',
                 paddingBottom: '40px'
             }}>
             <div className="container">
                 <div className="row justify-content-center align-items-center">
-                    {/* ផ្នែកខាងឆ្វេង: រូបភាព ឬ អត្ថបទស្វាគមន៍ */}
+                    {/* Left Side: Branding & Imagery */}
                     <div className="col-md-6 d-none d-lg-block text-center mb-4 mb-lg-0">
                         <h1 style={{ color: 'var(--primary-dark)', fontWeight: '800', fontSize: '3rem' }}>
                             {t('signup_hero_title_1')} <br />
@@ -35,7 +34,7 @@ const SignUp = () => {
                         />
                     </div>
 
-                    {/* ផ្នែកខាងស្តាំ: Form ចុះឈ្មោះ */}
+                    {/* Right Side: Sign Up Form */}
                     <div className="col-md-8 col-lg-5">
                         <SignUpForm />
                     </div>
