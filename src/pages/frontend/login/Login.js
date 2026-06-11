@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../../components/frontend/LoginForm';
 import FlashMessage from '../../../components/common/FlashMessage';
+import { useAuth } from '../../../context/AuthContext';
 import api from '../../../services/api';
 
 const Login = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [flashMessage, setFlashMessage] = useState({ show: false, message: '', type: 'success' });
@@ -28,13 +30,11 @@ const Login = () => {
             const response = await api.post('/auth/login', { email, password });
             
             if (response.data.token) {
-                // Save token and user data
                 localStorage.setItem('token', response.data.token);
-                localStorage.setItem('user', JSON.stringify(response.data.user));
+                login(response.data.user); // Update auth context immediately
                 
                 showFlashMessage(response.data.message || 'Login successful! Welcome back!', 'success');
                 
-                // Redirect after flash message
                 setTimeout(() => {
                     if (response.data.user.role === 'admin') {
                         navigate('/admin/properties');
@@ -79,8 +79,6 @@ const Login = () => {
                 }}>
                 <div className="container" style={{ paddingTop: '50px' }}>
                     <div className="row justify-content-center align-items-center">
-
-                        {/* Left Side: Professional Branding & Imagery */}
                         <div className="col-md-6 d-none d-lg-block text-center mb-4 mb-lg-0">
                             <h1 style={{ color: 'var(--primary-dark)', fontWeight: '800', fontSize: '3rem' }}>
                                 {t('login_welcome_title')} <br />
@@ -98,7 +96,6 @@ const Login = () => {
                             />
                         </div>
 
-                        {/* Right Side: Premium Form Container */}
                         <div className="col-md-8 col-lg-5">
                             <LoginForm 
                                 onSubmit={handleLogin}
@@ -106,7 +103,6 @@ const Login = () => {
                                 error={error}
                             />
                         </div>
-
                     </div>
                 </div>
             </div>
