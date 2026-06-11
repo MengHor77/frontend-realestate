@@ -70,18 +70,15 @@ const SaleDetail = () => {
         setShowLightbox(false);
         document.body.style.overflow = 'auto';
     };
-
     const calculateMortgage = () => {
         if (!property) return null;
-        const downPayment = property.price * 0.2;
-        const loanAmount = property.price - downPayment;
-        const monthlyInterest = 0.04 / 12;
-        const numberOfPayments = 30 * 12;
-        const monthlyPayment = (loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, numberOfPayments)) /
-            (Math.pow(1 + monthlyInterest, numberOfPayments) - 1);
+        const downPayment = property.price * 0.3;
+        const minMonthly = Math.round(property.price * 0.005);
+        const maxMonthly = Math.round(property.price * 0.01);
         return {
             downPayment: downPayment.toLocaleString(),
-            monthlyPayment: Math.round(monthlyPayment).toLocaleString()
+            minMonthly: minMonthly.toLocaleString(),
+            maxMonthly: maxMonthly.toLocaleString()
         };
     };
 
@@ -348,6 +345,17 @@ const SaleDetail = () => {
             color: '#0d6efd',
             fontWeight: 'bold'
         },
+        negotiableText: {
+            fontSize: '12px',
+            color: '#999',
+            marginTop: '3px',
+            fontStyle: 'italic'
+        },
+        monthlyRange: {
+            fontSize: '14px',
+            color: '#666',
+            marginTop: '3px'
+        },
         description: {
             marginBottom: '30px'
         },
@@ -555,7 +563,8 @@ const SaleDetail = () => {
                         onMouseLeave={(e) => e.currentTarget.style.color = '#003366'}
                     >
                         ← Back to Properties for Sale
-                    </Link>                </div>
+                    </Link>
+                </div>
 
                 <div style={styles.detailContainer}>
                     {/* Image Gallery */}
@@ -699,12 +708,14 @@ const SaleDetail = () => {
                                 <h3 style={styles.mortgageTitle}>Mortgage Estimate</h3>
                                 <div style={styles.mortgageDetails}>
                                     <div style={styles.mortgageItem}>
-                                        <span style={styles.mortgageLabel}>Down Payment (20%):</span>
+                                        <span style={styles.mortgageLabel}>Down Payment (30%):</span>
                                         <strong style={styles.mortgageValue}>${mortgage.downPayment}</strong>
+                                        <div style={styles.negotiableText}>(Negotiable)</div>
                                     </div>
                                     <div style={styles.mortgageItem}>
                                         <span style={styles.mortgageLabel}>Estimated Monthly Payment:</span>
-                                        <strong style={styles.mortgageValue}>${mortgage.monthlyPayment}</strong>
+                                        <strong style={styles.mortgageValue}>$200 - $300</strong>
+                                        <div style={styles.monthlyRange}>per month (depending on terms)</div>
                                     </div>
                                 </div>
                             </div>
