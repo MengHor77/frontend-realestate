@@ -34,6 +34,7 @@ const ManageUsers = () => {
     role: 'user',
   });
   const [currentUser, setCurrentUser] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Only use flashMessage state - remove error and success states
   const [flashMessage, setFlashMessage] = useState({ show: false, message: '', type: 'success' });
@@ -110,6 +111,7 @@ const ManageUsers = () => {
       phone: '',
       role: 'user',
     });
+    setIsSubmitting(false);
   };
 
   const handleChange = (e) => {
@@ -132,11 +134,12 @@ const ManageUsers = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       if (editingUser) {
         const updateData = { ...formData };
         if (!updateData.password) delete updateData.password;
-
         await api.put(`/users/${editingUser.id}`, updateData);
         showFlashMessage('User updated successfully!', 'success');
       } else {
@@ -144,8 +147,10 @@ const ManageUsers = () => {
         showFlashMessage('User created successfully!', 'success');
       }
 
-      // Refresh users and close modal
+      // Refresh users
       await fetchUsers();
+      
+      // Only close modal on SUCCESS
       handleCloseModal();
 
     } catch (err) {
@@ -155,6 +160,8 @@ const ManageUsers = () => {
       } else {
         showFlashMessage('Failed to save user', 'error');
       }
+      setIsSubmitting(false);
+      // DO NOT close modal on error - stay open so user can fix
     }
   };
 
@@ -533,11 +540,20 @@ const ManageUsers = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
-                <button type="submit" style={styles.submitBtn}>
+                <button 
+                  type="submit" 
+                  style={styles.submitBtn}
+                  disabled={isSubmitting}
+                >
                   <FontAwesomeIcon icon={faSave} style={{ marginRight: '8px' }} />
-                  {editingUser ? 'Update User' : 'Create User'}
+                  {isSubmitting ? (editingUser ? 'Updating...' : 'Creating...') : (editingUser ? 'Update User' : 'Create User')}
                 </button>
-                <button type="button" onClick={handleCloseModal} style={styles.cancelBtn}>
+                <button 
+                  type="button" 
+                  onClick={handleCloseModal} 
+                  style={styles.cancelBtn}
+                  disabled={isSubmitting}
+                >
                   Cancel
                 </button>
               </div>
@@ -556,7 +572,7 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    background: 'rgba(0,51,102,0.8',
+    background: 'rgba(0,51,102,0.8)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
