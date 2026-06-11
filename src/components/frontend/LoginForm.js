@@ -29,9 +29,7 @@ const LoginForm = ({ onSubmit, loading, error: externalError }) => {
                     <h2 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>
                         {t('login_title') || 'Welcome Back'}
                     </h2>
-                    <p className="text-muted">
-                        {t('login_subtitle') || 'Sign in to your account'}
-                    </p>
+
                 </div>
 
                 {displayError && (
@@ -89,7 +87,7 @@ const LoginForm = ({ onSubmit, loading, error: externalError }) => {
                         <div className="form-check">
                             <input type="checkbox" className="form-check-input" id="remember" />
                             <label className="form-check-label text-muted" htmlFor="remember">
-                                {t('remember_me') || 'Remember Me'}
+                                {'Remember Me'}
                             </label>
                         </div>
                         <Link to="/forgot-password" style={{ color: 'var(--gold-color)', textDecoration: 'none' }}>
@@ -99,30 +97,44 @@ const LoginForm = ({ onSubmit, loading, error: externalError }) => {
 
                     <button
                         type="submit"
-                        className="btn btn-primary btn-lg w-100 mb-3"
+                        className="btn w-100 py-2 fw-bold"
                         disabled={loading}
                         style={{
-                            backgroundColor: 'var(--primary-dark)',
-                            border: 'none',
-                            borderRadius: '12px',
-                            padding: '12px',
-                            fontWeight: '600'
+                            backgroundColor: '#003366',
+                            color: '#ffd700',
+                            borderRadius: '8px',
+                            fontSize: '16px',
+                            transition: 'all 0.3s ease',
+                            opacity: loading ? 0.7 : 1,
+                            cursor: loading ? 'not-allowed' : 'pointer'
                         }}
+                        onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#0d6efd')}
+                        onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#003366')}
                     >
                         {loading ? (
-                            <>
+                            <span>
                                 <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                                 {t('logging_in') || 'Logging in...'}
-                            </>
+                            </span>
                         ) : (
-                            <>{t('login_btn') || 'Login'}</>
+                            t('login_btn') || 'Login'
                         )}
                     </button>
 
                     <div className="text-center">
                         <p className="text-muted">
                             {t('no_account') || "Don't have an account?"}{' '}
-                            <Link to="/signup" style={{ color: 'var(--gold-color)', textDecoration: 'none', fontWeight: '600' }}>
+                            <Link
+                                to="/signup"
+                                style={{
+                                    color: 'var(--gold-color)',
+                                    textDecoration: 'none',
+                                    fontWeight: '600',
+                                    transition: 'text-decoration 0.3s ease'
+                                }}
+                                onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                                onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                            >
                                 {t('signup')}
                             </Link>
                         </p>
