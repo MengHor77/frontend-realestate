@@ -197,7 +197,7 @@ const CreateProperty = ({ onClose, onRefresh }) => {
 };
 
 const styles = {
-    overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,51,102,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999 },
+    overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999 },
     container: { background: '#fff', width: '100%', maxWidth: '560px', borderRadius: '16px', overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: '#003366', color: '#ffd700' },
     headerTitle: { margin: 0, fontSize: '17px', color: '#ffd700' },

@@ -24,8 +24,6 @@ import Dashboard from './pages/admin/dashboard/Dashboard';
 import ManageProperties from './pages/admin/manageProperty/ManageProperties';
 import ManageUsers from './pages/admin/manageUsers/ManageUsers';
 import ManageNews from './pages/admin/manageNews/ManageNews';
-import CreateNews from './pages/admin/manageNews/CreateNews';
-import EditNews from './pages/admin/manageNews/EditNews';
 import ManageInquiries from './pages/admin/manageInquiries/ManageInquiries';
 import Analytics from './pages/admin/analytics/Analytics';
 import Settings from './pages/admin/settings/Settings';
@@ -57,8 +55,6 @@ function App() {
           <Route path="properties" element={<ManageProperties />} />
           <Route path="users" element={<ManageUsers />} />
           <Route path="news" element={<ManageNews />} />
-          <Route path="news/create" element={<CreateNews />} />
-          <Route path="news/edit/:id" element={<EditNews />} />
           <Route path="inquiries" element={<ManageInquiries />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="settings" element={<Settings />} />

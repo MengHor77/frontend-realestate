@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useOutletContext } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faEdit, 
-  faTrash, 
-  faBuilding, 
-  faMapMarkerAlt, 
+import {
+  faEdit,
+  faTrash,
+  faBuilding,
+  faMapMarkerAlt,
   faPlus,
   faImage
 } from '@fortawesome/free-solid-svg-icons';
@@ -23,12 +23,12 @@ const ManageProperties = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPagesState, setTotalPagesState] = useState(0);
-  
+
   const [filters, setFilters] = useState({
     search: '',
     status: 'all'
@@ -46,7 +46,7 @@ const ManageProperties = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      
+
       const params = {
         page: currentPage,
         limit: itemsPerPage,
@@ -55,7 +55,7 @@ const ManageProperties = () => {
       if (filters.status === 'all') delete params.status;
 
       const res = await axios.get(`${API}/properties`, { ...config, params });
-      
+
       setProperties(res.data.properties || []);
       setTotalItems(res.data.total || 0);
       setTotalPagesState(res.data.totalPages || 0);
@@ -74,18 +74,18 @@ const ManageProperties = () => {
         const token = localStorage.getItem('token');
         await axios.delete(`${API}/properties/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         fetchProperties();
-      } catch (err) { 
-        alert("Failed to delete property."); 
+      } catch (err) {
+        alert("Failed to delete property.");
       }
     }
   };
 
-  const handleClose = () => { 
-    setShowAdd(false); 
-    setEditId(null); 
-    setIsOverlayVisible(false); 
+  const handleClose = () => {
+    setShowAdd(false);
+    setEditId(null);
+    setIsOverlayVisible(false);
   };
-  
+
   const totalPages = totalPagesState || Math.ceil(totalItems / itemsPerPage);
 
   const getImageUrl = (property) => {
@@ -146,8 +146,8 @@ const ManageProperties = () => {
                   <td style={{ padding: '16px 20px' }}>#{item.id}</td>
                   <td style={{ padding: '16px 20px' }}>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                      <img 
-                        src={getImageUrl(item)} 
+                      <img
+                        src={getImageUrl(item)}
                         alt={item.title}
                         style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }}
                         onError={(e) => {
@@ -155,11 +155,11 @@ const ManageProperties = () => {
                         }}
                       />
                       {getImageCount(item) > 1 && (
-                        <div style={{ 
-                          position: 'absolute', 
-                          bottom: '-5px', 
-                          right: '-5px', 
-                          background: '#003366', 
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '-5px',
+                          right: '-5px',
+                          background: '#003366',
                           color: '#ffd700',
                           borderRadius: '50%',
                           width: '18px',
@@ -175,43 +175,43 @@ const ManageProperties = () => {
                         </div>
                       )}
                     </div>
-                   </td>
+                  </td>
                   <td style={{ padding: '16px 20px', fontWeight: '600' }}>{item.title}</td>
                   <td style={{ padding: '16px 20px', textTransform: 'capitalize' }}>{item.property_type}</td>
                   <td style={{ padding: '16px 20px' }}>{item.listing_type}</td>
                   <td style={{ padding: '16px 20px', fontWeight: '700' }}>${Number(item.price).toLocaleString()}</td>
                   <td style={{ padding: '16px 20px' }}><FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: '#ffd700', marginRight: '5px' }} /> {item.location}</td>
                   <td style={{ padding: '16px 20px' }}>
-                    <span style={{ 
-                      padding: '4px 12px', 
-                      borderRadius: '20px', 
-                      fontSize: '12px', 
+                    <span style={{
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      fontSize: '12px',
                       backgroundColor: item.status === 'active' ? '#d4edda' : item.status === 'sold' ? '#f8d7da' : '#fff3cd',
                       color: item.status === 'active' ? '#155724' : item.status === 'sold' ? '#721c24' : '#856404'
                     }}>
                       {item.status.toUpperCase()}
                     </span>
-                   </td>
+                  </td>
                   <td style={{ padding: '16px 20px' }}>
-                    <button 
-                      onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }} 
+                    <button
+                      onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }}
                       style={{ backgroundColor: '#4f8ef7', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', marginRight: '5px', cursor: 'pointer' }}
                     >
                       <FontAwesomeIcon icon={faEdit} /> Edit
                     </button>
-                    <button 
-                      onClick={() => handleDelete(item.id)} 
+                    <button
+                      onClick={() => handleDelete(item.id)}
                       style={{ backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer' }}
                     >
                       <FontAwesomeIcon icon={faTrash} /> Delete
                     </button>
-                   </td>
-                 </tr>
+                  </td>
+                </tr>
               ))}
             </tbody>
-           </table>
+          </table>
         </div>
-        
+
         {totalPages > 1 && (
           <div style={{ padding: '20px', borderTop: '1px solid #eef2f6' }}>
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />

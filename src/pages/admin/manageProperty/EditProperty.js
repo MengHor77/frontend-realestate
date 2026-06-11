@@ -343,7 +343,7 @@ const setPrimaryImage = async (imageId) => {
 const styles = {
   overlay: { 
     position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', 
-    background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', 
+     display: 'flex', justifyContent: 'center', 
     alignItems: 'center', zIndex: 9999 
   },
   container: { 
