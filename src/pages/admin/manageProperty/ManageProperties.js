@@ -107,7 +107,7 @@ const ManageProperties = () => {
   };
 
   return (
-    <div style={{ padding: '25px', backgroundColor: '#f4f7f6', minHeight: '100vh' }}>
+    <div style={{ padding: '0px', backgroundColor: '#f4f7f6', minHeight: '100vh' }}>
       {showAdd && <CreateProperty onClose={handleClose} onRefresh={fetchProperties} />}
       {editId && <EditProperty propertyId={editId} onClose={handleClose} onRefresh={fetchProperties} />}
 

@@ -215,7 +215,7 @@ const ManageUsers = () => {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: "'Segoe UI', sans-serif" }}>
+    <div style={{ padding: '0px', fontFamily: "'Segoe UI', sans-serif" }}>
       {/* Flash Message Component - Only this for notifications */}
       {flashMessage.show && (
         <FlashMessage

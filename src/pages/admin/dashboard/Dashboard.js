@@ -93,7 +93,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div style={{ padding: '20px', fontFamily: "'Segoe UI', sans-serif" }}>
+    <div style={{ padding: '0px', fontFamily: "'Segoe UI', sans-serif" }}>
       {/* Page Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>

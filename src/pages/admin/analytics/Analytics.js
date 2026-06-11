@@ -85,7 +85,7 @@ const Analytics = () => {
   }
 
   return (
-    <div className="container-fluid px-4 py-4">
+    <div className="container-fluid ">
       {/* Header */}
       <div className="mb-4">
         <h2 className="fw-bold" style={{ color: '#003366' }}>
