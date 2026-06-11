@@ -87,7 +87,7 @@ const NewsDetail = () => {
         container: {
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: '80px 20px 60px'
+            padding: '50px 20px 60px'
         },
         backNavigation: {
             marginBottom: '30px'

@@ -140,7 +140,8 @@ const RentDetail = () => {
         container: {
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: '0 20px'
+            padding: '0 20px',
+            paddingTop: '20px'
         },
         backNavigation: {
             marginBottom: '30px'
