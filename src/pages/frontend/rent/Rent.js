@@ -250,12 +250,18 @@ const Rent = () => {
                             />
                         </div>
                         <div>
-                            <select name="type" value={filters.type} onChange={handleFilterChange} style={styles.select}>
+                            <select 
+                                name="type" 
+                                value={filters.type} 
+                                onChange={handleFilterChange} 
+                                style={styles.select}
+                            >
                                 <option value="">Property Type</option>
-                                <option value="apartment">Apartment</option>
+                                <option value="condo">Condo</option>
                                 <option value="house">House</option>
                                 <option value="villa">Villa</option>
-                                <option value="commercial">Commercial</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="land">Land</option>
                             </select>
                         </div>
                         <div>

@@ -36,7 +36,7 @@ const Sale = () => {
             });
 
             const response = await axios.get(`http://localhost:5000/api/properties/sale?${params}`);
-            
+
             if (response.data.success) {
                 setProperties(response.data.properties);
                 setPagination({
@@ -267,7 +267,7 @@ const Sale = () => {
                     background: #5a67d8 !important;
                 }
             `}</style>
-            
+
             <div style={styles.heroSection}>
                 <h1 style={styles.heroTitle}>Properties for Sale</h1>
                 <p style={styles.heroSubtitle}>Find your dream home</p>
@@ -287,12 +287,17 @@ const Sale = () => {
                             />
                         </div>
                         <div>
-                            <select name="type" value={filters.type} onChange={handleFilterChange} style={styles.select}>
+                            <select
+                                name="type"
+                                value={filters.type}
+                                onChange={handleFilterChange}
+                                style={styles.select}
+                            >
                                 <option value="">Property Type</option>
-                                <option value="apartment">Apartment</option>
+                                <option value="condo">Condo</option>
                                 <option value="house">House</option>
                                 <option value="villa">Villa</option>
-                                <option value="commercial">Commercial</option>
+                                <option value="land">Land</option>
                             </select>
                         </div>
                         <div>
@@ -357,7 +362,7 @@ const Sale = () => {
 
                             {pagination.totalPages > 1 && (
                                 <div style={styles.pagination}>
-                                    <button 
+                                    <button
                                         className="pagination-button"
                                         onClick={() => handlePageChange(pagination.currentPage - 1)}
                                         disabled={pagination.currentPage === 1}
@@ -366,7 +371,7 @@ const Sale = () => {
                                         Previous
                                     </button>
                                     <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
-                                    <button 
+                                    <button
                                         className="pagination-button"
                                         onClick={() => handlePageChange(pagination.currentPage + 1)}
                                         disabled={pagination.currentPage === pagination.totalPages}
