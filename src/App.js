@@ -19,7 +19,7 @@ import ContactUs from './pages/frontend/contact/ContactUs';
 import Login from './pages/frontend/login/Login';
 import SignUp from './pages/frontend/signUp/SignUp';
 import PropertyDetail from './pages/frontend/propertyDetail/PropertyDetail';
-
+import Profile from './pages/frontend/profile/Profile';
 // Admin Pages
 import Dashboard from './pages/admin/dashboard/Dashboard';
 import ManageProperties from './pages/admin/manageProperty/ManageProperties';
@@ -48,6 +48,7 @@ function App() {
                         <Route path="/contact-us" element={<ContactUs />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
+                        <Route path="/profile" element={<Profile />} />
                     </Route>
 
                     {/* Admin Protected Routes */}
