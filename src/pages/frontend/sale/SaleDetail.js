@@ -209,6 +209,18 @@ const SaleDetail = () => {
             fontSize: '14px',
             zIndex: 10
         },
+        propertyTypeBadge: {
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            background: '#ffd700',
+            color: '#003366',
+            padding: '8px 16px',
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            textTransform: 'capitalize',
+            zIndex: 10
+        },
         // Lightbox styles
         lightboxOverlay: {
             position: 'fixed',
@@ -460,12 +472,14 @@ const SaleDetail = () => {
             borderRadius: '8px'
         },
         noImages: {
+            position: 'relative',
             height: '500px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#f0f0f0',
-            color: '#999'
+            color: '#999',
+            fontSize: '16px'
         }
     };
 
@@ -569,6 +583,10 @@ const SaleDetail = () => {
                                             </div>
                                         </>
                                     )}
+                                    {/* For Sale Badge */}
+                                    <div style={styles.propertyTypeBadge}>
+                                        For Sale
+                                    </div>
                                 </div>
 
                                 {images.length > 1 && (
@@ -594,6 +612,9 @@ const SaleDetail = () => {
                         ) : (
                             <div style={styles.noImages}>
                                 <p>No images available for this property</p>
+                                <div style={styles.propertyTypeBadge}>
+                                    For Sale
+                                </div>
                             </div>
                         )}
                     </div>
