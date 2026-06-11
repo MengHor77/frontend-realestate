@@ -10,8 +10,9 @@ import Home from './pages/frontend/home/Home';
 import About from './pages/frontend/about/About';
 import Sale from './pages/frontend/sale/Sale';
 import Rent from './pages/frontend/rent/Rent';
-import SaleDetail from './pages/frontend/sale/SaleDetail'; // Add this if you have a separate SaleDetail component
+import SaleDetail from './pages/frontend/sale/SaleDetail'; 
 import RentDetail from './pages/frontend/rent/RentDetail';
+import NewsDetail from './pages/frontend/news/NewsDetail';
 import News from './pages/frontend/news/News';
 import ContactUs from './pages/frontend/contact/ContactUs';
 import Login from './pages/frontend/login/Login';
@@ -24,7 +25,7 @@ import ManageProperties from './pages/admin/manageProperty/ManageProperties';
 import ManageUsers from './pages/admin/manageUsers/ManageUsers';
 import ManageNews from './pages/admin/manageNews/ManageNews';
 import CreateNews from './pages/admin/manageNews/CreateNews';
-import EditNews from './pages/admin/manageNews/EditNews';      
+import EditNews from './pages/admin/manageNews/EditNews';
 import ManageInquiries from './pages/admin/manageInquiries/ManageInquiries';
 import Analytics from './pages/admin/analytics/Analytics';
 import Settings from './pages/admin/settings/Settings';
@@ -37,19 +38,13 @@ function App() {
         <Route element={<FrontendLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          
-          {/* Property Routes - Consistent with backend */}
           <Route path="/sale" element={<Sale />} />
-          <Route path="/sale/:id" element={<SaleDetail />} /> {/* Add this if you have separate sale detail page */}
-          
+          <Route path="/sale/:id" element={<SaleDetail />} />
           <Route path="/rent" element={<Rent />} />
-          <Route path="/rent/:id" element={<RentDetail />} /> {/* Fixed: removed extra 'rent-detail' */}
-          
-          {/* Alternative: Use single property detail route for all properties */}
+          <Route path="/rent/:id" element={<RentDetail />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
-          
-          {/* Other routes */}
           <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
