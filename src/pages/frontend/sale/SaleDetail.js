@@ -129,7 +129,9 @@ const SaleDetail = () => {
             color: '#003366',
             textDecoration: 'none',
             fontSize: '16px',
-            fontWeight: '500'
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'color 0.3s ease'
         },
         detailContainer: {
             background: 'white',
@@ -546,8 +548,14 @@ const SaleDetail = () => {
             `}</style>
             <div style={styles.container}>
                 <div style={styles.backNavigation}>
-                    <Link to="/sale" style={styles.backLink}>← Back to Properties for Sale</Link>
-                </div>
+                    <Link
+                        to="/sale"
+                        style={styles.backLink}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#0d6efd'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#003366'}
+                    >
+                        ← Back to Properties for Sale
+                    </Link>                </div>
 
                 <div style={styles.detailContainer}>
                     {/* Image Gallery */}
