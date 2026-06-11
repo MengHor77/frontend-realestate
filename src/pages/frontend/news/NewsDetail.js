@@ -24,14 +24,14 @@ const NewsDetail = () => {
         try {
             setLoading(true);
             setError(null);
-            
+
             console.log('Fetching news with ID:', id);
             const response = await axios.get(`http://localhost:5000/api/news/${id}`);
             console.log('API Response:', response.data);
-            
+
             if (response.data.success && response.data.news) {
                 setNews(response.data.news);
-                
+
                 // Fetch related news
                 try {
                     const relatedResponse = await axios.get(`http://localhost:5000/api/news/${id}/related`);
@@ -56,10 +56,10 @@ const NewsDetail = () => {
     const formatDate = (dateString) => {
         if (!dateString) return 'Unknown date';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
     };
 
@@ -100,7 +100,8 @@ const NewsDetail = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'color 0.3s ease'
         },
         heroImage: {
             width: '100%',
@@ -288,15 +289,20 @@ const NewsDetail = () => {
             `}</style>
 
             <div style={styles.backNavigation}>
-                <Link to="/news" style={styles.backLink}>
+                <Link
+                    to="/news"
+                    style={styles.backLink}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#0d6efd'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#003366'}
+                >
                     ← Back to News
                 </Link>
             </div>
 
             {news.image_url ? (
-                <img 
-                    src={news.image_url} 
-                    alt={news.title} 
+                <img
+                    src={news.image_url}
+                    alt={news.title}
                     style={styles.heroImage}
                     onError={(e) => {
                         e.target.src = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80';
@@ -346,14 +352,14 @@ const NewsDetail = () => {
                     <h2 style={styles.relatedTitle}>Related Articles</h2>
                     <div style={styles.relatedGrid}>
                         {relatedNews.map(item => (
-                            <Link 
-                                to={`/news/${item.id}`} 
-                                key={item.id} 
+                            <Link
+                                to={`/news/${item.id}`}
+                                key={item.id}
                                 className="related-card"
                                 style={styles.relatedCard}
                             >
-                                <img 
-                                    src={item.image_url || 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80'} 
+                                <img
+                                    src={item.image_url || 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80'}
                                     alt={item.title}
                                     style={styles.relatedImage}
                                     onError={(e) => {
