@@ -34,7 +34,7 @@ const ManageUsers = () => {
     role: 'user',
   });
   const [currentUser, setCurrentUser] = useState(null);
-  
+
   // Only use flashMessage state - remove error and success states
   const [flashMessage, setFlashMessage] = useState({ show: false, message: '', type: 'success' });
 
@@ -136,7 +136,7 @@ const ManageUsers = () => {
       if (editingUser) {
         const updateData = { ...formData };
         if (!updateData.password) delete updateData.password;
-        
+
         await api.put(`/users/${editingUser.id}`, updateData);
         showFlashMessage('User updated successfully!', 'success');
       } else {
@@ -147,7 +147,7 @@ const ManageUsers = () => {
       // Refresh users and close modal
       await fetchUsers();
       handleCloseModal();
-      
+
     } catch (err) {
       console.error('Error saving user:', err);
       if (err.response?.data?.message) {
@@ -164,7 +164,7 @@ const ManageUsers = () => {
       showFlashMessage('Cannot delete admin users!', 'error');
       return;
     }
-    
+
     // Prevent deleting yourself
     if (currentUser && user.id === currentUser.id) {
       showFlashMessage('You cannot delete your own account!', 'error');
@@ -355,7 +355,7 @@ const ManageUsers = () => {
                 {filteredUsers.map((user) => {
                   const roleBadge = getRoleBadge(user.role);
                   const disableDelete = !canDelete(user);
-                  
+
                   return (
                     <tr key={user.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
                       <td style={{ padding: '15px' }}>
@@ -439,8 +439,8 @@ const ManageUsers = () => {
 
       {/* Add/Edit User Modal */}
       {showModal && (
-        <div style={styles.overlay}>
-          <div style={styles.modal}>
+        <div style={styles.overlay} onClick={handleCloseModal}>
+          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div style={styles.modalHeader}>
               <h3 style={styles.modalTitle}>
                 <FontAwesomeIcon icon={editingUser ? faEdit : faUserPlus} style={{ marginRight: '10px' }} />

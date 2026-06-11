@@ -7,8 +7,8 @@ const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const EditProperty = ({ propertyId, onClose, onRefresh }) => {
   const [formData, setFormData] = useState({
-    title: '', price: '', location: '', property_type: 'condo', 
-    listing_type: 'sale', status: 'active', bedrooms: '', 
+    title: '', price: '', location: '', property_type: 'condo',
+    listing_type: 'sale', status: 'active', bedrooms: '',
     bathrooms: '', size_sqm: '', description: '', features: ''
   });
   const [existingImages, setExistingImages] = useState([]);
@@ -31,38 +31,38 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
       setLoading(true);
       setError('');
       const token = localStorage.getItem('token');
-      
+
       const response = await axios.get(`${API}/properties/${propertyId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       const p = response.data.property;
       setFormData({
-        title: p.title || '', 
-        price: p.price || '', 
+        title: p.title || '',
+        price: p.price || '',
         location: p.location || '',
-        property_type: p.property_type || 'condo', 
+        property_type: p.property_type || 'condo',
         listing_type: p.listing_type || 'sale',
-        status: p.status || 'active', 
+        status: p.status || 'active',
         bedrooms: p.bedrooms || '',
-        bathrooms: p.bathrooms || '', 
+        bathrooms: p.bathrooms || '',
         size_sqm: p.size_sqm || '',
-        description: p.description || '', 
+        description: p.description || '',
         features: p.features || ''
       });
-      
+
       // Set existing images
       if (p.images && p.images.length > 0) {
         setExistingImages(p.images);
       } else if (p.image_url) {
         setExistingImages([{ id: null, url: p.image_url, is_primary: true }]);
       }
-      
+
     } catch (err) {
       console.error('Fetch error:', err);
       setError(`Failed to load data: ${err.response?.data?.message || err.message}`);
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +73,7 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
       return;
     }
     setNewImages([...newImages, ...files]);
-    
+
     // Create preview URLs
     const previews = files.map(file => URL.createObjectURL(file));
     setNewImagePreviews([...newImagePreviews, ...previews]);
@@ -85,7 +85,7 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
       await axios.delete(`${API}/properties/${propertyId}/images/${imageId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       // Refresh property data
       await fetchProperty();
       setSuccess('Image removed successfully');
@@ -103,82 +103,82 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
     setNewImagePreviews(newPreviewsList);
   };
 
-// Update the setPrimaryImage function in EditProperty.js
-const setPrimaryImage = async (imageId) => {
+  // Update the setPrimaryImage function in EditProperty.js
+  const setPrimaryImage = async (imageId) => {
     try {
-        setLoading(true);
-        const token = localStorage.getItem('token');
-        
-        console.log(`Setting image ${imageId} as primary for property ${propertyId}`);
-        
-        const response = await axios.put(
-            `${API}/properties/${propertyId}/images/${imageId}/primary`,
-            {},
-            {
-                headers: { 
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-        
-        console.log('Set primary response:', response.data);
-        
-        if (response.data.success) {
-            setSuccess('Primary image updated successfully');
-            // Refresh property data to show updated primary image
-            await fetchProperty();
-            setTimeout(() => setSuccess(''), 3000);
-        } else {
-            setError(response.data.message || 'Failed to set primary image');
+      setLoading(true);
+      const token = localStorage.getItem('token');
+
+      console.log(`Setting image ${imageId} as primary for property ${propertyId}`);
+
+      const response = await axios.put(
+        `${API}/properties/${propertyId}/images/${imageId}/primary`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
+      );
+
+      console.log('Set primary response:', response.data);
+
+      if (response.data.success) {
+        setSuccess('Primary image updated successfully');
+        // Refresh property data to show updated primary image
+        await fetchProperty();
+        setTimeout(() => setSuccess(''), 3000);
+      } else {
+        setError(response.data.message || 'Failed to set primary image');
+      }
     } catch (err) {
-        console.error('Error setting primary image:', err);
-        const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to set primary image';
-        setError(errorMsg);
-        setTimeout(() => setError(''), 5000);
+      console.error('Error setting primary image:', err);
+      const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to set primary image';
+      setError(errorMsg);
+      setTimeout(() => setError(''), 5000);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    
+
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      
+
       if (!token) {
         setError('You are not logged in. Please login again.');
         setLoading(false);
         return;
       }
-      
+
       const fd = new FormData();
-      
+
       // Append all form data
       Object.keys(formData).forEach(key => {
         if (formData[key] !== '' && formData[key] !== null && formData[key] !== undefined) {
           fd.append(key, formData[key]);
         }
       });
-      
+
       // Append new images
       if (newImages.length > 0) {
         for (let i = 0; i < newImages.length; i++) {
           fd.append('images', newImages[i]);
         }
       }
-      
+
       const response = await axios.put(`${API}/properties/${propertyId}`, fd, {
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+
       if (response.data.success) {
         setSuccess('Property updated successfully!');
         setTimeout(() => {
@@ -188,26 +188,26 @@ const setPrimaryImage = async (imageId) => {
       } else {
         setError('Update failed');
       }
-      
+
     } catch (err) {
       console.error('Update error:', err);
       setError(err.response?.data?.message || err.response?.data?.error || 'Error updating property');
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.container}>
+    <div style={styles.overlay} onClick={onClose}>
+      <div style={styles.container} onClick={(e) => e.stopPropagation()}>
         <div style={styles.header}>
           <h3><FontAwesomeIcon icon={faBuilding} /> Edit Property #{propertyId}</h3>
           <button onClick={onClose} style={styles.closeBtn}><FontAwesomeIcon icon={faTimes} /></button>
         </div>
-        
+
         {error && <div style={styles.error}>{error}</div>}
         {success && <div style={styles.success}>{success}</div>}
-        
+
         {loading && !formData.title ? (
           <div style={styles.loading}>Loading property data...</div>
         ) : (
@@ -222,7 +222,7 @@ const setPrimaryImage = async (imageId) => {
                 <input style={styles.input} value={formData.location} onChange={e => set('location', e.target.value)} />
               </div>
             </div>
-            
+
             <div style={styles.grid2}>
               <div style={styles.group}>
                 <label>Property Type</label>
@@ -242,12 +242,12 @@ const setPrimaryImage = async (imageId) => {
                 </select>
               </div>
             </div>
-            
+
             <div style={styles.group}>
               <label>Price ($) *</label>
               <input style={styles.input} type="number" step="0.01" value={formData.price} onChange={e => set('price', e.target.value)} required />
             </div>
-            
+
             <div style={styles.grid3}>
               <div style={styles.group}>
                 <label>Bedrooms</label>
@@ -262,7 +262,7 @@ const setPrimaryImage = async (imageId) => {
                 <input style={styles.input} type="number" value={formData.size_sqm} onChange={e => set('size_sqm', e.target.value)} />
               </div>
             </div>
-            
+
             <div style={styles.group}>
               <label>Status</label>
               <select style={styles.input} value={formData.status} onChange={e => set('status', e.target.value)}>
@@ -271,17 +271,17 @@ const setPrimaryImage = async (imageId) => {
                 <option value="rented">Rented</option>
               </select>
             </div>
-            
+
             <div style={styles.group}>
               <label>Description</label>
-              <textarea style={{...styles.input, minHeight: '80px'}} value={formData.description} onChange={e => set('description', e.target.value)} />
+              <textarea style={{ ...styles.input, minHeight: '80px' }} value={formData.description} onChange={e => set('description', e.target.value)} />
             </div>
-            
+
             <div style={styles.group}>
               <label>Features</label>
               <input style={styles.input} placeholder="e.g., Parking, Pool, Garden" value={formData.features} onChange={e => set('features', e.target.value)} />
             </div>
-            
+
             {/* Existing Images */}
             {existingImages.length > 0 && (
               <div style={styles.imageSection}>
@@ -306,7 +306,7 @@ const setPrimaryImage = async (imageId) => {
                 </div>
               </div>
             )}
-            
+
             {/* New Images Preview */}
             {newImagePreviews.length > 0 && (
               <div style={styles.imageSection}>
@@ -323,13 +323,13 @@ const setPrimaryImage = async (imageId) => {
                 </div>
               </div>
             )}
-            
+
             <div style={styles.group}>
               <label>Add More Images</label>
               <input type="file" multiple accept="image/*" style={styles.input} onChange={handleNewImages} />
               <small style={styles.helperText}>You can add up to {10 - (existingImages.length + newImages.length)} more images</small>
             </div>
-            
+
             <button type="submit" style={styles.submitBtn} disabled={loading}>
               {loading ? 'Updating...' : <><FontAwesomeIcon icon={faSave} /> Update Property</>}
             </button>
@@ -341,43 +341,43 @@ const setPrimaryImage = async (imageId) => {
 };
 
 const styles = {
-  overlay: { 
-    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', 
-     display: 'flex', justifyContent: 'center', 
-    alignItems: 'center', zIndex: 9999 
+  overlay: {
+    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+    display: 'flex', justifyContent: 'center',
+    alignItems: 'center', zIndex: 9999
   },
-  container: { 
-    background: '#fff', width: '90%', maxWidth: '700px', 
-    borderRadius: '12px', maxHeight: '90vh', display: 'flex', 
+  container: {
+    background: '#fff', width: '90%', maxWidth: '700px',
+    borderRadius: '12px', maxHeight: '90vh', display: 'flex',
     flexDirection: 'column', boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
   },
-  header: { 
-    display: 'flex', justifyContent: 'space-between', 
-    padding: '15px 20px', background: '#003366', 
-    color: '#ffd700', borderRadius: '12px 12px 0 0' 
+  header: {
+    display: 'flex', justifyContent: 'space-between',
+    padding: '15px 20px', background: '#003366',
+    color: '#ffd700', borderRadius: '12px 12px 0 0'
   },
-  closeBtn: { 
-    background: 'none', border: 'none', color: '#ffd700', 
-    cursor: 'pointer', fontSize: '20px' 
+  closeBtn: {
+    background: 'none', border: 'none', color: '#ffd700',
+    cursor: 'pointer', fontSize: '20px'
   },
-  error: { 
-    color: 'white', background: '#dc3545', padding: '10px', 
-    fontSize: '13px', margin: '10px', borderRadius: '5px' 
+  error: {
+    color: 'white', background: '#dc3545', padding: '10px',
+    fontSize: '13px', margin: '10px', borderRadius: '5px'
   },
-  success: { 
-    color: 'white', background: '#28a745', padding: '10px', 
-    fontSize: '13px', margin: '10px', borderRadius: '5px' 
+  success: {
+    color: 'white', background: '#28a745', padding: '10px',
+    fontSize: '13px', margin: '10px', borderRadius: '5px'
   },
-  loading: { 
-    textAlign: 'center', padding: '40px', color: '#003366' 
+  loading: {
+    textAlign: 'center', padding: '40px', color: '#003366'
   },
   form: { padding: '20px', overflowY: 'auto' },
   grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '10px' },
   grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginBottom: '10px' },
   group: { display: 'flex', flexDirection: 'column', marginBottom: '15px' },
-  input: { 
-    padding: '10px', borderRadius: '5px', border: '1px solid #ccc', 
-    marginTop: '5px', fontSize: '14px' 
+  input: {
+    padding: '10px', borderRadius: '5px', border: '1px solid #ccc',
+    marginTop: '5px', fontSize: '14px'
   },
   imageSection: {
     marginBottom: '15px',
@@ -443,9 +443,9 @@ const styles = {
     color: '#666',
     marginTop: '5px'
   },
-  submitBtn: { 
-    background: '#003366', color: '#ffd700', padding: '12px', 
-    border: 'none', borderRadius: '5px', cursor: 'pointer', 
+  submitBtn: {
+    background: '#003366', color: '#ffd700', padding: '12px',
+    border: 'none', borderRadius: '5px', cursor: 'pointer',
     width: '100%', fontWeight: 'bold', fontSize: '16px',
     marginTop: '10px'
   }

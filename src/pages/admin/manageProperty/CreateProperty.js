@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../../services/api'; 
+import api from '../../../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faSave, faBuilding, faImage, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -31,7 +31,7 @@ const CreateProperty = ({ onClose, onRefresh }) => {
             return;
         }
         setImages(files);
-        
+
         // Create preview URLs
         const previews = files.map(file => URL.createObjectURL(file));
         setImagePreviews(previews);
@@ -69,7 +69,7 @@ const CreateProperty = ({ onClose, onRefresh }) => {
             }
 
             const response = await api.post('/properties', fd);
-            
+
             if (response.data.success) {
                 onRefresh();
                 onClose();
@@ -85,8 +85,8 @@ const CreateProperty = ({ onClose, onRefresh }) => {
     };
 
     return (
-        <div style={styles.overlay}>
-            <div style={styles.container}>
+        <div style={styles.overlay} onClick={onClose}>
+            <div style={styles.container} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <h3 style={styles.headerTitle}>
                         <FontAwesomeIcon icon={faBuilding} style={{ marginRight: 8 }} />
