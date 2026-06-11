@@ -57,6 +57,16 @@ function Home() {
         document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // Function to determine the correct detail link based on listing type
+    const getDetailLink = (property) => {
+        const listingType = property.listing_type || property.property_type;
+        if (listingType === 'rent' || listingType === 'rental') {
+            return `/rent/${property.id}`;
+        } else {
+            return `/sale/${property.id}`;
+        }
+    };
+
     return (
         <div className="home-page">
             <HeroSection onSearch={handleSearch} />
@@ -87,28 +97,37 @@ function Home() {
                         <p className="text-center">{t('loading')}</p>
                     ) : filteredProperties.length > 0 ? (
                         <div className="row g-4">
-                            {filteredProperties.map((item) => (
-                                <div className="col-md-4" key={item.id}>
-                                    <div className="card h-100 shadow-sm">
-                                        <img src={`http://localhost:5000${item.image_url || '/default-image.jpg'}`}
-                                            className="card-img-top" alt={item.title} style={{ height: '220px', objectFit: 'cover' }} />
-                                        <div className="card-body">
-                                            <h5 className="text-primary fw-bold">${item.price?.toLocaleString() || '0'}</h5>
-                                            <p className="fw-bold mb-1">{item.title}</p>
-                                            <p className="text-muted small">📍 {item.location}</p>
-                                            <hr className="my-2" />
-                                            <div className="d-flex justify-content-between text-muted small">
-                                                <span>🛏️ {item.bedrooms || 0}</span>
-                                                <span>🚿 {item.bathrooms || 0}</span>
-                                                <span>📐 {item.size_sqm || 0}m²</span>
+                            {filteredProperties.map((item) => {
+                                const detailLink = getDetailLink(item);
+                                return (
+                                    <div className="col-md-4" key={item.id}>
+                                        <Link to={detailLink} style={{ textDecoration: 'none' }}>
+                                            <div className="card h-100 shadow-sm" style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}>
+                                                <img
+                                                    src={`http://localhost:5000${item.image_url || '/default-image.jpg'}`}
+                                                    className="card-img-top"
+                                                    alt={item.title}
+                                                    style={{ height: '220px', objectFit: 'cover' }}
+                                                />
+                                                <div className="card-body">
+                                                    <h5 className="text-primary fw-bold">${item.price?.toLocaleString() || '0'}</h5>
+                                                    <p className="fw-bold mb-1">{item.title}</p>
+                                                    <p className="text-muted small">📍 {item.location}</p>
+                                                    <hr className="my-2" />
+                                                    <div className="d-flex justify-content-between text-muted small">
+                                                        <span>🛏️ {item.bedrooms || 0}</span>
+                                                        <span>🚿 {item.bathrooms || 0}</span>
+                                                        <span>📐 {item.size_sqm || 0}m²</span>
+                                                    </div>
+                                                    <span className="badge mt-2" style={{ backgroundColor: item.listing_type === 'sale' ? '#28a745' : '#ffc107', color: '#000' }}>
+                                                        {item.listing_type === 'sale' ? 'For Sale' : 'For Rent'}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <span className="badge mt-2" style={{ backgroundColor: item.listing_type === 'sale' ? '#28a745' : '#ffc107', color: '#000' }}>
-                                                {item.listing_type || item.property_type}
-                                            </span>
-                                        </div>
+                                        </Link>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     ) : (
                         <p className="text-center">{t('no_results')}</p>
@@ -123,6 +142,14 @@ function Home() {
                     <Link to="/contact-us" className="btn btn-warning btn-lg px-5 fw-bold rounded-pill">{t('consult_now')}</Link>
                 </div>
             </section>
+
+            <style jsx>{`
+                .card:hover {
+                    transform: translateY(-5px);
+                    transition: transform 0.3s ease;
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+                }
+            `}</style>
         </div>
     );
 }
