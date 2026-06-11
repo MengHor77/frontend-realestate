@@ -48,17 +48,17 @@ const ManageInquiries = () => {
         page: page + 1,
         limit: rowsPerPage
       };
-      
+
       if (filters.status !== 'all') {
         params.status = filters.status;
       }
-      
+
       if (filters.search) {
         params.search = filters.search;
       }
-      
+
       const response = await api.get('/contact', { params });
-      
+
       if (response.data) {
         setInquiries(response.data.inquiries || []);
         setTotalCount(response.data.total || 0);
@@ -100,7 +100,7 @@ const ManageInquiries = () => {
   const handleViewInquiry = async (inquiry) => {
     setSelectedInquiry(inquiry);
     setShowModal(true);
-    
+
     if (inquiry.status === 'unread') {
       try {
         await api.put(`/contact/${inquiry.id}/status`, { status: 'read' });
@@ -274,10 +274,8 @@ const ManageInquiries = () => {
               </thead>
               <tbody>
                 {inquiries.map((inquiry) => (
-                  <tr 
-                    key={inquiry.id} 
-                    style={{ cursor: 'pointer' }} 
-                    onClick={() => handleViewInquiry(inquiry)}
+                  <tr
+                    key={inquiry.id}
                     className="border-bottom"
                   >
                     <td className="py-3 px-4">#{inquiry.id}</td>
@@ -286,32 +284,30 @@ const ManageInquiries = () => {
                       <small className="text-muted">{inquiry.email}</small>
                       {inquiry.phone && <small className="text-muted d-block">{inquiry.phone}</small>}
                     </td>
-                    <td className="py-3 px-4">{inquiry.subject}</td>
+                    <td className="py-3 px-4">{inquiry.subject || 'No subject'}</td>
                     <td className="py-3 px-4">
                       {inquiry.message?.length > 50 ? `${inquiry.message.substring(0, 50)}...` : inquiry.message}
                     </td>
                     <td className="py-3 px-4">{getStatusBadge(inquiry.status)}</td>
                     <td className="py-3 px-4">{formatDate(inquiry.created_at)}</td>
                     <td className="py-3 px-4 text-center">
+                      {/* View Button */}
                       <button
                         className="btn btn-sm btn-outline-primary me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewInquiry(inquiry);
-                        }}
+                        onClick={() => handleViewInquiry(inquiry)}
                         style={{ borderRadius: '8px' }}
+                        title="View Details"
                       >
-                        <i className="bi bi-eye"></i>
+                        <i className="bi bi-eye"></i> View
                       </button>
+                      {/* Delete Button */}
                       <button
                         className="btn btn-sm btn-outline-danger"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(inquiry.id);
-                        }}
+                        onClick={() => handleDelete(inquiry.id)}
                         style={{ borderRadius: '8px' }}
+                        title="Delete Inquiry"
                       >
-                        <i className="bi bi-trash"></i>
+                        <i className="bi bi-trash"></i> Delete
                       </button>
                     </td>
                   </tr>
@@ -327,7 +323,7 @@ const ManageInquiries = () => {
               </tbody>
             </table>
           </div>
-          
+
           {/* Pagination */}
           <div className="d-flex justify-content-between align-items-center p-3 border-top">
             <div>
@@ -373,75 +369,84 @@ const ManageInquiries = () => {
 
       {/* View Inquiry Modal */}
       {showModal && selectedInquiry && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }}>
-          <div className="modal-dialog modal-lg" style={{ marginTop: '50px' }}>
-            <div className="modal-content" style={{ borderRadius: '15px' }}>
-              <div className="modal-header" style={{ borderBottom: '2px solid #ffd700' }}>
-                <h5 className="modal-title">
-                  Inquiry Details #{selectedInquiry.id}
-                  <span className="ms-2">{getStatusBadge(selectedInquiry.status)}</span>
-                </h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <h6 className="text-primary mb-3">Customer Information</h6>
-                  <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                    <p className="mb-2"><strong>Name:</strong> {selectedInquiry.name}</p>
-                    <p className="mb-2"><strong>Email:</strong> {selectedInquiry.email}</p>
-                    {selectedInquiry.phone && <p className="mb-0"><strong>Phone:</strong> {selectedInquiry.phone}</p>}
-                  </div>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }} onClick={() => setShowModal(false)}>
+          <div className="modal-dialog modal-lg" style={{ marginTop: '50px' }} onClick={(e) => e.stopPropagation()}>          <div className="modal-content" style={{ borderRadius: '15px' }}>
+            <div className="modal-header" style={{ borderBottom: '2px solid #ffd700' }}>
+              <h5 className="modal-title">
+                Inquiry Details #{selectedInquiry.id}
+                <span className="ms-2">{getStatusBadge(selectedInquiry.status)}</span>
+              </h5>
+              <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <div className="mb-3">
+                <h6 className="text-primary mb-3">Customer Information</h6>
+                <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+                  <p className="mb-2"><strong>Name:</strong> {selectedInquiry.name}</p>
+                  <p className="mb-2"><strong>Email:</strong> {selectedInquiry.email}</p>
+                  {selectedInquiry.phone && <p className="mb-0"><strong>Phone:</strong> {selectedInquiry.phone}</p>}
                 </div>
+              </div>
 
-                <div className="mb-3">
-                  <h6 className="text-primary mb-3">Message Details</h6>
-                  <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                    <p className="mb-2"><strong>Subject:</strong> {selectedInquiry.subject}</p>
-                    <p className="mb-2"><strong>Date:</strong> {formatDate(selectedInquiry.created_at)}</p>
-                    <p className="mb-0"><strong>Message:</strong></p>
-                    <div className="bg-white p-3 rounded mt-2" style={{ border: '1px solid #dee2e6' }}>
-                      {selectedInquiry.message}
-                    </div>
+              <div className="mb-3">
+                <h6 className="text-primary mb-3">Message Details</h6>
+                <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+                  <p className="mb-2"><strong>Subject:</strong> {selectedInquiry.subject || 'No subject'}</p>
+                  <p className="mb-2"><strong>Date:</strong> {formatDate(selectedInquiry.created_at)}</p>
+                  <p className="mb-0"><strong>Message:</strong></p>
+                  <div className="bg-white p-3 rounded mt-2" style={{ border: '1px solid #dee2e6' }}>
+                    {selectedInquiry.message}
                   </div>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                {selectedInquiry.status !== 'replied' && (
-                  <button 
-                    className="btn btn-primary"
-                    onClick={() => {
-                      setShowModal(false);
-                      setShowReplyModal(true);
-                    }}
-                  >
-                    <i className="bi bi-reply me-2"></i>Reply to Customer
-                  </button>
-                )}
-                <button 
-                  className="btn btn-success"
+
+              {/* Property Info if exists */}
+              {selectedInquiry.property_title && (
+                <div className="mb-3">
+                  <h6 className="text-primary mb-3">Property Information</h6>
+                  <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+                    <p className="mb-0"><strong>Property:</strong> {selectedInquiry.property_title}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+              {selectedInquiry.status !== 'replied' && (
+                <button
+                  className="btn btn-primary"
                   onClick={() => {
-                    api.put(`/contact/${selectedInquiry.id}/status`, { status: 'replied' })
-                      .then(() => {
-                        fetchInquiries();
-                        fetchStats();
-                        alert('Marked as replied');
-                        setShowModal(false);
-                      });
+                    setShowModal(false);
+                    setShowReplyModal(true);
                   }}
                 >
-                  <i className="bi bi-check-circle me-2"></i>Mark as Replied
+                  <i className="bi bi-reply me-2"></i>Reply to Customer
                 </button>
-              </div>
+              )}
+              <button
+                className="btn btn-success"
+                onClick={() => {
+                  api.put(`/contact/${selectedInquiry.id}/status`, { status: 'replied' })
+                    .then(() => {
+                      fetchInquiries();
+                      fetchStats();
+                      alert('Marked as replied');
+                      setShowModal(false);
+                    });
+                }}
+              >
+                <i className="bi bi-check-circle me-2"></i>Mark as Replied
+              </button>
             </div>
+          </div>
           </div>
         </div>
       )}
 
       {/* Reply Modal */}
       {showReplyModal && selectedInquiry && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }}>
-          <div className="modal-dialog modal-lg" style={{ marginTop: '50px' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }} onClick={() => setShowReplyModal(false)}>
+          <div className="modal-dialog modal-lg" style={{ marginTop: '50px' }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-content" style={{ borderRadius: '15px' }}>
               <div className="modal-header" style={{ borderBottom: '2px solid #ffd700' }}>
                 <h5 className="modal-title">Reply to Customer</h5>
@@ -450,7 +455,7 @@ const ManageInquiries = () => {
               <div className="modal-body">
                 <div className="alert alert-info">
                   <strong>To:</strong> {selectedInquiry.email}<br />
-                  <strong>Subject:</strong> Re: {selectedInquiry.subject}
+                  <strong>Subject:</strong> Re: {selectedInquiry.subject || 'Inquiry'}
                 </div>
                 <textarea
                   className="form-control"
