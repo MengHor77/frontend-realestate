@@ -118,7 +118,7 @@ function Header() {
                                     >
                                         {getUserInitial()}
                                     </div>
-                                    <span style={{ fontWeight: '500' }}>{getUserDisplayName()}</span>
+                                    {/* <span style={{ fontWeight: '500' }}>{getUserDisplayName()}</span> */}
                                 </button>
                                 <ul className="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown">
                                     <li>
