@@ -7,6 +7,7 @@ const LoginForm = ({ onSubmit, loading, error: externalError }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [internalError, setInternalError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,7 +30,6 @@ const LoginForm = ({ onSubmit, loading, error: externalError }) => {
                     <h2 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>
                         {t('login_title') || 'Welcome Back'}
                     </h2>
-
                 </div>
 
                 {displayError && (
@@ -68,19 +68,45 @@ const LoginForm = ({ onSubmit, loading, error: externalError }) => {
                             <i className="fas fa-lock me-2" style={{ color: 'var(--gold-color)' }}></i>
                             {t('password') || 'Password'}
                         </label>
-                        <input
-                            type="password"
-                            className="form-control form-control-lg"
-                            placeholder={t('password_placeholder') || 'Enter your password'}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={loading}
-                            style={{
-                                borderRadius: '12px',
-                                border: '1px solid #e0e0e0',
-                                padding: '12px'
-                            }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                className="form-control form-control-lg"
+                                placeholder={t('password_placeholder') || 'Enter your password'}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                disabled={loading}
+                                style={{
+                                    borderRadius: '12px',
+                                    border: '1px solid #e0e0e0',
+                                    padding: '12px',
+                                    paddingRight: '45px'
+                                }}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '12px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    padding: '0',
+                                    fontSize: '18px',
+                                    color: '#666'
+                                }}
+                                tabIndex="-1"
+                            >
+                                {showPassword ? (
+                                    <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                ) : (
+                                    <i className="fa fa-eye" aria-hidden="true"></i>
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="d-flex justify-content-between align-items-center mb-4">
