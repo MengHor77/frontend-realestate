@@ -20,6 +20,9 @@ const Profile = () => {
         newPassword: '',
         confirmPassword: ''
     });
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     useEffect(() => {
         if (!user) {
@@ -62,7 +65,6 @@ const Profile = () => {
             });
 
             if (response.data.success) {
-                // Update user in localStorage and context
                 const updatedUser = { ...user, name: formData.name, phone: formData.phone };
                 localStorage.setItem('user', JSON.stringify(updatedUser));
                 showFlashMessage('Profile updated successfully!', 'success');
@@ -336,39 +338,111 @@ const Profile = () => {
                                     <form onSubmit={handleChangePassword}>
                                         <div className="mb-3">
                                             <label className="form-label fw-semibold">Current Password</label>
-                                            <input
-                                                type="password"
-                                                name="currentPassword"
-                                                className="form-control"
-                                                value={formData.currentPassword}
-                                                onChange={handleChange}
-                                                style={styles.input}
-                                                required
-                                            />
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type={showCurrentPassword ? 'text' : 'password'}
+                                                    name="currentPassword"
+                                                    className="form-control"
+                                                    value={formData.currentPassword}
+                                                    onChange={handleChange}
+                                                    style={{ ...styles.input, paddingRight: '40px' }}
+                                                    required
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '10px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        cursor: 'pointer',
+                                                        padding: 0,
+                                                        color: '#666',
+                                                        fontSize: '16px'
+                                                    }}
+                                                >
+                                                    {showCurrentPassword ? (
+                                                        <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                                    ) : (
+                                                        <i className="fa fa-eye" aria-hidden="true"></i>
+                                                    )}
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="mb-3">
                                             <label className="form-label fw-semibold">New Password</label>
-                                            <input
-                                                type="password"
-                                                name="newPassword"
-                                                className="form-control"
-                                                value={formData.newPassword}
-                                                onChange={handleChange}
-                                                style={styles.input}
-                                                required
-                                            />
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type={showNewPassword ? 'text' : 'password'}
+                                                    name="newPassword"
+                                                    className="form-control"
+                                                    value={formData.newPassword}
+                                                    onChange={handleChange}
+                                                    style={{ ...styles.input, paddingRight: '40px' }}
+                                                    required
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '10px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        cursor: 'pointer',
+                                                        padding: 0,
+                                                        color: '#666',
+                                                        fontSize: '16px'
+                                                    }}
+                                                >
+                                                    {showNewPassword ? (
+                                                        <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                                    ) : (
+                                                        <i className="fa fa-eye" aria-hidden="true"></i>
+                                                    )}
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="mb-3">
                                             <label className="form-label fw-semibold">Confirm New Password</label>
-                                            <input
-                                                type="password"
-                                                name="confirmPassword"
-                                                className="form-control"
-                                                value={formData.confirmPassword}
-                                                onChange={handleChange}
-                                                style={styles.input}
-                                                required
-                                            />
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type={showConfirmPassword ? 'text' : 'password'}
+                                                    name="confirmPassword"
+                                                    className="form-control"
+                                                    value={formData.confirmPassword}
+                                                    onChange={handleChange}
+                                                    style={{ ...styles.input, paddingRight: '40px' }}
+                                                    required
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '10px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        cursor: 'pointer',
+                                                        padding: 0,
+                                                        color: '#666',
+                                                        fontSize: '16px'
+                                                    }}
+                                                >
+                                                    {showConfirmPassword ? (
+                                                        <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                                    ) : (
+                                                        <i className="fa fa-eye" aria-hidden="true"></i>
+                                                    )}
+                                                </button>
+                                            </div>
                                         </div>
                                         <button type="submit" style={styles.button} disabled={loading}>
                                             {loading ? 'Updating...' : 'Change Password'}
