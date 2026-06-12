@@ -41,7 +41,9 @@ function Header() {
         <header className="navbar navbar-expand-lg fixed-top custom-header">
             <div className="container">
                 <NavLink className="navbar-brand fw-bold fs-4 d-flex align-items-center gap-2" to="/">
-                    <span className="brand-icon">🏡</span>
+                    <span className="brand-icon">
+                        <i class="fa fa-home" aria-hidden="true" style={{ color: '#ffd700', marginRight: '5px' }}></i>
+                    </span>
                     <span className="brand-text">MH<span className="text-gold"> Real Estate</span></span>
                 </NavLink>
 
