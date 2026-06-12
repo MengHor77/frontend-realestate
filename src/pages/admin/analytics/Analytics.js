@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
-import StatCard from '../../../components/frontend/StatCard';
-import PropertyTypeCard from '../../../components/frontend/PropertyTypeCard';
-import PropertyStatusCard from '../../../components/frontend/PropertyStatusCard';
-import InquiryStatusCard from '../../../components/frontend/InquiryStatusCard';
+import StatCard from '../../../components/admin/StatCard';
+import PropertyTypeCard from '../../../components/admin/PropertyTypeCard';
+import PropertyStatusCard from '../../../components/admin/PropertyStatusCard';
+import InquiryStatusCard from '../../../components/admin/InquiryStatusCard';
 
 const Analytics = () => {
   const [stats, setStats] = useState({
