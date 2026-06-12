@@ -18,6 +18,8 @@ const SignUpForm = () => {
         confirmPassword: ''
     });
     const [fieldErrors, setFieldErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const showFlashMessage = (message, type = 'success') => {
         setFlashMessage({ show: true, message, type });
@@ -60,11 +62,11 @@ const SignUpForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        
+
         if (!validateForm()) return;
-        
+
         setLoading(true);
-        
+
         try {
             const response = await api.post('/auth/register', {
                 name: formData.username,
@@ -72,13 +74,13 @@ const SignUpForm = () => {
                 password: formData.password,
                 phone: formData.phone || ''
             });
-            
+
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify(response.data.user));
-                
+
                 showFlashMessage(response.data.message || 'Registration successful! Please login.', 'success');
-                
+
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000);
@@ -127,19 +129,19 @@ const SignUpForm = () => {
                     onClose={handleCloseFlashMessage}
                 />
             )}
-            
+
             <div className="card shadow-lg p-4" style={{ borderRadius: '16px', border: 'none' }}>
                 <div className="card-body">
                     <h3 className="card-title text-center mb-4" style={{ color: '#003366', fontWeight: '700' }}>
                         {t('signup_card_title')}
                     </h3>
-                    
+
                     {error && (
                         <div className="alert alert-danger" role="alert" style={{ borderRadius: '10px', fontSize: '14px' }}>
                             {error}
                         </div>
                     )}
-                    
+
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label className="form-label" style={{ fontWeight: '600', color: '#333' }}>
@@ -156,7 +158,7 @@ const SignUpForm = () => {
                             />
                             {fieldErrors.username && <span style={errorTextStyle}>{fieldErrors.username}</span>}
                         </div>
-                        
+
                         <div className="mb-3">
                             <label className="form-label" style={{ fontWeight: '600', color: '#333' }}>
                                 {t('email_label')}
@@ -172,7 +174,7 @@ const SignUpForm = () => {
                             />
                             {fieldErrors.email && <span style={errorTextStyle}>{fieldErrors.email}</span>}
                         </div>
-                        
+
                         <div className="mb-3">
                             <label className="form-label" style={{ fontWeight: '600', color: '#333' }}>
                                 {t('phone_label') || 'Phone Number'}
@@ -186,41 +188,97 @@ const SignUpForm = () => {
                                 style={inputStyle}
                             />
                         </div>
-                        
+
                         <div className="mb-3">
                             <label className="form-label" style={{ fontWeight: '600', color: '#333' }}>
                                 {t('password_label')}
                             </label>
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control"
-                                placeholder={t('password_placeholder')}
-                                onChange={handleChange}
-                                style={{ ...inputStyle, ...(fieldErrors.password ? inputErrorStyle : {}) }}
-                                required
-                            />
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    className="form-control"
+                                    placeholder={t('password_placeholder')}
+                                    onChange={handleChange}
+                                    style={{
+                                        ...inputStyle,
+                                        ...(fieldErrors.password ? inputErrorStyle : {}),
+                                        paddingRight: '40px'
+                                    }}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                        color: '#666',
+                                        fontSize: '16px'
+                                    }}
+                                >
+                                    {showPassword ? (
+                                        <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                    ) : (
+                                        <i className="fa fa-eye" aria-hidden="true"></i>
+                                    )}
+                                </button>
+                            </div>
                             {fieldErrors.password && <span style={errorTextStyle}>{fieldErrors.password}</span>}
                         </div>
-                        
+
                         <div className="mb-4">
                             <label className="form-label" style={{ fontWeight: '600', color: '#333' }}>
                                 {t('confirm_password_label')}
                             </label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                className="form-control"
-                                placeholder={t('confirm_password_placeholder')}
-                                onChange={handleChange}
-                                style={{ ...inputStyle, ...(fieldErrors.confirmPassword ? inputErrorStyle : {}) }}
-                                required
-                            />
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    name="confirmPassword"
+                                    className="form-control"
+                                    placeholder={t('confirm_password_placeholder')}
+                                    onChange={handleChange}
+                                    style={{
+                                        ...inputStyle,
+                                        ...(fieldErrors.confirmPassword ? inputErrorStyle : {}),
+                                        paddingRight: '40px'
+                                    }}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                        color: '#666',
+                                        fontSize: '16px'
+                                    }}
+                                >
+                                    {showConfirmPassword ? (
+                                        <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                                    ) : (
+                                        <i className="fa fa-eye" aria-hidden="true"></i>
+                                    )}
+                                </button>
+                            </div>
                             {fieldErrors.confirmPassword && <span style={errorTextStyle}>{fieldErrors.confirmPassword}</span>}
                         </div>
-                        
-                        <button 
-                            type="submit" 
+
+                        <button
+                            type="submit"
                             className="btn w-100 py-2 fw-bold"
                             disabled={loading}
                             style={{
@@ -245,7 +303,7 @@ const SignUpForm = () => {
                             )}
                         </button>
                     </form>
-                    
+
                     <div className="mt-4 text-center">
                         <span>{t('already_have_account')} </span>
                         <Link to="/login" style={{ color: '#003366', fontWeight: 'bold', textDecoration: 'none' }}
