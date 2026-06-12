@@ -28,6 +28,7 @@ import ManageNews from './pages/admin/manageNews/ManageNews';
 import ManageInquiries from './pages/admin/manageInquiries/ManageInquiries';
 import Analytics from './pages/admin/analytics/Analytics';
 import Settings from './pages/admin/settings/Settings';
+import ProtectedRoute from './routes/protectRoute';
 
 function App() {
     return (
@@ -52,7 +53,9 @@ function App() {
                     </Route>
 
                     {/* Admin Protected Routes */}
-                    <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="/admin" element={<ProtectedRoute adminOnly={true}>
+                        <AdminLayout />
+                    </ProtectedRoute>}>
                         <Route index element={<Navigate to="/admin/dashboard" replace />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="properties" element={<ManageProperties />} />
