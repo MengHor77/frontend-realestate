@@ -1,6 +1,9 @@
-// D:\realestate\frontend\src\pages\admin\analytics\Analytics.js
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
+import StatCard from '../../../components/frontend/StatCard';
+import PropertyTypeCard from '../../../components/frontend/PropertyTypeCard';
+import PropertyStatusCard from '../../../components/frontend/PropertyStatusCard';
+import InquiryStatusCard from '../../../components/frontend/InquiryStatusCard';
 
 const Analytics = () => {
   const [stats, setStats] = useState({
@@ -24,7 +27,6 @@ const Analytics = () => {
     try {
       setLoading(true);
       
-      // Fetch all data in parallel
       const [propertiesRes, usersRes, inquiriesRes, newsRes] = await Promise.all([
         api.get('/properties'),
         api.get('/users'),
@@ -32,23 +34,22 @@ const Analytics = () => {
         api.get('/news')
       ]);
 
-      const properties = propertiesRes.data.data || [];
-      const users = usersRes.data.data || [];
-      const inquiries = inquiriesRes.data.inquiries || [];
-      const news = newsRes.data.data || [];
+      const properties = propertiesRes.data.properties || propertiesRes.data.data || [];
+      const users = usersRes.data.users || usersRes.data.data || [];
+      const inquiries = inquiriesRes.data.inquiries || inquiriesRes.data || [];
+      const news = newsRes.data.news || newsRes.data.data || [];
 
       setStats({
         totalProperties: properties.length,
         totalUsers: users.length,
         totalInquiries: inquiries.length,
         totalNews: news.length,
-        propertiesForSale: properties.filter(p => p.type === 'sale').length,
-        propertiesForRent: properties.filter(p => p.type === 'rent').length,
+        propertiesForSale: properties.filter(p => p.listing_type === 'sale' || p.type === 'sale').length,
+        propertiesForRent: properties.filter(p => p.listing_type === 'rent' || p.type === 'rent').length,
         activeProperties: properties.filter(p => p.status === 'active').length,
         unreadInquiries: inquiries.filter(i => i.status === 'unread').length
       });
 
-      // Get recent inquiries for activity
       setRecentActivities(inquiries.slice(0, 5));
     } catch (error) {
       console.error('Error fetching analytics:', error);
@@ -56,23 +57,6 @@ const Analytics = () => {
       setLoading(false);
     }
   };
-
-  const StatCard = ({ title, value, icon, color, trend }) => (
-    <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '15px', borderLeft: `4px solid ${color}` }}>
-      <div className="card-body">
-        <div className="d-flex justify-content-between align-items-start">
-          <div>
-            <p className="text-muted mb-1 small">{title}</p>
-            <h3 className="mb-0 fw-bold">{loading ? '...' : value}</h3>
-            {trend && <small className="text-success">{trend}</small>}
-          </div>
-          <div className="rounded-circle p-3" style={{ backgroundColor: `${color}15` }}>
-            <i className={`bi ${icon} fs-4`} style={{ color: color }}></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   if (loading) {
     return (
@@ -85,17 +69,17 @@ const Analytics = () => {
   }
 
   return (
-    <div className="container-fluid ">
+    <div className="container-fluid">
       {/* Header */}
       <div className="mb-4">
-        <h2 className="fw-bold" style={{ color: '#003366' }}>
+        <h2 className="fw-bold" style={{ color: 'var(--primary-dark)' }}>
           📊 Analytics Dashboard
         </h2>
         <p className="text-muted">Real-time statistics and insights for your real estate platform</p>
       </div>
 
-      {/* Statistics Cards */}
-      <div className="row g-3 mb-4">
+      {/* Statistics Cards Row */}
+      <div className="row g-4 mb-4">
         <div className="col-md-3">
           <StatCard 
             title="Total Properties" 
@@ -103,6 +87,7 @@ const Analytics = () => {
             icon="bi-building" 
             color="#4f8ef7"
             trend="+12 this month"
+            loading={loading}
           />
         </div>
         <div className="col-md-3">
@@ -111,6 +96,7 @@ const Analytics = () => {
             value={stats.totalUsers} 
             icon="bi-people" 
             color="#28a745"
+            loading={loading}
           />
         </div>
         <div className="col-md-3">
@@ -119,6 +105,7 @@ const Analytics = () => {
             value={stats.totalInquiries} 
             icon="bi-chat-dots" 
             color="#f5a623"
+            loading={loading}
           />
         </div>
         <div className="col-md-3">
@@ -127,118 +114,101 @@ const Analytics = () => {
             value={stats.totalNews} 
             icon="bi-newspaper" 
             color="#17a2b8"
+            loading={loading}
           />
         </div>
       </div>
 
-      {/* Property Statistics */}
-      <div className="row g-3 mb-4">
+      {/* Analytics Cards Row */}
+      <div className="row g-4 mb-4">
         <div className="col-md-4">
-          <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '15px' }}>
-            <div className="card-body">
-              <h6 className="text-muted mb-3">Properties by Type</h6>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span>For Sale</span>
-                <span className="fw-bold">{stats.propertiesForSale}</span>
-              </div>
-              <div className="progress mb-3" style={{ height: '8px' }}>
-                <div className="progress-bar bg-primary" style={{ width: `${(stats.propertiesForSale / stats.totalProperties) * 100}%` }}></div>
-              </div>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span>For Rent</span>
-                <span className="fw-bold">{stats.propertiesForRent}</span>
-              </div>
-              <div className="progress" style={{ height: '8px' }}>
-                <div className="progress-bar bg-warning" style={{ width: `${(stats.propertiesForRent / stats.totalProperties) * 100}%` }}></div>
-              </div>
-            </div>
-          </div>
+          <PropertyTypeCard 
+            forSale={stats.propertiesForSale}
+            forRent={stats.propertiesForRent}
+            total={stats.totalProperties}
+            loading={loading}
+          />
         </div>
-
         <div className="col-md-4">
-          <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '15px' }}>
-            <div className="card-body">
-              <h6 className="text-muted mb-3">Property Status</h6>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span>Active</span>
-                <span className="fw-bold text-success">{stats.activeProperties}</span>
-              </div>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span>Inactive/Sold</span>
-                <span className="fw-bold text-danger">{stats.totalProperties - stats.activeProperties}</span>
-              </div>
-            </div>
-          </div>
+          <PropertyStatusCard 
+            active={stats.activeProperties}
+            inactive={stats.totalProperties - stats.activeProperties}
+            total={stats.totalProperties}
+            loading={loading}
+          />
         </div>
-
         <div className="col-md-4">
-          <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '15px' }}>
-            <div className="card-body">
-              <h6 className="text-muted mb-3">Inquiry Status</h6>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span>Unread</span>
-                <span className="fw-bold text-danger">{stats.unreadInquiries}</span>
-              </div>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span>Read/Replied</span>
-                <span className="fw-bold text-success">{stats.totalInquiries - stats.unreadInquiries}</span>
-              </div>
-            </div>
-          </div>
+          <InquiryStatusCard 
+            unread={stats.unreadInquiries}
+            readReplied={stats.totalInquiries - stats.unreadInquiries}
+            total={stats.totalInquiries}
+            loading={loading}
+          />
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="card border-0 shadow-sm" style={{ borderRadius: '15px' }}>
-        <div className="card-header bg-white border-0 pt-4 pb-0">
-          <h5 className="fw-bold mb-0">Recent Customer Inquiries</h5>
+      <div className="card border-0 shadow-sm" style={{ borderRadius: '20px' }}>
+        <div className="card-header bg-white border-0 pt-4 pb-0 px-4">
+          <h5 className="fw-bold mb-0" style={{ color: 'var(--primary-dark)' }}>
+            <i className="bi bi-clock-history me-2"></i>
+            Recent Customer Inquiries
+          </h5>
         </div>
-        <div className="card-body">
-          {recentActivities.length === 0 ? (
-            <p className="text-muted text-center py-4">No recent inquiries</p>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Subject</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentActivities.map((inquiry) => (
-                    <tr key={inquiry.id}>
-                      <td>{inquiry.name}</td>
-                      <td>{inquiry.email}</td>
-                      <td>{inquiry.subject}</td>
-                      <td>
-                        <span className={`badge bg-${inquiry.status === 'unread' ? 'danger' : inquiry.status === 'read' ? 'warning' : 'success'}`}>
-                          {inquiry.status?.toUpperCase()}
-                        </span>
-                      </td>
-                      <td>{new Date(inquiry.created_at).toLocaleDateString()}</td>
+        <div className="card-body p-0">
+          <div className="custom-scroll-area" style={{ maxHeight: '400px' }}>
+            {recentActivities.length === 0 ? (
+              <p className="text-muted text-center py-4">No recent inquiries</p>
+            ) : (
+              <div className="table-responsive">
+                <table className="table table-hover mb-0">
+                  <thead>
+                    <tr style={{ backgroundColor: '#f8f9fa' }}>
+                      <th className="py-3 px-4">Name</th>
+                      <th className="py-3 px-4">Email</th>
+                      <th className="py-3 px-4">Subject</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4">Date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {recentActivities.map((inquiry) => (
+                      <tr key={inquiry.id}>
+                        <td className="py-3 px-4 fw-semibold">{inquiry.name}</td>
+                        <td className="py-3 px-4">{inquiry.email}</td>
+                        <td className="py-3 px-4">{inquiry.subject || 'No subject'}</td>
+                        <td className="py-3 px-4">
+                          <span className={`badge bg-${inquiry.status === 'unread' ? 'danger' : inquiry.status === 'read' ? 'warning' : 'success'}`}>
+                            {inquiry.status?.toUpperCase() || 'UNREAD'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">{new Date(inquiry.created_at).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="mt-4">
-        <div className="alert alert-info border-0" style={{ backgroundColor: '#e3f2fd', borderRadius: '15px' }}>
-          <div className="d-flex justify-content-between align-items-center">
+        <div className="alert border-0" style={{ backgroundColor: '#e3f2fd', borderRadius: '20px' }}>
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-              <i className="bi bi-graph-up fs-4 me-2"></i>
-              <strong>Analytics Summary</strong>
-              <p className="mb-0 small mt-1">Your platform has {stats.totalProperties} properties, {stats.totalUsers} users, and {stats.totalInquiries} inquiries.</p>
+              <i className="bi bi-graph-up fs-4 me-2" style={{ color: 'var(--primary-dark)' }}></i>
+              <strong style={{ color: 'var(--primary-dark)' }}>Analytics Summary</strong>
+              <p className="mb-0 small mt-1 text-muted">
+                Your platform has {stats.totalProperties} properties, {stats.totalUsers} users, and {stats.totalInquiries} inquiries.
+              </p>
             </div>
-            <button className="btn btn-sm btn-primary" onClick={fetchAnalytics}>
+            <button 
+              className="btn btn-sm" 
+              onClick={fetchAnalytics}
+              style={{ backgroundColor: 'var(--primary-dark)', color: 'var(--gold-color)' }}
+            >
               <i className="bi bi-arrow-repeat me-1"></i> Refresh
             </button>
           </div>
