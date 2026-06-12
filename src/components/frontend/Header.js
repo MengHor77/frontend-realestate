@@ -44,7 +44,7 @@ function Header() {
                     <span className="brand-icon">
                         <i class="fa fa-home" aria-hidden="true" style={{ color: '#ffd700', marginRight: '5px' }}></i>
                     </span>
-                    <span className="brand-text">MH<span className="text-gold"> Real Estate</span></span>
+                    <span className="brand-text" style={{ color: '#ffd700', marginRight: '5px' }}>MH Real Estate</span>
                 </NavLink>
 
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
