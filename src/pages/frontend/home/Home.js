@@ -21,6 +21,14 @@ function Home() {
         { title: t('create_web_app'), icon: '💻', link: '/web-app', color: '#e8f5e9' },
     ];
 
+    // Helper function to get full image URL
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return 'https://via.placeholder.com/400x250?text=No+Image';
+        if (imageUrl.startsWith('http')) return imageUrl;
+        if (imageUrl.startsWith('/uploads')) return `http://localhost:5000${imageUrl}`;
+        return `http://localhost:5000/uploads/${imageUrl}`;
+    };
+
     useEffect(() => {
         axios.get('http://localhost:5000/api/properties')
             .then(res => {
@@ -39,9 +47,9 @@ function Home() {
         let filtered = [...properties];
 
         if (type === 'sale') {
-            filtered = filtered.filter(p => p.listing_type === 'sale' || p.property_type === 'sale');
+            filtered = filtered.filter(p => p.listing_type === 'sale');
         } else if (type === 'rent') {
-            filtered = filtered.filter(p => p.listing_type === 'rent' || p.property_type === 'rent');
+            filtered = filtered.filter(p => p.listing_type === 'rent');
         }
 
         if (searchTerm) {
@@ -59,8 +67,8 @@ function Home() {
 
     // Function to determine the correct detail link based on listing type
     const getDetailLink = (property) => {
-        const listingType = property.listing_type || property.property_type;
-        if (listingType === 'rent' || listingType === 'rental') {
+        const listingType = property.listing_type;
+        if (listingType === 'rent') {
             return `/rent/${property.id}`;
         } else {
             return `/sale/${property.id}`;
@@ -99,15 +107,19 @@ function Home() {
                         <div className="row g-4">
                             {filteredProperties.map((item) => {
                                 const detailLink = getDetailLink(item);
+                                const imageUrl = getImageUrl(item.image_url || item.images?.[0]?.url);
                                 return (
                                     <div className="col-md-4" key={item.id}>
                                         <Link to={detailLink} style={{ textDecoration: 'none' }}>
                                             <div className="card h-100 shadow-sm" style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}>
                                                 <img
-                                                    src={`http://localhost:5000${item.image_url || '/default-image.jpg'}`}
+                                                    src={imageUrl}
                                                     className="card-img-top"
                                                     alt={item.title}
                                                     style={{ height: '220px', objectFit: 'cover' }}
+                                                    onError={(e) => {
+                                                        e.target.src = 'https://via.placeholder.com/400x250?text=No+Image';
+                                                    }}
                                                 />
                                                 <div className="card-body">
                                                     <h5 className="text-primary fw-bold">${item.price?.toLocaleString() || '0'}</h5>
@@ -119,7 +131,7 @@ function Home() {
                                                         <span>🚿 {item.bathrooms || 0}</span>
                                                         <span>📐 {item.size_sqm || 0}m²</span>
                                                     </div>
-                                                    <span className="badge mt-2" style={{ backgroundColor: item.listing_type === 'sale' ? '#28a745' : '#ffc107', color: '#000' }}>
+                                                    <span className="badge mt-2" style={{ backgroundColor: item.listing_type === 'sale' ? '#28a745' : '#ffc107', color: item.listing_type === 'sale' ? 'white' : '#000' }}>
                                                         {item.listing_type === 'sale' ? 'For Sale' : 'For Rent'}
                                                     </span>
                                                 </div>
