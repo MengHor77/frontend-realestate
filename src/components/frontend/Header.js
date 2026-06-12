@@ -17,14 +17,14 @@ function Header() {
         navigate('/');
     };
 
-    // Get user's first name or display name
-    const getUserDisplayName = () => {
-        if (!user) return '';
-        if (user.name) {
-            return user.name.split(' ')[0];
-        }
-        return user.email?.split('@')[0];
-    };
+    // // Get user's first name or display name
+    // const getUserDisplayName = () => {
+    //     if (!user) return '';
+    //     if (user.name) {
+    //         return user.name.split(' ')[0];
+    //     }
+    //     return user.email?.split('@')[0];
+    // };
 
     // Get user initial for avatar
     const getUserInitial = () => {
