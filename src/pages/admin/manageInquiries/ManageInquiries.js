@@ -1,5 +1,4 @@
-// D:\realestate\frontend\src\pages\admin\manageInquiries\ManageInquiries.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Filter from '../../../components/admin/Filter';
 import api from '../../../services/api';
 
@@ -33,15 +32,8 @@ const ManageInquiries = () => {
     { value: 'replied', label: 'Replied' }
   ];
 
-  useEffect(() => {
-    fetchInquiries();
-  }, [page, rowsPerPage, filters]);
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  const fetchInquiries = async () => {
+  // Fetch inquiries function wrapped in useCallback
+  const fetchInquiries = useCallback(async () => {
     try {
       setLoading(true);
       const params = {
@@ -68,9 +60,10 @@ const ManageInquiries = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, rowsPerPage, filters]);
 
-  const fetchStats = async () => {
+  // Fetch stats function
+  const fetchStats = useCallback(async () => {
     try {
       const response = await api.get('/contact', { params: { limit: 1000 } });
       if (response.data && response.data.inquiries) {
@@ -85,7 +78,17 @@ const ManageInquiries = () => {
     } catch (err) {
       console.error('Error fetching stats:', err);
     }
-  };
+  }, []);
+
+  // Effect for fetching inquiries
+  useEffect(() => {
+    fetchInquiries();
+  }, [fetchInquiries]);
+
+  // Effect for fetching stats
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
@@ -284,7 +287,9 @@ const ManageInquiries = () => {
                       <small className="text-muted">{inquiry.email}</small>
                       {inquiry.phone && <small className="text-muted d-block">{inquiry.phone}</small>}
                     </td>
-                    <td className="py-3 px-4">{inquiry.subject || 'No subject'}</td>
+                    <td className="py-3 px-4">
+                      <span className="fw-semibold">{inquiry.subject || 'No subject'}</span>
+                    </td>
                     <td className="py-3 px-4">
                       {inquiry.message?.length > 50 ? `${inquiry.message.substring(0, 50)}...` : inquiry.message}
                     </td>
@@ -370,75 +375,76 @@ const ManageInquiries = () => {
       {/* View Inquiry Modal */}
       {showModal && selectedInquiry && (
         <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }} onClick={() => setShowModal(false)}>
-          <div className="modal-dialog modal-lg" style={{ marginTop: '50px' }} onClick={(e) => e.stopPropagation()}>          <div className="modal-content" style={{ borderRadius: '15px' }}>
-            <div className="modal-header" style={{ borderBottom: '2px solid #ffd700' }}>
-              <h5 className="modal-title">
-                Inquiry Details #{selectedInquiry.id}
-                <span className="ms-2">{getStatusBadge(selectedInquiry.status)}</span>
-              </h5>
-              <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-            </div>
-            <div className="modal-body">
-              <div className="mb-3">
-                <h6 className="text-primary mb-3">Customer Information</h6>
-                <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                  <p className="mb-2"><strong>Name:</strong> {selectedInquiry.name}</p>
-                  <p className="mb-2"><strong>Email:</strong> {selectedInquiry.email}</p>
-                  {selectedInquiry.phone && <p className="mb-0"><strong>Phone:</strong> {selectedInquiry.phone}</p>}
-                </div>
+          <div className="modal-dialog modal-lg" style={{ marginTop: '50px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content" style={{ borderRadius: '15px' }}>
+              <div className="modal-header" style={{ borderBottom: '2px solid #ffd700' }}>
+                <h5 className="modal-title">
+                  Inquiry Details #{selectedInquiry.id}
+                  <span className="ms-2">{getStatusBadge(selectedInquiry.status)}</span>
+                </h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
               </div>
-
-              <div className="mb-3">
-                <h6 className="text-primary mb-3">Message Details</h6>
-                <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                  <p className="mb-2"><strong>Subject:</strong> {selectedInquiry.subject || 'No subject'}</p>
-                  <p className="mb-2"><strong>Date:</strong> {formatDate(selectedInquiry.created_at)}</p>
-                  <p className="mb-0"><strong>Message:</strong></p>
-                  <div className="bg-white p-3 rounded mt-2" style={{ border: '1px solid #dee2e6' }}>
-                    {selectedInquiry.message}
-                  </div>
-                </div>
-              </div>
-
-              {/* Property Info if exists */}
-              {selectedInquiry.property_title && (
+              <div className="modal-body">
                 <div className="mb-3">
-                  <h6 className="text-primary mb-3">Property Information</h6>
+                  <h6 className="text-primary mb-3">Customer Information</h6>
                   <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                    <p className="mb-0"><strong>Property:</strong> {selectedInquiry.property_title}</p>
+                    <p className="mb-2"><strong>Name:</strong> {selectedInquiry.name}</p>
+                    <p className="mb-2"><strong>Email:</strong> {selectedInquiry.email}</p>
+                    {selectedInquiry.phone && <p className="mb-0"><strong>Phone:</strong> {selectedInquiry.phone}</p>}
                   </div>
                 </div>
-              )}
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-              {selectedInquiry.status !== 'replied' && (
+
+                <div className="mb-3">
+                  <h6 className="text-primary mb-3">Message Details</h6>
+                  <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+                    <p className="mb-2"><strong>Subject:</strong> {selectedInquiry.subject || 'No subject'}</p>
+                    <p className="mb-2"><strong>Date:</strong> {formatDate(selectedInquiry.created_at)}</p>
+                    <p className="mb-0"><strong>Message:</strong></p>
+                    <div className="bg-white p-3 rounded mt-2" style={{ border: '1px solid #dee2e6' }}>
+                      {selectedInquiry.message}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Property Info if exists */}
+                {selectedInquiry.property_title && (
+                  <div className="mb-3">
+                    <h6 className="text-primary mb-3">Property Information</h6>
+                    <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+                      <p className="mb-0"><strong>Property:</strong> {selectedInquiry.property_title}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                {selectedInquiry.status !== 'replied' && (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setShowModal(false);
+                      setShowReplyModal(true);
+                    }}
+                  >
+                    <i className="bi bi-reply me-2"></i>Reply to Customer
+                  </button>
+                )}
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-success"
                   onClick={() => {
-                    setShowModal(false);
-                    setShowReplyModal(true);
+                    api.put(`/contact/${selectedInquiry.id}/status`, { status: 'replied' })
+                      .then(() => {
+                        fetchInquiries();
+                        fetchStats();
+                        alert('Marked as replied');
+                        setShowModal(false);
+                      });
                   }}
                 >
-                  <i className="bi bi-reply me-2"></i>Reply to Customer
+                  <i className="bi bi-check-circle me-2"></i>Mark as Replied
                 </button>
-              )}
-              <button
-                className="btn btn-success"
-                onClick={() => {
-                  api.put(`/contact/${selectedInquiry.id}/status`, { status: 'replied' })
-                    .then(() => {
-                      fetchInquiries();
-                      fetchStats();
-                      alert('Marked as replied');
-                      setShowModal(false);
-                    });
-                }}
-              >
-                <i className="bi bi-check-circle me-2"></i>Mark as Replied
-              </button>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       )}
@@ -455,7 +461,7 @@ const ManageInquiries = () => {
               <div className="modal-body">
                 <div className="alert alert-info">
                   <strong>To:</strong> {selectedInquiry.email}<br />
-                  <strong>Subject:</strong> Re: {selectedInquiry.subject || 'Inquiry'}
+                  <strong>Subject:</strong> Re: {selectedInquiry.subject || 'Inquiry about property'}
                 </div>
                 <textarea
                   className="form-control"

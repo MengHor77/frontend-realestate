@@ -1,7 +1,7 @@
-// D:\realestate\frontend\src\pages\frontend\rent\RentDetail.js
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import RentInquiriesForm from '../../../components/frontend/RentInquiriesForm';
 
 const RentDetail = () => {
     const { id } = useParams();
@@ -11,13 +11,6 @@ const RentDetail = () => {
     const [showContactForm, setShowContactForm] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showLightbox, setShowLightbox] = useState(false);
-    const [inquiry, setInquiry] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        message: ''
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         fetchPropertyDetails();
@@ -27,7 +20,6 @@ const RentDetail = () => {
     const fetchPropertyDetails = async () => {
         try {
             setLoading(true);
-            // Try both endpoints - first try rent specific, then fallback to general properties
             let response;
             try {
                 response = await axios.get(`http://localhost:5000/api/properties/rent/${id}`);
@@ -102,33 +94,9 @@ const RentDetail = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [showLightbox, property]);
 
-    const handleInquiryChange = (e) => {
-        const { name, value } = e.target;
-        setInquiry(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmitInquiry = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        try {
-            const response = await axios.post('http://localhost:5000/api/inquiries', {
-                ...inquiry,
-                property_id: property.id,
-                property_title: property.title,
-                property_type: 'rent'
-            });
-
-            if (response.data.success) {
-                alert('Inquiry sent successfully! We will contact you soon.');
-                setShowContactForm(false);
-                setInquiry({ name: '', email: '', phone: '', message: '' });
-            }
-        } catch (err) {
-            console.error('Error sending inquiry:', err);
-            alert('Failed to send inquiry. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
+    const handleInquirySuccess = () => {
+        alert('Inquiry sent successfully! We will contact you soon.');
+        setShowContactForm(false);
     };
 
     const styles = {
@@ -244,7 +212,6 @@ const RentDetail = () => {
             textTransform: 'capitalize',
             zIndex: 10
         },
-        // Lightbox styles
         lightboxOverlay: {
             position: 'fixed',
             top: 0,
@@ -395,57 +362,6 @@ const RentDetail = () => {
             cursor: 'pointer',
             transition: 'background 0.3s ease'
         },
-        contactForm: {
-            background: '#f9f9f9',
-            padding: '30px',
-            borderRadius: '8px'
-        },
-        formTitle: {
-            marginTop: 0,
-            marginBottom: '20px',
-            color: '#003366'
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '15px'
-        },
-        formInput: {
-            padding: '12px',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            fontSize: '16px',
-            transition: 'border-color 0.3s ease'
-        },
-        formTextarea: {
-            padding: '12px',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontFamily: 'inherit',
-            resize: 'vertical'
-        },
-        submitButton: {
-            padding: '12px',
-            background: '#003366',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            transition: 'background 0.3s ease'
-        },
-        cancelButton: {
-            padding: '12px',
-            background: '#ccc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            transition: 'background 0.3s ease'
-        },
         loadingContainer: {
             display: 'flex',
             flexDirection: 'column',
@@ -564,7 +480,7 @@ const RentDetail = () => {
                                 <div style={styles.mainImageContainer}>
                                     <img
                                         src={images[currentImageIndex].url}
-                                        alt={`${property.title} - Image ${currentImageIndex + 1}`}
+                                        alt={`${property.title}`}
                                         style={styles.mainImage}
                                         onClick={openLightbox}
                                     />
@@ -736,66 +652,11 @@ const RentDetail = () => {
                                     📞 Inquire About This Property
                                 </button>
                             ) : (
-                                <div style={styles.contactForm}>
-                                    <h3 style={styles.formTitle}>Send Inquiry for {property.title}</h3>
-                                    <form style={styles.form} onSubmit={handleSubmitInquiry}>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            placeholder="Your Name *"
-                                            value={inquiry.name}
-                                            onChange={handleInquiryChange}
-                                            style={styles.formInput}
-                                            required
-                                        />
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            placeholder="Your Email *"
-                                            value={inquiry.email}
-                                            onChange={handleInquiryChange}
-                                            style={styles.formInput}
-                                            required
-                                        />
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            placeholder="Your Phone *"
-                                            value={inquiry.phone}
-                                            onChange={handleInquiryChange}
-                                            style={styles.formInput}
-                                            required
-                                        />
-                                        <textarea
-                                            name="message"
-                                            placeholder="Your Message *"
-                                            rows="4"
-                                            value={inquiry.message}
-                                            onChange={handleInquiryChange}
-                                            style={styles.formTextarea}
-                                            required
-                                        ></textarea>
-                                        <button 
-                                            type="submit" 
-                                            style={styles.submitButton}
-                                            disabled={isSubmitting}
-                                            onMouseEnter={(e) => e.currentTarget.style.background = '#0d6efd'}
-                                            onMouseLeave={(e) => e.currentTarget.style.background = '#003366'}
-                                        >
-                                            {isSubmitting ? 'Sending...' : 'Send Inquiry'}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            style={styles.cancelButton}
-                                            onClick={() => setShowContactForm(false)}
-                                            disabled={isSubmitting}
-                                            onMouseEnter={(e) => e.currentTarget.style.background = '#999'}
-                                            onMouseLeave={(e) => e.currentTarget.style.background = '#ccc'}
-                                        >
-                                            Cancel
-                                        </button>
-                                    </form>
-                                </div>
+                                <RentInquiriesForm
+                                    property={property}
+                                    onClose={() => setShowContactForm(false)}
+                                    onSuccess={handleInquirySuccess}
+                                />
                             )}
                         </div>
                     </div>
