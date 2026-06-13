@@ -1,0 +1,398 @@
+/* Header Styles */
+.custom-header {
+  background-color: #003366 !important;
+  border-bottom: 3px solid #ffd700 !important;
+  padding: 10px 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Brand Styles */
+.navbar-brand {
+  color: #ffffff !important;
+  transition: opacity 0.3s ease;
+}
+
+.navbar-brand:hover {
+  opacity: 0.9;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Navigation Links */
+.custom-header .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+  padding: 6px 0 !important;
+  margin: 0 12px;
+}
+
+.custom-header .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ffd700;
+  transition: width 0.3s ease-in-out;
+}
+
+.custom-header .nav-link:hover,
+.custom-header .nav-link.active {
+  color: #ffd700 !important;
+}
+
+.custom-header .nav-link:hover::after,
+.custom-header .nav-link.active::after {
+  width: 100%;
+}
+
+/* Custom Toggler Button */
+.custom-toggler {
+  border-color: #ffd700 !important;
+}
+
+.custom-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffd700' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Sign Up Button - Premium Luxury Style */
+.btn-signup-nav {
+  position: relative;
+  background-color: #ffd700 !important;
+  color: #000000 !important;
+  font-weight: 700;
+  padding: 8px 22px !important;
+  border-radius: 30px !important;
+  text-decoration: none;
+  display: inline-block;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 1;
+  border: none;
+}
+
+.btn-signup-nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: all 0.6s ease;
+  z-index: -1;
+}
+
+.btn-signup-nav:hover {
+  background-color: #e6c200 !important;
+  color: #000000 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.45);
+}
+
+.btn-signup-nav:hover::before {
+  left: 100%;
+}
+
+.btn-signup-nav:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Login Button */
+.btn-login-nav {
+  transition: all 0.3s ease !important;
+}
+
+.btn-login-nav:hover {
+  background-color: #ffd700 !important;
+  color: #003366 !important;
+}
+
+/* Language Dropdown */
+#languageDropdown {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-weight: 500;
+  border-radius: 30px;
+  padding: 6px 18px;
+  backdrop-filter: blur(5px);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+#languageDropdown:hover,
+#languageDropdown:focus,
+#languageDropdown[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Dropdown Menu */
+.custom-header .dropdown-menu {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 51, 102, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+  padding: 8px;
+  min-width: 150px;
+  margin-top: 8px !important;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* Dropdown Open State */
+.custom-header .dropdown:hover .dropdown-menu,
+.custom-header .dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Dropdown Items */
+.custom-header .dropdown-item {
+  padding: 10px 15px !important;
+  border-radius: 10px;
+  margin-bottom: 2px;
+  color: #003366 !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent !important;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.custom-header .dropdown-item:last-child {
+  margin-bottom: 0;
+}
+
+.custom-header .dropdown-item:hover,
+.custom-header .dropdown-item:focus {
+  background-color: #003366 !important;
+  color: #ffd700 !important;
+}
+
+.custom-header .dropdown-item.active {
+  background-color: rgba(0, 51, 102, 0.1) !important;
+  color: #003366 !important;
+}
+
+/* User Avatar */
+.user-avatar {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Focus Reset */
+.btn:focus,
+.btn-check:focus + .btn,
+.form-control:focus,
+.dropdown-item:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* ==========================================================================
+   Responsive Media Queries
+   ========================================================================== */
+
+/* Tablet Styles (768px - 991px) */
+@media (max-width: 991.98px) {
+  .custom-header {
+    padding: 8px 0;
+  }
+
+  .custom-header .nav-link {
+    margin: 8px 0;
+    padding: 10px 15px !important;
+    display: inline-block;
+    width: auto;
+  }
+
+  .custom-header .nav-link::after {
+    display: none !important;
+  }
+
+  .custom-header .nav-link:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-radius: 8px;
+  }
+
+  .custom-header .dropdown-menu {
+    background: #003366 !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    opacity: 1;
+    visibility: visible;
+    position: static !important;
+    float: none;
+    margin-top: 5px !important;
+  }
+
+  .custom-header .dropdown-item {
+    color: #ffffff !important;
+  }
+
+  .custom-header .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffd700 !important;
+  }
+
+  .navbar-collapse {
+    padding: 15px 0;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+  }
+
+  .btn-signup-nav,
+  .btn-login-nav {
+    display: inline-block;
+    text-align: center;
+    margin: 5px 0;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .ms-lg-3,
+  .ms-lg-2 {
+    margin-left: 0 !important;
+  }
+
+  .mt-2 {
+    margin-top: 8px !important;
+  }
+
+  #languageDropdown {
+    margin: 5px 0;
+  }
+}
+
+/* Mobile Styles (up to 767px) */
+@media (max-width: 767.98px) {
+  .custom-header {
+    padding: 8px 0;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem !important;
+  }
+
+  .brand-text {
+    font-size: 1rem;
+  }
+
+  .brand-icon {
+    font-size: 0.9rem;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    padding: 8px 15px !important;
+  }
+
+  .btn-signup-nav,
+  .btn-login-nav {
+    padding: 6px 16px !important;
+    font-size: 13px;
+    width: 100%;
+    max-width: 180px;
+    text-align: center;
+  }
+
+  .dropdown-toggle {
+    font-size: 13px;
+    padding: 4px 12px !important;
+  }
+
+  .user-avatar {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 14px !important;
+  }
+
+  .custom-header .dropdown-item {
+    padding: 8px 12px !important;
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile Styles (up to 480px) */
+@media (max-width: 480px) {
+  .navbar-brand {
+    font-size: 0.9rem !important;
+  }
+
+  .brand-text {
+    font-size: 0.85rem;
+  }
+
+  .btn-signup-nav,
+  .btn-login-nav {
+    padding: 5px 12px !important;
+    font-size: 12px;
+    max-width: 150px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    padding: 6px 12px !important;
+  }
+
+  .custom-header .dropdown-menu {
+    min-width: 100%;
+  }
+
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Landscape Mode for Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .navbar-collapse {
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+
+  .custom-header {
+    padding: 5px 0;
+  }
+}
