@@ -88,22 +88,35 @@ const ManageProperties = () => {
 
   const totalPages = totalPagesState || Math.ceil(totalItems / itemsPerPage);
 
+  // Fixed: Get image URL from the correct field
   const getImageUrl = (property) => {
+    // First check if images array exists and has items
     if (property.images && property.images.length > 0) {
-      const primaryImage = property.images.find(img => img.is_primary) || property.images[0];
-      return primaryImage.url;
+      const primaryImage = property.images.find(img => img.is_primary === true || img.is_primary === 1) || property.images[0];
+      if (primaryImage && primaryImage.url) {
+        return primaryImage.url;
+      }
     }
+    // Then check image_url field
     if (property.image_url) {
       return property.image_url;
     }
+    // Fallback placeholder
     return 'https://via.placeholder.com/50x50?text=No+Image';
   };
 
+  // Fixed: Get image count
   const getImageCount = (property) => {
     if (property.images && property.images.length > 0) {
       return property.images.length;
     }
     return property.image_url ? 1 : 0;
+  };
+
+  // Format price
+  const formatPrice = (price) => {
+    if (!price) return '$0';
+    return `$${Number(price).toLocaleString()}`;
   };
 
   return (
@@ -179,8 +192,10 @@ const ManageProperties = () => {
                   <td style={{ padding: '16px 20px', fontWeight: '600' }}>{item.title}</td>
                   <td style={{ padding: '16px 20px', textTransform: 'capitalize' }}>{item.property_type}</td>
                   <td style={{ padding: '16px 20px' }}>{item.listing_type}</td>
-                  <td style={{ padding: '16px 20px', fontWeight: '700' }}>${Number(item.price).toLocaleString()}</td>
-                  <td style={{ padding: '16px 20px' }}><FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: '#ffd700', marginRight: '5px' }} /> {item.location}</td>
+                  <td style={{ padding: '16px 20px', fontWeight: '700' }}>{formatPrice(item.price)}</td>
+                  <td style={{ padding: '16px 20px' }}>
+                    <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: '#ffd700', marginRight: '5px' }} /> {item.location}
+                  </td>
                   <td style={{ padding: '16px 20px' }}>
                     <span style={{
                       padding: '4px 12px',
@@ -189,7 +204,7 @@ const ManageProperties = () => {
                       backgroundColor: item.status === 'active' ? '#d4edda' : item.status === 'sold' ? '#f8d7da' : '#fff3cd',
                       color: item.status === 'active' ? '#155724' : item.status === 'sold' ? '#721c24' : '#856404'
                     }}>
-                      {item.status.toUpperCase()}
+                      {item.status?.toUpperCase() || 'ACTIVE'}
                     </span>
                   </td>
                   <td style={{ padding: '16px 20px' }}>
