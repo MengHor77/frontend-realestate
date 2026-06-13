@@ -8,7 +8,7 @@ const FrontendLayout = () => {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      height: '100vh',        // បង្ខំកម្ពស់ឱ្យពេញអេក្រង់
+      minHeight: '100vh',        // បង្ខំកម្ពស់ឱ្យពេញអេក្រង់
       overflow: 'hidden'      // ដក Scrollbar ចេញពីទំព័រទាំងមូល
     }}>
       <Header />

@@ -2,15 +2,21 @@
 .custom-header {
   background-color: #003366 !important;
   border-bottom: 3px solid #ffd700 !important;
-  padding: 10px 0;
+  padding: 0 !important;
   z-index: 1000;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 /* Brand Styles */
 .navbar-brand {
   color: #ffffff !important;
   transition: opacity 0.3s ease;
+  padding: 8px 0;
 }
 
 .navbar-brand:hover {
@@ -56,6 +62,12 @@
 /* Custom Toggler Button */
 .custom-toggler {
   border-color: #ffd700 !important;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+
+.custom-toggler:hover {
+  background-color: rgba(255, 215, 0, 0.1);
 }
 
 .custom-toggler .navbar-toggler-icon {
@@ -131,11 +143,7 @@
   border-radius: 30px;
   padding: 6px 18px;
   backdrop-filter: blur(5px);
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #languageDropdown:hover,
@@ -147,7 +155,7 @@
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
-/* Dropdown Menu */
+/* Dropdown Menu - Only show on click (not hover) */
 .custom-header .dropdown-menu {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -157,21 +165,12 @@
   padding: 8px;
   min-width: 150px;
   margin-top: 8px !important;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition:
-    opacity 0.25s ease,
-    visibility 0.25s ease,
-    transform 0.25s ease;
+  display: none;
 }
 
-/* Dropdown Open State */
-.custom-header .dropdown:hover .dropdown-menu,
+/* Dropdown Open State - Only when show class is added */
 .custom-header .dropdown-menu.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: block;
 }
 
 /* Dropdown Items */
@@ -185,9 +184,7 @@
   align-items: center;
   gap: 10px;
   background: transparent !important;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .custom-header .dropdown-item:last-child {
@@ -207,9 +204,7 @@
 
 /* User Avatar */
 .user-avatar {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .user-avatar:hover {
@@ -227,172 +222,187 @@
 }
 
 /* ==========================================================================
-   Responsive Media Queries
+   MOBILE MENU DESIGN - Fixed
    ========================================================================== */
 
-/* Tablet Styles (768px - 991px) */
+/* Tablet & Mobile Styles (up to 991px) */
 @media (max-width: 991.98px) {
-  .custom-header {
-    padding: 8px 0;
+  /* Ensure no top margin/padding */
+  body, html {
+    margin: 0;
+    padding: 0;
   }
 
+  .custom-header {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Mobile Menu Container - Fixed position */
+  .navbar-collapse {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #003366;
+    padding: 20px 20px;
+    width: 100%;
+    z-index: 999;
+    overflow-y: auto;
+  }
+
+  /* Menu Items Container */
+  .navbar-nav {
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  /* Navigation Links in Mobile */
   .custom-header .nav-link {
-    margin: 8px 0;
-    padding: 10px 15px !important;
-    display: inline-block;
-    width: auto;
+    font-size: 18px;
+    padding: 14px 20px !important;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
   }
 
   .custom-header .nav-link::after {
-    display: none !important;
+    display: none;
   }
 
-  .custom-header .nav-link:hover {
-    background-color: rgba(255, 215, 0, 0.1);
-    border-radius: 8px;
+  .custom-header .nav-link:hover,
+  .custom-header .nav-link.active {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700 !important;
   }
 
+  /* Dropdowns in Mobile - Always visible in mobile menu */
+  .custom-header .dropdown {
+    width: 100%;
+  }
+
+  .custom-header .dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 14px 20px !important;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-top: 5px;
+  }
+
+  /* Mobile dropdown menu - Always visible in menu */
   .custom-header .dropdown-menu {
-    background: #003366 !important;
-    border: 1px solid rgba(255, 215, 0, 0.3) !important;
-    transform: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-shadow: none !important;
-    opacity: 1;
-    visibility: visible;
     position: static !important;
-    float: none;
-    margin-top: 5px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(5px);
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+    padding: 5px 0 5px 20px;
+    margin-top: 5px;
+    display: block !important;
   }
 
   .custom-header .dropdown-item {
     color: #ffffff !important;
+    padding: 12px 20px !important;
+    margin-bottom: 2px;
+    border-radius: 10px;
   }
 
   .custom-header .dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 215, 0, 0.2) !important;
     color: #ffd700 !important;
   }
 
-  .navbar-collapse {
-    padding: 15px 0;
-    max-height: calc(100vh - 70px);
-    overflow-y: auto;
-  }
-
-  .btn-signup-nav,
-  .btn-login-nav {
-    display: inline-block;
-    text-align: center;
-    margin: 5px 0;
-    width: 100%;
-    max-width: 200px;
-  }
-
-  .ms-lg-3,
-  .ms-lg-2 {
-    margin-left: 0 !important;
-  }
-
-  .mt-2 {
-    margin-top: 8px !important;
-  }
-
+  /* Language Dropdown in Mobile */
   #languageDropdown {
-    margin: 5px 0;
-  }
-}
-
-/* Mobile Styles (up to 767px) */
-@media (max-width: 767.98px) {
-  .custom-header {
-    padding: 8px 0;
-  }
-
-  .navbar-brand {
-    font-size: 1.1rem !important;
-  }
-
-  .brand-text {
-    font-size: 1rem;
-  }
-
-  .brand-icon {
-    font-size: 0.9rem;
-  }
-
-  .nav-link {
-    font-size: 14px;
-    padding: 8px 15px !important;
-  }
-
-  .btn-signup-nav,
-  .btn-login-nav {
-    padding: 6px 16px !important;
-    font-size: 13px;
     width: 100%;
-    max-width: 180px;
-    text-align: center;
+    justify-content: space-between;
+    margin-top: 5px;
+    padding: 12px 20px !important;
+    background: rgba(255, 255, 255, 0.05);
   }
 
-  .dropdown-toggle {
-    font-size: 13px;
-    padding: 4px 12px !important;
-  }
-
-  .user-avatar {
-    width: 30px !important;
-    height: 30px !important;
-    font-size: 14px !important;
-  }
-
-  .custom-header .dropdown-item {
-    padding: 8px 12px !important;
-    font-size: 13px;
-  }
-}
-
-/* Small Mobile Styles (up to 480px) */
-@media (max-width: 480px) {
-  .navbar-brand {
-    font-size: 0.9rem !important;
-  }
-
-  .brand-text {
-    font-size: 0.85rem;
-  }
-
+  /* Buttons in Mobile Menu */
   .btn-signup-nav,
   .btn-login-nav {
-    padding: 5px 12px !important;
-    font-size: 12px;
-    max-width: 150px;
+    width: 100%;
+    text-align: center;
+    margin: 5px 0;
+    padding: 12px 20px !important;
   }
 
-  .nav-link {
-    font-size: 13px;
-    padding: 6px 12px !important;
+  /* User Avatar in Mobile */
+  .dropdown-toggle .user-avatar {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 18px !important;
   }
 
-  .custom-header .dropdown-menu {
-    min-width: 100%;
+  /* Remove "Menu" header */
+  .navbar-collapse::before {
+    display: none;
   }
 
+  /* Adjust container padding */
   .container {
     padding-left: 15px;
     padding-right: 15px;
   }
 }
 
+/* Small Mobile Styles (up to 576px) */
+@media (max-width: 576px) {
+  .custom-header {
+    padding: 0 !important;
+  }
+
+  .navbar-brand {
+    font-size: 1rem !important;
+  }
+
+  .brand-text {
+    font-size: 0.9rem;
+  }
+
+  .custom-header .nav-link {
+    font-size: 16px;
+    padding: 12px 16px !important;
+  }
+
+  .btn-signup-nav,
+  .btn-login-nav {
+    padding: 10px 16px !important;
+    font-size: 14px;
+  }
+
+  .custom-header .dropdown-toggle {
+    padding: 12px 16px !important;
+  }
+
+  .navbar-collapse {
+    top: 54px;
+    padding: 15px;
+  }
+}
+
 /* Landscape Mode for Mobile */
 @media (max-width: 768px) and (orientation: landscape) {
   .navbar-collapse {
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
+    top: 56px;
+    max-height: calc(100vh - 56px);
   }
 
-  .custom-header {
-    padding: 5px 0;
+  .custom-header .nav-link {
+    padding: 8px 16px !important;
+    font-size: 14px;
   }
 }
