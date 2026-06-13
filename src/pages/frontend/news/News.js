@@ -17,6 +17,9 @@ function News() {
         limit: 9
     });
 
+    // Get API URL from environment variable or use default
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
     useEffect(() => {
         fetchNews();
     }, [pagination.currentPage]);
@@ -24,27 +27,48 @@ function News() {
     const fetchNews = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:5000/api/news?page=${pagination.currentPage}&limit=${pagination.limit}`);
+            const response = await axios.get(`${API_URL}/news`, {
+                params: {
+                    page: pagination.currentPage,
+                    limit: pagination.limit
+                }
+            });
+
+            // Handle different response structures
+            let newsData = [];
+            let total = 0;
+            let totalPages = 1;
 
             if (response.data.success) {
-                const newsData = response.data.news || [];
-                setNews(newsData);
-                setPagination({
-                    ...pagination,
-                    totalPages: response.data.totalPages || 1,
-                    total: response.data.total || 0
-                });
-
-                // Set first news item as featured if available
-                if (newsData.length > 0 && !featuredNews) {
-                    setFeaturedNews(newsData[0]);
-                }
+                newsData = response.data.news || response.data.data || [];
+                total = response.data.total || response.data.pagination?.total || 0;
+                totalPages = response.data.totalPages || response.data.pagination?.totalPages || 1;
+            } else if (Array.isArray(response.data)) {
+                newsData = response.data;
+                total = response.data.length;
+                totalPages = Math.ceil(total / pagination.limit);
+            } else if (response.data.news) {
+                newsData = response.data.news;
+                total = response.data.total || newsData.length;
+                totalPages = response.data.totalPages || Math.ceil(total / pagination.limit);
             } else {
-                setError('Failed to load news');
+                newsData = [];
+            }
+
+            setNews(newsData);
+            setPagination(prev => ({
+                ...prev,
+                totalPages: totalPages,
+                total: total
+            }));
+
+            // Set first news item as featured if available and not already set
+            if (newsData.length > 0 && !featuredNews) {
+                setFeaturedNews(newsData[0]);
             }
         } catch (err) {
             console.error('Error fetching news:', err);
-            setError('Failed to load news. Please try again later.');
+            setError(err.response?.data?.message || 'Failed to load news. Please try again later.');
         } finally {
             setLoading(false);
         }
@@ -58,6 +82,7 @@ function News() {
     };
 
     const formatDate = (dateString) => {
+        if (!dateString) return '';
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
@@ -130,7 +155,11 @@ function News() {
         featuredDesc: {
             color: '#666',
             lineHeight: '1.6',
-            marginBottom: '20px'
+            marginBottom: '20px',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden'
         },
         readMoreBtn: {
             backgroundColor: '#003366',
@@ -235,12 +264,12 @@ function News() {
                     }
                 `}</style>
                 <div style={styles.spinner}></div>
-                <p style={{ marginTop: '20px', color: '#666' }}>{t('loading')}</p>
+                <p style={{ marginTop: '20px', color: '#666' }}>{t('loading') || 'Loading...'}</p>
             </div>
         );
     }
 
-    if (error) {
+    if (error && news.length === 0) {
         return (
             <div style={styles.errorContainer}>
                 <p style={{ fontSize: '18px', color: '#666', marginBottom: '20px' }}>{error}</p>
@@ -248,6 +277,9 @@ function News() {
             </div>
         );
     }
+
+    // Get non-featured news (skip the first one if it's featured)
+    const regularNews = featuredNews && news.length > 0 ? news.slice(1) : news;
 
     return (
         <div className="container" style={styles.container}>
@@ -284,7 +316,7 @@ function News() {
                                                 {t('hot_news') || 'HOT NEWS'}
                                             </span>
                                             <h2 style={styles.featuredTitle}>{featuredNews.title}</h2>
-                                            <p className="text-muted" style={styles.featuredDesc}>
+                                            <p style={styles.featuredDesc}>
                                                 {featuredNews.content?.substring(0, 200)}...
                                             </p>
                                             <div className="d-flex align-items-center mt-4">
@@ -315,13 +347,13 @@ function News() {
             </h3>
 
             {/* News Grid */}
-            {news.length === 0 ? (
+            {regularNews.length === 0 && news.length === 0 ? (
                 <div style={styles.errorContainer}>
                     <p>{t('no_news_found') || 'No news articles found'}</p>
                 </div>
             ) : (
                 <div className="row g-4">
-                    {news.map((item) => (
+                    {(regularNews.length > 0 ? regularNews : news).map((item) => (
                         <NewsCard key={item.id} news={item} />
                     ))}
                 </div>
