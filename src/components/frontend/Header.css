@@ -241,7 +241,7 @@
   /* Mobile Menu Container - Fixed position */
   .navbar-collapse {
     position: fixed;
-    top: 56px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -389,7 +389,7 @@
   }
 
   .navbar-collapse {
-    top: 54px;
+    top: 45px;
     padding: 15px;
   }
 }
@@ -397,7 +397,7 @@
 /* Landscape Mode for Mobile */
 @media (max-width: 768px) and (orientation: landscape) {
   .navbar-collapse {
-    top: 56px;
+    top: 0 px;
     max-height: calc(100vh - 56px);
   }
 
