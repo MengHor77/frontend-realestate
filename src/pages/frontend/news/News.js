@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 import NewsCard from '../../../components/frontend/NewsCard';
 
 function News() {
@@ -17,9 +17,6 @@ function News() {
         limit: 9
     });
 
-    // Get API URL from environment variable or use default
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-
     useEffect(() => {
         fetchNews();
     }, [pagination.currentPage]);
@@ -27,7 +24,8 @@ function News() {
     const fetchNews = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${API_URL}/news`, {
+            // CHANGE: Use api instance instead of axios
+            const response = await api.get('/news', {
                 params: {
                     page: pagination.currentPage,
                     limit: pagination.limit

@@ -1,7 +1,7 @@
 // D:\realestate\frontend\src\pages\frontend\news\NewsDetail.js
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 import { useTranslation } from 'react-i18next';
 
 const NewsDetail = () => {
@@ -26,7 +26,8 @@ const NewsDetail = () => {
             setError(null);
 
             console.log('Fetching news with ID:', id);
-            const response = await axios.get(`http://localhost:5000/api/news/${id}`);
+            // CHANGE: Use api instance instead of axios
+            const response = await api.get(`/news/${id}`);
             console.log('API Response:', response.data);
 
             if (response.data.success && response.data.news) {
@@ -34,7 +35,7 @@ const NewsDetail = () => {
 
                 // Fetch related news
                 try {
-                    const relatedResponse = await axios.get(`http://localhost:5000/api/news/${id}/related`);
+                    const relatedResponse = await api.get(`/news/${id}/related`);
                     if (relatedResponse.data.success) {
                         setRelatedNews(relatedResponse.data.news);
                     }
@@ -81,6 +82,16 @@ const NewsDetail = () => {
             'general': 'General'
         };
         return categories[category?.toLowerCase()] || category || 'General';
+    };
+
+    const getImageUrl = (url) => {
+        if (!url) return 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80';
+        if (url.startsWith('http')) return url;
+        if (url.startsWith('/uploads')) {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            return `${API_URL}${url}`;
+        }
+        return url;
     };
 
     const styles = {
@@ -301,7 +312,7 @@ const NewsDetail = () => {
 
             {news.image_url ? (
                 <img
-                    src={news.image_url}
+                    src={getImageUrl(news.image_url)}
                     alt={news.title}
                     style={styles.heroImage}
                     onError={(e) => {
@@ -359,7 +370,7 @@ const NewsDetail = () => {
                                 style={styles.relatedCard}
                             >
                                 <img
-                                    src={item.image_url || 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80'}
+                                    src={getImageUrl(item.image_url)}
                                     alt={item.title}
                                     style={styles.relatedImage}
                                     onError={(e) => {
