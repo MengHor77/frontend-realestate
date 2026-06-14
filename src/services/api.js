@@ -12,6 +12,7 @@ const api = axios.create({
     'Accept': 'application/json'
   },
   timeout: 30000, // 30 second timeout
+  withCredentials: false, 
 });
 
 // ── Attach JWT token to every request ─────────────────────────────────────

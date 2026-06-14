@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 import { useOutletContext } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,7 +15,8 @@ import EditProperty from './EditProperty';
 import Filter from '../../../components/admin/Filter';
 import Pagination from '../../../components/common/Pagination';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// REMOVE this line - don't define API manually
+// const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const ManageProperties = () => {
   const { setIsOverlayVisible } = useOutletContext();
@@ -45,8 +46,7 @@ const ManageProperties = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-
+      
       const params = {
         page: currentPage,
         limit: itemsPerPage,
@@ -54,7 +54,11 @@ const ManageProperties = () => {
       };
       if (filters.status === 'all') delete params.status;
 
-      const res = await axios.get(`${API}/properties`, { ...config, params });
+      // CHANGE: use api instance instead of axios
+      const res = await api.get('/properties', { 
+        params,
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       setProperties(res.data.properties || []);
       setTotalItems(res.data.total || 0);
@@ -72,7 +76,10 @@ const ManageProperties = () => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`${API}/properties/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+        // CHANGE: use api instance
+        await api.delete(`/properties/${id}`, { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
         fetchProperties();
       } catch (err) {
         alert("Failed to delete property.");
@@ -88,24 +95,19 @@ const ManageProperties = () => {
 
   const totalPages = totalPagesState || Math.ceil(totalItems / itemsPerPage);
 
-  // Fixed: Get image URL from the correct field
   const getImageUrl = (property) => {
-    // First check if images array exists and has items
     if (property.images && property.images.length > 0) {
       const primaryImage = property.images.find(img => img.is_primary === true || img.is_primary === 1) || property.images[0];
       if (primaryImage && primaryImage.url) {
         return primaryImage.url;
       }
     }
-    // Then check image_url field
     if (property.image_url) {
       return property.image_url;
     }
-    // Fallback placeholder
     return 'https://via.placeholder.com/50x50?text=No+Image';
   };
 
-  // Fixed: Get image count
   const getImageCount = (property) => {
     if (property.images && property.images.length > 0) {
       return property.images.length;
@@ -113,7 +115,6 @@ const ManageProperties = () => {
     return property.image_url ? 1 : 0;
   };
 
-  // Format price
   const formatPrice = (price) => {
     if (!price) return '$0';
     return `$${Number(price).toLocaleString()}`;
