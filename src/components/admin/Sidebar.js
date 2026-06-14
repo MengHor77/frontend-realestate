@@ -8,6 +8,7 @@ import {
   faUsers,
   faNewspaper,
   faComments,
+  faEnvelope,
   faChartLine,
   faGear,
   faSignOutAlt
@@ -19,6 +20,7 @@ const menuItems = [
   { path: '/admin/users', icon: faUsers, label: 'Users' },
   { path: '/admin/news', icon: faNewspaper, label: 'News' },
   { path: '/admin/inquiries', icon: faComments, label: 'Inquiries' },
+  { path: '/admin/subscribers', icon: faEnvelope, label: 'Subscribers' },
   { path: '/admin/analytics', icon: faChartLine, label: 'Analytics' },
   { path: '/admin/settings', icon: faGear, label: 'Settings' },
 ];

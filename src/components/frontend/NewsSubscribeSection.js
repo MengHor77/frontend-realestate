@@ -1,44 +1,60 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
+import FlashMessage from '../../components/common/FlashMessage';
 
 const NewsSubscribeSection = () => {
     const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [flashMessage, setFlashMessage] = useState({ show: false, message: '', type: 'success' });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email) {
-            setMessage({ type: 'error', text: 'Please enter your email address' });
+            setFlashMessage({ show: true, message: 'Please enter your email address', type: 'error' });
             return;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            setMessage({ type: 'error', text: 'Please enter a valid email address' });
+            setFlashMessage({ show: true, message: 'Please enter a valid email address', type: 'error' });
             return;
         }
 
         try {
             setLoading(true);
-            setMessage({ type: '', text: '' });
 
             const response = await api.post('/newsletter/subscribe', { email });
 
             if (response.data.success) {
-                setMessage({ type: 'success', text: response.data.message || 'Successfully subscribed!' });
+                setFlashMessage({
+                    show: true,
+                    message: response.data.message || 'Successfully subscribed to newsletter!',
+                    type: 'success'
+                });
                 setEmail('');
             } else {
-                setMessage({ type: 'error', text: response.data.message || 'Subscription failed' });
+                setFlashMessage({
+                    show: true,
+                    message: response.data.message || 'Subscription failed',
+                    type: 'error'
+                });
             }
         } catch (err) {
             console.error('Subscription error:', err);
-            setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to subscribe. Please try again.' });
+            setFlashMessage({
+                show: true,
+                message: err.response?.data?.message || 'Failed to subscribe. Please try again.',
+                type: 'error'
+            });
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleCloseFlashMessage = () => {
+        setFlashMessage(prev => ({ ...prev, show: false }));
     };
 
     const styles = {
@@ -86,22 +102,6 @@ const NewsSubscribeSection = () => {
             fontWeight: '600',
             transition: 'background 0.3s ease'
         },
-        messageSuccess: {
-            marginTop: '15px',
-            padding: '10px',
-            backgroundColor: '#d4edda',
-            color: '#155724',
-            borderRadius: '8px',
-            fontSize: '14px'
-        },
-        messageError: {
-            marginTop: '15px',
-            padding: '10px',
-            backgroundColor: '#f8d7da',
-            color: '#721c24',
-            borderRadius: '8px',
-            fontSize: '14px'
-        },
         loadingText: {
             marginTop: '15px',
             color: '#003366'
@@ -110,6 +110,16 @@ const NewsSubscribeSection = () => {
 
     return (
         <div style={styles.newsletterSection}>
+            {/* Flash Message */}
+            {flashMessage.show && (
+                <FlashMessage
+                    message={flashMessage.message}
+                    type={flashMessage.type}
+                    duration={3000}
+                    onClose={handleCloseFlashMessage}
+                />
+            )}
+
             <h4 style={styles.newsletterTitle}>
                 {t('newsletter_title') || 'Subscribe to Our Newsletter'}
             </h4>
@@ -138,11 +148,6 @@ const NewsSubscribeSection = () => {
                         {loading ? 'Subscribing...' : (t('subscribe_btn') || 'Subscribe')}
                     </button>
                 </div>
-                {message.text && (
-                    <div style={message.type === 'success' ? styles.messageSuccess : styles.messageError}>
-                        {message.text}
-                    </div>
-                )}
                 {loading && <div style={styles.loadingText}>Processing...</div>}
             </form>
         </div>
