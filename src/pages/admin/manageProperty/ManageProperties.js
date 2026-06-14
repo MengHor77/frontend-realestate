@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../../services/api';  // CHANGE: import api instead of axios
+import api from '../../../services/api';
 import { useOutletContext } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -14,9 +14,6 @@ import CreateProperty from './CreateProperty';
 import EditProperty from './EditProperty';
 import Filter from '../../../components/admin/Filter';
 import Pagination from '../../../components/common/Pagination';
-
-// REMOVE this line - don't define API manually
-// const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const ManageProperties = () => {
   const { setIsOverlayVisible } = useOutletContext();
@@ -54,7 +51,6 @@ const ManageProperties = () => {
       };
       if (filters.status === 'all') delete params.status;
 
-      // CHANGE: use api instance instead of axios
       const res = await api.get('/properties', { 
         params,
         headers: { Authorization: `Bearer ${token}` }
@@ -76,7 +72,6 @@ const ManageProperties = () => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
         const token = localStorage.getItem('token');
-        // CHANGE: use api instance
         await api.delete(`/properties/${id}`, { 
           headers: { Authorization: `Bearer ${token}` } 
         });
@@ -151,8 +146,8 @@ const ManageProperties = () => {
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Price</th>
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Location</th>
                 <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Status</th>
-                <th style={{ padding: '16px 20px', textAlign: 'left', color: '#003366' }}>Actions</th>
-              </tr>
+                <th style={{ padding: '16px 20px', textAlign: 'center', color: '#003366' }}>Actions</th>
+               </tr>
             </thead>
             <tbody>
               {properties.map((item) => (
@@ -208,19 +203,45 @@ const ManageProperties = () => {
                       {item.status?.toUpperCase() || 'ACTIVE'}
                     </span>
                   </td>
-                  <td style={{ padding: '16px 20px' }}>
-                    <button
-                      onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }}
-                      style={{ backgroundColor: '#4f8ef7', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', marginRight: '5px', cursor: 'pointer' }}
-                    >
-                      <FontAwesomeIcon icon={faEdit} /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      style={{ backgroundColor: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer' }}
-                    >
-                      <FontAwesomeIcon icon={faTrash} /> Delete
-                    </button>
+                  <td style={{ padding: '16px 20px', textAlign: 'center' }}>
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                      <button
+                        onClick={() => { setEditId(item.id); setIsOverlayVisible(true); }}
+                        style={{
+                          backgroundColor: '#4f8ef7',
+                          color: '#fff',
+                          border: 'none',
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faEdit} /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        style={{
+                          backgroundColor: '#dc3545',
+                          color: '#fff',
+                          border: 'none',
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} /> Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
