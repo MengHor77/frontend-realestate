@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faSave, faBuilding, faImage, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const EditProperty = ({ propertyId, onClose, onRefresh }) => {
   const [formData, setFormData] = useState({
@@ -32,7 +30,8 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
       setError('');
       const token = localStorage.getItem('token');
 
-      const response = await axios.get(`${API}/properties/${propertyId}`, {
+      // CHANGE: use api instance
+      const response = await api.get(`/properties/${propertyId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -82,7 +81,8 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
   const removeExistingImage = async (imageId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`${API}/properties/${propertyId}/images/${imageId}`, {
+      // CHANGE: use api instance
+      await api.delete(`/properties/${propertyId}/images/${imageId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -103,7 +103,6 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
     setNewImagePreviews(newPreviewsList);
   };
 
-  // Update the setPrimaryImage function in EditProperty.js
   const setPrimaryImage = async (imageId) => {
     try {
       setLoading(true);
@@ -111,8 +110,9 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
 
       console.log(`Setting image ${imageId} as primary for property ${propertyId}`);
 
-      const response = await axios.put(
-        `${API}/properties/${propertyId}/images/${imageId}/primary`,
+      // CHANGE: use api instance
+      const response = await api.put(
+        `/properties/${propertyId}/images/${imageId}/primary`,
         {},
         {
           headers: {
@@ -126,7 +126,6 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
 
       if (response.data.success) {
         setSuccess('Primary image updated successfully');
-        // Refresh property data to show updated primary image
         await fetchProperty();
         setTimeout(() => setSuccess(''), 3000);
       } else {
@@ -141,6 +140,7 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
       setLoading(false);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -172,7 +172,8 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
         }
       }
 
-      const response = await axios.put(`${API}/properties/${propertyId}`, fd, {
+      // CHANGE: use api instance
+      const response = await api.put(`/properties/${propertyId}`, fd, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -343,6 +344,7 @@ const EditProperty = ({ propertyId, onClose, onRefresh }) => {
 const styles = {
   overlay: {
     position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     display: 'flex', justifyContent: 'center',
     alignItems: 'center', zIndex: 9999
   },
@@ -352,7 +354,7 @@ const styles = {
     flexDirection: 'column', boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
   },
   header: {
-    display: 'flex', justifyContent: 'space-between',
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     padding: '15px 20px', background: '#003366',
     color: '#ffd700', borderRadius: '12px 12px 0 0'
   },
@@ -418,7 +420,8 @@ const styles = {
     padding: '4px 8px',
     borderRadius: '4px',
     cursor: 'pointer',
-    fontSize: '11px'
+    fontSize: '11px',
+    transition: 'background 0.3s'
   },
   primaryBadge: {
     background: '#ffd700',
@@ -436,7 +439,8 @@ const styles = {
     padding: '4px 8px',
     borderRadius: '4px',
     cursor: 'pointer',
-    fontSize: '11px'
+    fontSize: '11px',
+    transition: 'background 0.3s'
   },
   helperText: {
     fontSize: '12px',
@@ -447,7 +451,7 @@ const styles = {
     background: '#003366', color: '#ffd700', padding: '12px',
     border: 'none', borderRadius: '5px', cursor: 'pointer',
     width: '100%', fontWeight: 'bold', fontSize: '16px',
-    marginTop: '10px'
+    marginTop: '10px', transition: 'background 0.3s'
   }
 };
 
