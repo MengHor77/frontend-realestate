@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import api from '../../../services/api';  // CHANGE: import api instead of axios
+import api from '../../../services/api';
 import NewsCard from '../../../components/frontend/NewsCard';
+import NewsSubscribeSection from '../../../components/frontend/NewsSubscribeSection';  // ADD THIS IMPORT
 
 function News() {
     const { t } = useTranslation();
@@ -24,7 +25,6 @@ function News() {
     const fetchNews = async () => {
         try {
             setLoading(true);
-            // CHANGE: Use api instance instead of axios
             const response = await api.get('/news', {
                 params: {
                     page: pagination.currentPage,
@@ -32,7 +32,6 @@ function News() {
                 }
             });
 
-            // Handle different response structures
             let newsData = [];
             let total = 0;
             let totalPages = 1;
@@ -60,7 +59,6 @@ function News() {
                 total: total
             }));
 
-            // Set first news item as featured if available and not already set
             if (newsData.length > 0 && !featuredNews) {
                 setFeaturedNews(newsData[0]);
             }
@@ -222,33 +220,6 @@ function News() {
         pageInfo: {
             fontSize: '14px',
             color: '#666'
-        },
-        newsletterSection: {
-            marginTop: '60px',
-            padding: '50px',
-            borderRadius: '15px',
-            backgroundColor: '#f8f9fa',
-            border: '1px dashed #003366',
-            textAlign: 'center'
-        },
-        newsletterTitle: {
-            fontSize: '24px',
-            fontWeight: 'bold',
-            marginBottom: '15px',
-            color: '#003366'
-        },
-        newsletterDesc: {
-            color: '#666',
-            marginBottom: '25px'
-        },
-        inputGroup: {
-            maxWidth: '500px',
-            margin: '0 auto'
-        },
-        subscribeBtn: {
-            backgroundColor: '#003366',
-            border: 'none',
-            padding: '10px 25px'
         }
     };
 
@@ -276,7 +247,6 @@ function News() {
         );
     }
 
-    // Get non-featured news (skip the first one if it's featured)
     const regularNews = featuredNews && news.length > 0 ? news.slice(1) : news;
 
     return (
@@ -380,26 +350,8 @@ function News() {
                 </div>
             )}
 
-            {/* Newsletter Subscription */}
-            <div style={styles.newsletterSection}>
-                <h4 style={styles.newsletterTitle}>{t('newsletter_title') || 'Subscribe to Our Newsletter'}</h4>
-                <p style={styles.newsletterDesc}>
-                    {t('newsletter_desc') || 'Get the latest real estate news and updates delivered to your inbox'}
-                </p>
-                <div className="d-flex justify-content-center">
-                    <div className="input-group mb-3" style={styles.inputGroup}>
-                        <input
-                            type="email"
-                            className="form-control py-2"
-                            placeholder={t('email_placeholder') || 'Enter your email'}
-                            aria-label="Email"
-                        />
-                        <button className="btn btn-primary px-4" type="button" style={styles.subscribeBtn}>
-                            {t('subscribe_btn') || 'Subscribe'}
-                        </button>
-                    </div>
-                </div>
-            </div>
+            {/* Newsletter Subscription - REPLACED with component */}
+            <NewsSubscribeSection />
         </div>
     );
 }
