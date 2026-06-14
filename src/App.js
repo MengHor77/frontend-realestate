@@ -26,9 +26,11 @@ import ManageProperties from './pages/admin/manageProperty/ManageProperties';
 import ManageUsers from './pages/admin/manageUsers/ManageUsers';
 import ManageNews from './pages/admin/manageNews/ManageNews';
 import ManageInquiries from './pages/admin/manageInquiries/ManageInquiries';
+import ManageSubscribers from './pages/admin/manageSubscribers/ManageSubscribers';
 import Analytics from './pages/admin/analytics/Analytics';
 import Settings from './pages/admin/settings/Settings';
 import ProtectedRoute from './routes/protectRoute';
+
 
 function App() {
     return (
@@ -62,6 +64,7 @@ function App() {
                         <Route path="users" element={<ManageUsers />} />
                         <Route path="news" element={<ManageNews />} />
                         <Route path="inquiries" element={<ManageInquiries />} />
+                        <Route path="subscribers" element={<ManageSubscribers />} />  {/* ADD THIS */}
                         <Route path="analytics" element={<Analytics />} />
                         <Route path="settings" element={<Settings />} />
                     </Route>
