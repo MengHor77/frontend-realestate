@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../services/api';  // FIXED: import api instead of axios
 
 const RentInquiriesForm = ({ property, onClose, onSuccess }) => {
     const [inquiry, setInquiry] = useState({
@@ -46,7 +46,8 @@ const RentInquiriesForm = ({ property, onClose, onSuccess }) => {
         console.log('Sending rent inquiry payload:', payload);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/inquiries', payload);
+            // CHANGE: use api instance instead of axios
+            const response = await api.post('/inquiries', payload);
 
             if (response.data.success) {
                 if (onSuccess) onSuccess();
@@ -152,9 +153,9 @@ const RentInquiriesForm = ({ property, onClose, onSuccess }) => {
     return (
         <div style={styles.contactForm}>
             <h3 style={styles.formTitle}>Inquire About {property.title}</h3>
-            
+
             {error && <div style={styles.errorMessage}>{error}</div>}
-            
+
             <form style={styles.form} onSubmit={handleSubmit}>
                 <div style={styles.formGroup}>
                     <label style={styles.formLabel}>

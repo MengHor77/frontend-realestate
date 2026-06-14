@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../services/api';  // CHANGE: import api instead of axios
 
 const SaleInquiriesForm = ({ property, onClose, onSuccess }) => {
     const [inquiry, setInquiry] = useState({
@@ -17,56 +17,58 @@ const SaleInquiriesForm = ({ property, onClose, onSuccess }) => {
         setInquiry(prev => ({ ...prev, [name]: value }));
     };
 
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
 
-    console.log('========== FRONTEND DEBUG ==========');
-    console.log('Inquiry state:', inquiry);
-    console.log('Property:', property);
+        console.log('========== FRONTEND DEBUG ==========');
+        console.log('Inquiry state:', inquiry);
+        console.log('Property:', property);
 
-    if (!inquiry.name || !inquiry.email || !inquiry.message) {
-        setError('Please fill in all required fields');
-        setLoading(false);
-        return;
-    }
+        if (!inquiry.name || !inquiry.email || !inquiry.message) {
+            setError('Please fill in all required fields');
+            setLoading(false);
+            return;
+        }
 
-    const finalSubject = inquiry.subject || `Inquiry about ${property.title} (Sale)`;
-    console.log('Final subject:', finalSubject);
+        const finalSubject = inquiry.subject || `Inquiry about ${property.title} (Sale)`;
+        console.log('Final subject:', finalSubject);
 
-    const payload = {
-        name: inquiry.name,
-        email: inquiry.email,
-        phone: inquiry.phone,
-        subject: finalSubject,
-        message: inquiry.message,
-        property_id: property.id,
-        property_title: property.title,
-        property_type: property.listing_type || 'sale'
+        const payload = {
+            name: inquiry.name,
+            email: inquiry.email,
+            phone: inquiry.phone,
+            subject: finalSubject,
+            message: inquiry.message,
+            property_id: property.id,
+            property_title: property.title,
+            property_type: property.listing_type || 'sale'
+        };
+
+        console.log('Sending payload:', payload);
+
+        try {
+            // CHANGE: use api instance instead of axios
+            const response = await api.post('/inquiries', payload);
+            console.log('Response:', response.data);
+
+            if (response.data.success) {
+                if (onSuccess) onSuccess();
+                setInquiry({ name: '', email: '', phone: '', subject: '', message: '' });
+                if (onClose) onClose();
+            } else {
+                setError(response.data.message || 'Failed to send inquiry');
+            }
+        } catch (err) {
+            console.error('Error sending inquiry:', err);
+            console.error('Error response:', err.response?.data);
+            setError(err.response?.data?.message || 'Failed to send inquiry. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    console.log('Sending payload:', payload);
-
-    try {
-        const response = await axios.post('http://localhost:5000/api/inquiries', payload);
-        console.log('Response:', response.data);
-        
-        if (response.data.success) {
-            if (onSuccess) onSuccess();
-            setInquiry({ name: '', email: '', phone: '', subject: '', message: '' });
-            if (onClose) onClose();
-        } else {
-            setError(response.data.message || 'Failed to send inquiry');
-        }
-    } catch (err) {
-        console.error('Error sending inquiry:', err);
-        console.error('Error response:', err.response?.data);
-        setError(err.response?.data?.message || 'Failed to send inquiry. Please try again.');
-    } finally {
-        setLoading(false);
-    }
-};
     const styles = {
         contactForm: {
             background: '#f9f9f9',
@@ -156,9 +158,9 @@ const SaleInquiriesForm = ({ property, onClose, onSuccess }) => {
     return (
         <div style={styles.contactForm}>
             <h3 style={styles.formTitle}>Inquire About {property.title}</h3>
-            
+
             {error && <div style={styles.errorMessage}>{error}</div>}
-            
+
             <form style={styles.form} onSubmit={handleSubmit}>
                 <div style={styles.formGroup}>
                     <label style={styles.formLabel}>
