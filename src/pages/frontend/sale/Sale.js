@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 
 const Sale = () => {
     const [properties, setProperties] = useState([]);
@@ -26,24 +26,29 @@ const Sale = () => {
     const fetchSaleProperties = async () => {
         try {
             setLoading(true);
-            const params = new URLSearchParams({
-                page: pagination.currentPage,
-                limit: pagination.limit,
-                ...(filters.location && { location: filters.location }),
-                ...(filters.type && { type: filters.type }),
-                ...(filters.minPrice && { minPrice: filters.minPrice }),
-                ...(filters.maxPrice && { maxPrice: filters.maxPrice })
+            
+            // CHANGE: Use api instance with correct endpoint
+            const response = await api.get('/properties', {
+                params: {
+                    page: pagination.currentPage,
+                    limit: pagination.limit,
+                    listing_type: 'sale',  // Add this filter
+                    ...(filters.location && { location: filters.location }),
+                    ...(filters.type && { property_type: filters.type }),
+                    ...(filters.minPrice && { minPrice: filters.minPrice }),
+                    ...(filters.maxPrice && { maxPrice: filters.maxPrice })
+                }
             });
 
-            const response = await axios.get(`http://localhost:5000/api/properties/sale?${params}`);
-
             if (response.data.success) {
-                setProperties(response.data.properties);
+                setProperties(response.data.properties || []);
                 setPagination({
                     ...pagination,
-                    totalPages: response.data.totalPages,
-                    total: response.data.total
+                    totalPages: response.data.totalPages || 1,
+                    total: response.data.total || 0
                 });
+            } else {
+                setError('Failed to load properties');
             }
         } catch (err) {
             console.error('Error fetching sale properties:', err);
@@ -66,13 +71,19 @@ const Sale = () => {
         }
     };
 
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250"%3E%3Crect width="400" height="250" fill="%23cccccc"/%3E%3Ctext x="200" y="130" text-anchor="middle" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+        if (imageUrl.startsWith('http')) return imageUrl;
+        return imageUrl;
+    };
+
     const styles = {
         container: {
             minHeight: '100vh',
             backgroundColor: '#f5f5f5'
         },
         heroSection: {
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #003366 0%, #001a33 100%)',
             color: 'white',
             padding: '60px 20px',
             textAlign: 'center'
@@ -173,7 +184,7 @@ const Sale = () => {
         price: {
             fontSize: '24px',
             fontWeight: 'bold',
-            color: '#667eea',
+            color: '#003366',
             marginBottom: '12px'
         },
         propertyDetails: {
@@ -191,7 +202,7 @@ const Sale = () => {
         },
         button: {
             padding: '10px 20px',
-            background: '#667eea',
+            background: '#003366',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
@@ -215,7 +226,7 @@ const Sale = () => {
         },
         spinner: {
             border: '4px solid #f3f3f3',
-            borderTop: '4px solid #667eea',
+            borderTop: '4px solid #003366',
             borderRadius: '50%',
             width: '40px',
             height: '40px',
@@ -248,7 +259,7 @@ const Sale = () => {
         );
     }
 
-    if (error) {
+    if (error && properties.length === 0) {
         return (
             <div style={styles.errorContainer}>
                 <p>{error}</p>
@@ -264,7 +275,7 @@ const Sale = () => {
                     transform: translateY(-5px);
                 }
                 .pagination-button:hover:not(:disabled) {
-                    background: #5a67d8 !important;
+                    background: #004488 !important;
                 }
             `}</style>
 
@@ -298,6 +309,8 @@ const Sale = () => {
                                 <option value="house">House</option>
                                 <option value="villa">Villa</option>
                                 <option value="land">Land</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="flat">Flat</option>
                             </select>
                         </div>
                         <div>
@@ -342,13 +355,20 @@ const Sale = () => {
                                     <Link to={`/sale/${property.id}`} key={property.id} style={{ textDecoration: 'none' }}>
                                         <div className="property-card" style={styles.propertyCard}>
                                             <div style={styles.propertyImage}>
-                                                <img src={property.image_url} alt={property.title} style={styles.image} />
+                                                <img 
+                                                    src={getImageUrl(property.image_url)} 
+                                                    alt={property.title} 
+                                                    style={styles.image}
+                                                    onError={(e) => {
+                                                        e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250"%3E%3Crect width="400" height="250" fill="%23cccccc"/%3E%3Ctext x="200" y="130" text-anchor="middle" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+                                                    }}
+                                                />
                                                 <span style={styles.propertyType}>{property.property_type}</span>
                                             </div>
                                             <div style={styles.propertyInfo}>
                                                 <h3 style={styles.title}>{property.title}</h3>
                                                 <p style={styles.location}>{property.location}</p>
-                                                <p style={styles.price}>${property.price.toLocaleString()}</p>
+                                                <p style={styles.price}>${Number(property.price).toLocaleString()}</p>
                                                 <div style={styles.propertyDetails}>
                                                     <span>{property.bedrooms} beds</span>
                                                     <span>{property.bathrooms} baths</span>

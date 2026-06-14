@@ -1,7 +1,7 @@
 // D:\realestate\frontend\src\pages\frontend\rent\Rent.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 import RentCard from '../../../components/frontend/RentCard';
 
 const Rent = () => {
@@ -29,24 +29,29 @@ const Rent = () => {
     const fetchRentProperties = async () => {
         try {
             setLoading(true);
-            const params = new URLSearchParams({
-                page: pagination.currentPage,
-                limit: pagination.limit,
-                ...(filters.location && { location: filters.location }),
-                ...(filters.type && { type: filters.type }),
-                ...(filters.minPrice && { minPrice: filters.minPrice }),
-                ...(filters.maxPrice && { maxPrice: filters.maxPrice })
+
+            // CHANGE: Use api instance with correct endpoint
+            const response = await api.get('/properties', {
+                params: {
+                    page: pagination.currentPage,
+                    limit: pagination.limit,
+                    listing_type: 'rent',  // Add this filter
+                    ...(filters.location && { location: filters.location }),
+                    ...(filters.type && { property_type: filters.type }),
+                    ...(filters.minPrice && { minPrice: filters.minPrice }),
+                    ...(filters.maxPrice && { maxPrice: filters.maxPrice })
+                }
             });
 
-            const response = await axios.get(`http://localhost:5000/api/properties/rent?${params}`);
-            
             if (response.data.success) {
-                setProperties(response.data.properties);
+                setProperties(response.data.properties || []);
                 setPagination({
                     ...pagination,
-                    totalPages: response.data.totalPages,
-                    total: response.data.total
+                    totalPages: response.data.totalPages || 1,
+                    total: response.data.total || 0
                 });
+            } else {
+                setError('Failed to load properties');
             }
         } catch (err) {
             console.error('Error fetching rent properties:', err);
@@ -70,8 +75,8 @@ const Rent = () => {
     };
 
     const handleFavoriteToggle = (propertyId) => {
-        setFavorites(prev => 
-            prev.includes(propertyId) 
+        setFavorites(prev =>
+            prev.includes(propertyId)
                 ? prev.filter(id => id !== propertyId)
                 : [...prev, propertyId]
         );
@@ -207,7 +212,7 @@ const Rent = () => {
         );
     }
 
-    if (error) {
+    if (error && properties.length === 0) {
         return (
             <div style={styles.errorContainer}>
                 <p>{error}</p>
@@ -230,7 +235,7 @@ const Rent = () => {
                     border-color: #003366 !important;
                 }
             `}</style>
-            
+
             <div style={styles.heroSection}>
                 <h1 style={styles.heroTitle}>Properties for Rent</h1>
                 <p style={styles.heroSubtitle}>Find your perfect rental home</p>
@@ -250,10 +255,10 @@ const Rent = () => {
                             />
                         </div>
                         <div>
-                            <select 
-                                name="type" 
-                                value={filters.type} 
-                                onChange={handleFilterChange} 
+                            <select
+                                name="type"
+                                value={filters.type}
+                                onChange={handleFilterChange}
                                 style={styles.select}
                             >
                                 <option value="">Property Type</option>
@@ -262,6 +267,7 @@ const Rent = () => {
                                 <option value="villa">Villa</option>
                                 <option value="apartment">Apartment</option>
                                 <option value="land">Land</option>
+                                <option value="flat">Flat</option>
                             </select>
                         </div>
                         <div>
@@ -315,7 +321,7 @@ const Rent = () => {
 
                             {pagination.totalPages > 1 && (
                                 <div style={styles.pagination}>
-                                    <button 
+                                    <button
                                         className="pagination-button"
                                         onClick={() => handlePageChange(pagination.currentPage - 1)}
                                         disabled={pagination.currentPage === 1}
@@ -324,7 +330,7 @@ const Rent = () => {
                                         Previous
                                     </button>
                                     <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
-                                    <button 
+                                    <button
                                         className="pagination-button"
                                         onClick={() => handlePageChange(pagination.currentPage + 1)}
                                         disabled={pagination.currentPage === pagination.totalPages}

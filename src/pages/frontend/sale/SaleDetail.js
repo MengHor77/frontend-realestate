@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';  // CHANGE: import api instead of axios
 import SaleInquiriesForm from '../../../components/frontend/SaleInquiriesForm';
 
 const SaleDetail = () => {
@@ -19,7 +19,8 @@ const SaleDetail = () => {
     const fetchPropertyDetails = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:5000/api/properties/sale/${id}`);
+            // CHANGE: Use api instance with correct endpoint
+            const response = await api.get(`/properties/${id}`);
 
             if (response.data.success) {
                 setProperty(response.data.property);
@@ -80,6 +81,16 @@ const SaleDetail = () => {
     const handleInquirySuccess = () => {
         alert('Inquiry sent successfully! We will contact you soon.');
         setShowContactForm(false);
+    };
+
+    const getImageUrl = (url) => {
+        if (!url) return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"%3E%3Crect width="800" height="500" fill="%23cccccc"/%3E%3Ctext x="400" y="250" text-anchor="middle" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+        if (url.startsWith('http')) return url;
+        if (url.startsWith('/uploads')) {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            return `${API_URL}${url}`;
+        }
+        return url;
     };
 
     const styles = {
@@ -454,7 +465,7 @@ const SaleDetail = () => {
 
     const mortgage = calculateMortgage();
     const images = property.images && property.images.length > 0 ? property.images :
-        (property.image_url ? [{ id: 0, url: property.image_url, is_primary: true }] : []);
+        (property.image_url ? [{ id: 0, url: getImageUrl(property.image_url), is_primary: true }] : []);
     const hasImages = images.length > 0;
 
     return (
@@ -501,10 +512,13 @@ const SaleDetail = () => {
                             <>
                                 <div style={styles.mainImageContainer}>
                                     <img
-                                        src={images[currentImageIndex].url}
+                                        src={getImageUrl(images[currentImageIndex]?.url || images[currentImageIndex])}
                                         alt={`${property.title} - Image ${currentImageIndex + 1}`}
                                         style={styles.mainImage}
                                         onClick={openLightbox}
+                                        onError={(e) => {
+                                            e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"%3E%3Crect width="800" height="500" fill="%23cccccc"/%3E%3Ctext x="400" y="250" text-anchor="middle" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
+                                        }}
                                     />
                                     {images.length > 1 && (
                                         <>
@@ -539,7 +553,7 @@ const SaleDetail = () => {
                                         {images.map((image, index) => (
                                             <img
                                                 key={image.id || index}
-                                                src={image.url}
+                                                src={getImageUrl(image.url || image)}
                                                 alt={`Thumbnail ${index + 1}`}
                                                 style={{
                                                     ...styles.thumbnail,
@@ -549,6 +563,9 @@ const SaleDetail = () => {
                                                 onClick={() => goToImage(index)}
                                                 onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                                                 onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                onError={(e) => {
+                                                    e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"%3E%3Crect width="80" height="80" fill="%23cccccc"/%3E%3Ctext x="40" y="45" text-anchor="middle" fill="%23666"%3ENo%3C/text%3E%3C/svg%3E';
+                                                }}
                                             />
                                         ))}
                                     </div>
@@ -569,7 +586,7 @@ const SaleDetail = () => {
                         <div style={styles.lightboxOverlay} onClick={closeLightbox}>
                             <div style={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
                                 <img
-                                    src={images[currentImageIndex].url}
+                                    src={getImageUrl(images[currentImageIndex]?.url || images[currentImageIndex])}
                                     alt="Full size view"
                                     style={styles.lightboxImage}
                                 />
@@ -604,7 +621,7 @@ const SaleDetail = () => {
                     <div style={styles.content}>
                         <div style={styles.header}>
                             <h1 style={styles.title}>{property.title}</h1>
-                            <div style={styles.priceTag}>${property.price.toLocaleString()}</div>
+                            <div style={styles.priceTag}>${Number(property.price).toLocaleString()}</div>
                         </div>
 
                         <div style={styles.location}>

@@ -1,6 +1,6 @@
 // Home.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../services/api';  
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ServiceCard from '../../../components/frontend/ServiceCard';
@@ -23,14 +23,18 @@ function Home() {
 
     // Helper function to get full image URL
     const getImageUrl = (imageUrl) => {
-        if (!imageUrl) return 'https://via.placeholder.com/400x250?text=No+Image';
+        if (!imageUrl) return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250"%3E%3Crect width="400" height="250" fill="%23cccccc"/%3E%3Ctext x="200" y="130" text-anchor="middle" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
         if (imageUrl.startsWith('http')) return imageUrl;
-        if (imageUrl.startsWith('/uploads')) return `http://localhost:5000${imageUrl}`;
-        return `http://localhost:5000/uploads/${imageUrl}`;
+        if (imageUrl.startsWith('/uploads')) {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            return `${API_URL}${imageUrl}`;
+        }
+        return imageUrl;
     };
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/properties')
+        // CHANGE: use api instance instead of axios
+        api.get('/properties')
             .then(res => {
                 const data = res.data.properties || [];
                 setProperties(data);
@@ -61,11 +65,9 @@ function Home() {
 
         setFilteredProperties(filtered.slice(0, 6));
 
-        // Scroll to projects section
         document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Function to determine the correct detail link based on listing type
     const getDetailLink = (property) => {
         const listingType = property.listing_type;
         if (listingType === 'rent') {
@@ -74,6 +76,10 @@ function Home() {
             return `/sale/${property.id}`;
         }
     };
+
+    if (loading) {
+        return <div className="text-center py-5">{t('loading')}...</div>;
+    }
 
     return (
         <div className="home-page">
@@ -101,9 +107,7 @@ function Home() {
                         <Link to="/sale" className="btn btn-outline-primary fw-bold rounded-pill">{t('view_all')}</Link>
                     </div>
 
-                    {loading ? (
-                        <p className="text-center">{t('loading')}</p>
-                    ) : filteredProperties.length > 0 ? (
+                    {filteredProperties.length > 0 ? (
                         <div className="row g-4">
                             {filteredProperties.map((item) => {
                                 const detailLink = getDetailLink(item);
@@ -118,7 +122,7 @@ function Home() {
                                                     alt={item.title}
                                                     style={{ height: '220px', objectFit: 'cover' }}
                                                     onError={(e) => {
-                                                        e.target.src = 'https://via.placeholder.com/400x250?text=No+Image';
+                                                        e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250"%3E%3Crect width="400" height="250" fill="%23cccccc"/%3E%3Ctext x="200" y="130" text-anchor="middle" fill="%23666"%3ENo Image%3C/text%3E%3C/svg%3E';
                                                     }}
                                                 />
                                                 <div className="card-body">
@@ -155,7 +159,7 @@ function Home() {
                 </div>
             </section>
 
-            <style jsx>{`
+            <style>{`
                 .card:hover {
                     transform: translateY(-5px);
                     transition: transform 0.3s ease;
